@@ -1,0 +1,89 @@
+<server description="Social Login Guide Server">
+    <!-- tag::features[] -->
+    <featureManager>
+        <feature>jaxrs-2.1</feature>
+        <feature>appSecurity-3.0</feature>
+        <feature>transportSecurity-1.0</feature>
+        <feature>socialLogin-1.0</feature>
+        <feature>ssl-1.0</feature>
+        <feature>jwt-1.0</feature>
+    </featureManager>
+    <!-- end::features[] -->
+
+    <httpEndpoint httpPort="${default.http.port}" httpsPort="${default.https.port}"
+                  id="defaultHttpEndpoint" host="localhost" />
+
+    <!-- Set up default key store, trust stores for auth APIs -->
+    <!-- tag::keystore[] -->
+    <keyStore id="defaultKeyStore"
+              location="${server.output.dir}/resources/security/key.p12"
+              password="changeit"
+              type="PKCS12" />
+    <!-- end::keystore[] -->
+    <!-- tag::truststore[] -->
+    <keyStore id="socialLoginKeyStore"
+              location="${server.output.dir}/resources/security/slts.p12"
+              password="changeit"
+              type="PKCS12" />
+    <!-- end::truststore[] -->
+    <!-- SSL configuration for auth services -->
+    <!-- tag::sslConfig[] -->
+    <ssl id="authServiceSslRef"
+         keyStoreRef="defaultKeyStore"
+         trustStoreRef="socialLoginKeyStore" />
+    <!-- end::sslConfig[] -->
+
+    <!-- Social Login Configuration -->
+    <!-- Github Login -->
+    <!-- tag::githubLogin[] -->
+    <githubLogin clientId="" 
+                 clientSecret=""
+                 sslRef="authServiceSslRef"/>
+    <!-- end::githubLogin[] -->
+    <!-- Amazon Login -->
+    <!-- tag::amazonLogin[] -->
+    <oauth2Login id="amazonLogin"
+                 displayName="Amazon"
+                 clientId=""
+                 clientSecret=""
+                 responseType="code"
+                 sslRef="authServiceSslRef"
+                 tokenEndpointAuthMethod="client_secret_post"
+                 authorizationEndpoint="https://www.amazon.com/ap/oa"
+                 tokenEndpoint="https://api.amazon.com/auth/o2/token"
+                 userApi="https://api.amazon.com/user/profile"
+                 scope="profile"
+                 userNameAttribute="name"
+                 userUniqueIdAttribute="user_id"
+                 website="www.amazon.com" />
+    <!-- end::amazonLogin[] -->
+    <!-- Google OIDC Login using discovery URL -->
+    <!-- tag::googleOIDCLogin[] -->
+    <oidcLogin id="googleOIDCLogin"
+               displayName="Google"
+               clientId=""
+               clientSecret=""
+               sslRef="authServiceSslRef"
+               authorizationEndpoint="https://accounts.google.com/o/oauth2/v2/auth"
+               tokenEndpoint="https://www.googleapis.com/oauth2/v4/token"
+               jwksUri="https://www.googleapis.com/oauth2/v3/certs"
+               scope="openid profile email"
+               userNameAttribute="email"
+               realmNameAttribute="iss"
+               issuer="https://accounts.google.com"/>
+    <!-- end::googleOIDCLogin[] -->
+
+    <!-- tag::webApplication[] -->
+    <webApplication location="draft-guide-social-login.war" contextRoot="${app.context.root}">
+        <!-- tag::applicationBnd[] -->
+        <application-bnd>
+            <security-role name="users">
+                <special-subject type="ALL_AUTHENTICATED_USERS"/>
+            </security-role>
+        </application-bnd>
+        <!-- end::applicationBnd[] -->
+    </webApplication>
+    <!-- end::webApplication[] -->
+
+    <applicationMonitor updateTrigger="mbean"/>
+</server>
