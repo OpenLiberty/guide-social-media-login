@@ -103,7 +103,12 @@ Add each of the certificates that you downloaded to the `slts.p12` trust store.
 To generate certificates for your service to use for HTTPS connections, run the following command:
 [role='command']
 ```
-openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365
+openssl req \
+        -x509 \
+        -newkey rsa:4096 \
+        -keyout key.pem \
+        -out cert.pem \
+        -days 365
 ```
 
 Before the certificate and private key can be imported into the key store for your service, it needs to be converted into one `PKCS12` bundle.
@@ -117,7 +122,11 @@ The key store to be used by social media login will be configured to be `key.p12
 To import your certificate bundle into this key store, run the following command:
 [role='command']
 ```
-keytool -importkeystore -srckeystore certificate.p12 -srcstoretype PKCS12 -destkeystore key.p12 -deststoretype PKCS12
+keytool -importkeystore \
+        -srckeystore certificate.p12 \
+        -srcstoretype PKCS12 \
+        -destkeystore key.p12 \
+        -deststoretype PKCS12
 ```
 
 To use the new key store and trust store, copy these files into `src/main/liberty/resources/security`
@@ -142,7 +151,7 @@ First, navigate to the `start` directory.
 
 [role="code_command", subs="quotes"] 
 ---- 
-#Update this `HelloService` class.#
+#Update the `HelloService` class.#
 `src/main/java/io/openliberty/guides/sociallogin/HelloService.java`
 ---- 
 
@@ -156,32 +165,32 @@ import javax.ws.rs.core.Context;
 ----
 
 The [hotspot=helloService]`HelloService` class is the JAX-RS service that you will be securing.
-Add the [hotspot=rolesAllowed]`@RolesAllowed({"users"})` annotation to restrict access to the service to users who are
+Add the [hotspot=rolesAllowed hotspot=rolesAllowedImport]`@RolesAllowed({"users"})` annotation to restrict access to the service to users who are
 in the `users` role.
 
 Next, you will replace the `return "Hello, friend!";` to output user information instead of `friend`.
 
-Add the [hotspot=httpServletRequestContext]`HttpServletRequest` context.
-Then, use [hotspot=userPrincipal]`request.getUserPrincipal()` to get information about the logged in user.
+Add the [hotspot=httpServletRequestContext hotspot=httpServletRequestImport]`HttpServletRequest` context.
+Then, use [hotspot=userPrincipal hotspot=userPrincipalImport]`request.getUserPrincipal()` to get information about the logged in user.
 
 HelloService.java 
 [source, Java, linenums, role='code_column hide_tags=copyright'] 
----- 
+----
 include::finish/src/main/java/io/openliberty/guides/sociallogin/HelloService.java[]
----- 
+----
 
 == Configuring the security and social media login
 
 [role="code_command", subs="quotes"] 
 ---- 
-#Replace this `server.xml` class.#
+#Replace the `server.xml` class.#
 `src/main/liberty/config/server.xml`
----- 
+----
 
 server.xml 
-[source, xml, linenums, role='code_column'] 
+[source, xml, linenums, role='code_column']
 ---- 
-include::finish/src/main/liberty/config/server.xml[tags=**;!copyright;]
+include::finish/src/main/liberty/config/server.xml[]
 ---- 
 
 Replace the contents of `src/main/liberty/config/server.xml`.
@@ -193,6 +202,12 @@ The [hotspot=applicationBnd]`application-bnd` configuration element under the
 [hotspot=webApplication]`webApplication` configuration element creates a new security role `users`,
 which all authenticated users belong to.
 Adding this allows users that are authenticated using social media login to access your `HelloService` service.
+
+server.xml
+[source, xml, linenums, role='code_column']
+----
+include::finish/src/main/liberty/config/server.xml[]
+---- 
 
 === Adding required features
 

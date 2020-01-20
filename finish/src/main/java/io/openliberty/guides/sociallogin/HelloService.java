@@ -17,15 +17,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 // tag::newImports[]
-// tag::rolesAllowed[]
+// tag::rolesAllowedImport[]
 import javax.annotation.security.RolesAllowed;
-// end::rolesAllowed[]
-// tag::httpServletRequestContext[]
+// end::rolesAllowedImport[]
+// tag::httpServletRequestContextImport[]
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
-// end::httpServletRequestContext[]
+// end::httpServletRequestContextImport[]
 // end::newImports[]
 
+// tag::helloService[]
 @Path("hello")
 public class HelloService {
 
@@ -48,3 +49,4 @@ public class HelloService {
     }
     // end::userPrincipal[]
 }
+// tag::helloService[]

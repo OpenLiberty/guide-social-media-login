@@ -20,12 +20,14 @@
               password="changeit"
               type="PKCS12" />
     <!-- end::keystore[] -->
+
     <!-- tag::truststore[] -->
     <keyStore id="socialLoginKeyStore"
               location="${server.output.dir}/resources/security/slts.p12"
               password="changeit"
               type="PKCS12" />
     <!-- end::truststore[] -->
+
     <!-- SSL configuration for auth services -->
     <!-- tag::sslConfig[] -->
     <ssl id="authServiceSslRef"
@@ -40,6 +42,7 @@
                  clientSecret=""
                  sslRef="authServiceSslRef"/>
     <!-- end::githubLogin[] -->
+
     <!-- Amazon Login -->
     <!-- tag::amazonLogin[] -->
     <oauth2Login id="amazonLogin"
@@ -57,6 +60,7 @@
                  userUniqueIdAttribute="user_id"
                  website="www.amazon.com" />
     <!-- end::amazonLogin[] -->
+
     <!-- Google OIDC Login using discovery URL -->
     <!-- tag::googleOIDCLogin[] -->
     <oidcLogin id="googleOIDCLogin"
@@ -74,7 +78,8 @@
     <!-- end::googleOIDCLogin[] -->
 
     <!-- tag::webApplication[] -->
-    <webApplication location="draft-guide-social-login.war" contextRoot="${app.context.root}">
+    <webApplication location="draft-guide-social-login.war"
+                    contextRoot="${app.context.root}">
         <!-- tag::applicationBnd[] -->
         <application-bnd>
             <security-role name="users">
