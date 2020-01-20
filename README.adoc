@@ -151,6 +151,12 @@ Enter the client IDs and client secrets to `src/main/liberty/config/server.xml` 
 == Securing HelloService
 
 First, navigate to the `start` directory.
+To start the Open Liberty server in development mode, run the `liberty:dev` goal in the `start` directory:
+
+[role='command']
+```
+mvn liberty:dev
+```
 
 [role="code_command", subs="quotes"] 
 ---- 
@@ -214,9 +220,7 @@ include::finish/src/main/liberty/config/server.xml[]
 
 === Adding required features
 
-Add OpenLiberty features to the [hotspot=features]`feature elements`
-
-To enable https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] and other required features, add [hotspot=newFeatures]`feature elements` to the [hotspot=featureManager]`featureManager` in
+To enable https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] and other required features, add new [hotspot=newFeatures]`feature elements` to the [hotspot=featureManager]`featureManager` in
 `src/main/liberty/config/server.xml`
 
 There are some prerequisite configurations that social media login configuration elements need:
