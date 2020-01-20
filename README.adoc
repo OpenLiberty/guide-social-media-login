@@ -115,7 +115,10 @@ Before the certificate and private key can be imported into the key store for yo
 Combine your key and certificate by running the following command:
 [role='command']
 ```
-openssl pkcs12 -inkey key.pem -in cert.pem -export -out certificate.p12
+openssl pkcs12 \
+        -inkey key.pem \
+        -in cert.pem \
+        -export -out certificate.p12
 ```
 
 The key store to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
@@ -211,22 +214,16 @@ include::finish/src/main/liberty/config/server.xml[]
 
 === Adding required features
 
-The following OpenLiberty [hotspot=features]`feature elements` enable Social Media Login and other related features:
+Add OpenLiberty features to the [hotspot=features]`feature elements`
 
-[role="command"]
-----
-<feature>appSecurity-3.0</feature>
-<feature>transportSecurity-1.0</feature>
-<feature>socialLogin-1.0</feature>
-<feature>ssl-1.0</feature>
-<feature>jwt-1.0</feature>
-----
+To enable https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] and other required features, add [hotspot=newFeatures]`feature elements` to the [hotspot=featureManager]`featureManager` in
+`src/main/liberty/config/server.xml`
 
 There are some prerequisite configurations that social media login configuration elements need:
 
-1. A `keyStore` configuration element that corresponds to the key store created in the prerequisites section
-2. A `keyStore` configuration element that corresponds to the trust store created in the prerequisites section
-3. An `ssl` configuration element for configuring the SSL configuration that is used to connect to the social media
+1. A [hotspot=keystore]`keyStore` configuration element that corresponds to the key store created in the prerequisites section
+2. A [hotspot=truststore]`keyStore` configuration element that corresponds to the trust store created in the prerequisites section
+3. An [hotspot=sslConfig]`ssl` configuration element for configuring the SSL configuration that is used to connect to the social media
 
 === Adding key store and trust store
 

@@ -1,14 +1,16 @@
 <server description="Social Login Guide Server">
-    <!-- tag::features[] -->
+    <!-- tag::featureManager[] -->
     <featureManager>
         <feature>jaxrs-2.1</feature>
+        <!-- tag::newFeatures[] -->
         <feature>appSecurity-3.0</feature>
         <feature>transportSecurity-1.0</feature>
         <feature>socialLogin-1.0</feature>
         <feature>ssl-1.0</feature>
         <feature>jwt-1.0</feature>
+        <!-- end::newFeatures[] -->
     </featureManager>
-    <!-- end::features[] -->
+    <!-- end::featureManager[] -->
 
     <httpEndpoint httpPort="${default.http.port}" httpsPort="${default.https.port}"
                   id="defaultHttpEndpoint" host="localhost" />
