@@ -146,14 +146,23 @@ First, navigate to the `start` directory.
 `src/main/java/io/openliberty/guides/sociallogin/HelloService.java`
 ---- 
 
+Add the following [hotspot=newImports]`imports` to the `HelloService` class:
+
+[role="command"]
+----
+import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
+----
+
 The [hotspot=helloService]`HelloService` class is the JAX-RS service that you will be securing.
 Add the [hotspot=rolesAllowed]`@RolesAllowed({"users"})` annotation to restrict access to the service to users who are
-in the `Users` role.
+in the `users` role.
 
 Next, you will replace the `return "Hello, friend!";` to output user information instead of `friend`.
 
-First, add the [hotspot=httpServletRequestContext]`HttpServletRequest` context.
-Next, use [hotspot=userPrincipal]`request.getUserPrincipal()` to get information about the logged in user.
+Add the [hotspot=httpServletRequestContext]`HttpServletRequest` context.
+Then, use [hotspot=userPrincipal]`request.getUserPrincipal()` to get information about the logged in user.
 
 HelloService.java 
 [source, Java, linenums, role='code_column hide_tags=copyright'] 

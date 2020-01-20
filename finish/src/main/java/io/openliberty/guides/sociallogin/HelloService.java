@@ -12,13 +12,19 @@
 // end::copyright[]
 package io.openliberty.guides.sociallogin;
 
-import javax.annotation.security.RolesAllowed;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+// tag::newImports[]
+// tag::rolesAllowed[]
+import javax.annotation.security.RolesAllowed;
+// end::rolesAllowed[]
+// tag::httpServletRequestContext[]
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
+// end::httpServletRequestContext[]
+// end::newImports[]
 
 @Path("hello")
 public class HelloService {
