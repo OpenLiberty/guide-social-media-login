@@ -75,13 +75,35 @@ Use the following URLs to get the certificates for each service:
 - Github: https://developer.github.com/
 - Amazon: https://developer.amazon.com/
 
-For example, to get the certificates using Firefox:
+For example, to get the certificates using Firefox, perform the following steps for each
+URL mentioned above:
 
 1. Open the website on Firefox.
 2. Click on the button next to "Connection Secure".
 3. Click on "More Information".
 4. Click on "View Certificate".
 5. Download each certificate in the chain as a separate `PEM` file.
+
+To get the certificates using `openssl`:
+
+1. Replace `<website URL` with each URL mentioned above and run the following command in a terminal window:
+
+    [role='command']
+    ----
+    openssl s_client \
+        -showcerts \
+        -connect <website URL>:443 </dev/null
+    ----
+
+2. In the command output, the contents of each certificate looks like:
+
+    [source,role="no_copy"]
+    ----
+    Hello, friend!
+    ----
+
+3. Copy each certificate from the chain and add it to a separate `.pem` file.
+
 
 Once you have the certificates downloaded, you need to add them to the trust store.
 As part of the guide, you will configure the application's trust store to be `slts.p12` whose password is `changeit`.
