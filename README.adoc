@@ -23,14 +23,14 @@
 = Securing a RESTful web service with Social Media Login
 
 [.hidden]
-NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
+NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website^].
 
 Learn how to secure a RESTful web service with the Open Liberty Social Media Login feature.
 
 == What you'll learn
 
-You will learn how to secure a simple RESTful web service using the https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature]. You will secure an existing service,
-`HelloService` using social media OAuth2 and OpenID Connect.
+You will learn how to secure a simple RESTful web service using the https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^]. You will secure an existing service,
+`HelloService` using social media https://oauth.net/2[OAuth2^] and https://openid.net/connect[OpenID Connect^].
 
 `HelloService` is an existing microservice that responds to a `GET` request with a Plain Text response that looks like this:
 
@@ -43,7 +43,7 @@ Instead of securing your `HelloService` service by implementing your own authent
 you can allow users to authenticate to your service using social media accounts.
 This will allow you to provide a secure authentication method for your users without having to explicitly implement it.
 
-Open Liberty provides a https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature]
+Open Liberty provides a https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^]
 that provides configuration elements that allows you to use Facebook, Google, Github, Linkedin for authentication,
 or to configure a custom OAuth2 or OpenID Connect provider.
 
@@ -66,7 +66,15 @@ The application you will build in this guide requires certificates for Amazon, G
 You also need to create certificates that your application will provide for HTTPS connections. This certificate and private key will need to be added to the key store for social media login.
 Lastly, you need to create applications on the three social media developer platforms to obtain a client ID and client secret to use their APIs.
 
-To get the certificates for Amazon, Google and Github, use a browser.
+First, navigate to the `start/src/main/liberty/config/resources/security` directory.
+
+To get the certificates for Amazon, Google and Github, you can use `openssl` or a browser.
+Use the following URLs to get the certificates for each service:
+
+- Google: https://developers.google.com/
+- Github: https://developer.github.com/
+- Amazon: https://developer.amazon.com/
+
 For example, open the website on Firefox.
 
 1. Click on the button next to "Connection Secure".
@@ -76,11 +84,21 @@ For example, open the website on Firefox.
 
 Once you have the certificates downloaded, you need to add them to the trust store.
 As part of the guide, you will configure the application's trust store to be `slts.p12` whose password is `changeit`.
-Run the following command to add a certificate to the trust store. The command also creates the trust store file if it doesn't exist.
+
+To add a certificate to the trust store, substitute `<certificate-file-name>` with the name of the downloaded certificate
+and `<certificate-alias>` with an alias you wish to give the certificate in the following command and run it.
 [role='command']
 ```
-keytool -import -trustcacerts -file <certificate-file-name> -alias <certificate-alias> -keystore slts.p12 -storetype PKCS12 -storepass changeit
+keytool -import -trustcacerts \
+        -file <certificate-file-name> \
+        -alias <certificate-alias> \
+        -keystore slts.p12 \
+        -storetype PKCS12 \
+        -storepass changeit
 ```
+The command also creates the trust store file if it doesn't exist.
+
+Add each of the certificates that you downloaded to the `slts.p12` trust store.
 
 To generate certificates for your service to use for HTTPS connections, run the following command:
 [role='command']
@@ -116,9 +134,11 @@ Set the redirect URL to `https://localhost:9443/ibm/api/social-login/redirect/am
 In order to obtain OAuth 2.0 credentials for Github, follow the steps here: https://auth0.com/docs/connections/social/github.
 Set the redirect URL to `https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
 
-In order to try what you'll build, enter the client IDs and client secrets to `server.xml` in the `finish` folder.
+Enter the client IDs and client secrets to `src/main/liberty/config/server.xml` in the `start` folder.
 
 == Securing HelloService
+
+First, navigate to the `start` directory.
 
 [role="code_command", subs="quotes"] 
 ---- 
