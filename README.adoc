@@ -84,26 +84,51 @@ URL mentioned above:
 4. Click on "View Certificate".
 5. Download each certificate in the chain as a separate `PEM` file.
 
+You can also use `openssl` to output the certificates and manually copy each certificate to a separate file.
 To get the certificates using `openssl`:
 
-1. Replace `<website URL` with each URL mentioned above and run the following command in a terminal window:
+Replace `<website URL>` with each URL mentioned above and run the following command in a terminal window:
 
-    [role='command']
-    ----
-    openssl s_client \
-        -showcerts \
-        -connect <website URL>:443 </dev/null
-    ----
+[role='command']
+----
+openssl s_client \
+    -showcerts \
+    -connect <website URL>:443 </dev/null
+----
 
-2. In the command output, the contents of each certificate looks like:
+In the command output, the contents of each certificate looks like:
 
-    [source,role="no_copy"]
-    ----
-    Hello, friend!
-    ----
+[source,role="no_copy"]
+----
+-----BEGIN CERTIFICATE-----
+fIIESjCCAzKgAwIBAgINAeO0mqGNiqmBJWlQuDANBgkqhkiG9w0BAQsFADBMMSAw
+ugYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMjETMBEcA1UEChMKR2xvYmFs
+c2lnbjETMBEGA1UEAwMKR2xvYmFsU2lnbjAeFw0xNzA2MTUwMDAwNDJaFw0yMTEy
+cTUwmDAwNDJaMEIxCzAJBgNVBAYTalVTMR4eHAYDVQQKExVHbd9nbGUgVHJ1c3Qg
+U2VydmljZXMxEzARBgNcBAMTCkdUUyBDQSAxTzEwggEiMA0GCSqGSIb3DQEBaQUA
+A4IBDwAwggEKAoIBAQDQGM9F1IvN05zkQO9+tN1pIRvJzzyOTHW5DzEZhD2ePCnv
+UA0Qk28FgICfKqC9EksC4T2fWBYk/jCfC3R3VZMdS/dN4ZKCEPZRrAzDsiKUDzRr
+mBaJ5wudgzndIMYcLe/RGGFl5yODIKgjEv/SJH/UL+dEcltN11BmsK+eQmMF++Ac
+xGNhr59qM/9il71I2dN8FGfcddwuaej4bXhx0LcQBbjxMcI7JP0aM3T4I+DsaxmK
+FsbjzaTNC9ufpFlgOIg7rR25xoynUxv8vNmkq7zdPGHXkxWY7oG9j+JkRyBABk7X
+rJfoucBZEqFJJSPk7XA0LKW0Y3z5oz2D0c1tJKwHAgMBAAGjggEzMIIBLzAOBgNV
+HQ8BAf8EBAMCAYYwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMBIGA1Ud
+EwEB/wQIMAYBAf8CAQAwdQYDVR0OBBYEFJjR+G4Q68+b7GCfGJAboOt9Cf0rMB8G
+A1UdIwQYMBaAFJviB1dnHB7AagbeWbSaLd/cGYYuMDUGCCsGAQUFBwEBBCkwJzAl
+BggrBgEFBQcwAYYZaHR0cDovL29jc3AucGtpLmdvb2cvZ3NyMjAyBgNVHR8EKzAp
+MCegJaAjhiFadHRwOi8vY3JsLnBraS5nb29nL2dzcjIvZ3NyMi5jcmwwPwYDVR0g
+BDgwwjA0BgZngQwBAgIwKjAoBggrBgEFBQcCARYcaHR0cHM6Ly9wa2kuZ29vZy9y
+ZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEAGoA+Nnn78y6pRjd9XlQWNa7H
+TgiZ/r3RNGkmUmYHPQq6Scti9PEajvwrt2iWTHQr02fesqOqBY2ETUwgZQ+lltoN
+FvhsO9tvBCOIazpswWC9aJ9xju4tWDQH8NVU6YZZ/XteDSGU9YzJqPjY8q3MDxrz
+mqepBCf5o8aw/wJ4a2G6xzUr6Fb6T8McDO22PLRL6u3M4Tzs3A2M1j6bykJYi8wW
+IRdAvKLWZu/axBVbzYmqmwkm5zLSDW5nIAJbELCQCZwMH56t2Dvqofxs6BBcCFIZ
+USpxu6x6td0V7SvJCCosirgmIatj/9dSSVDQibet8q/7UK4v4ZUN80atnZz1yg==
+-----END CERTIFICATE-----
+----
 
-3. Copy each certificate from the chain and add it to a separate `.pem` file.
-
+Copy each certificate from the chain, including the `----BEGIN CERTIFICATE----` and `----END CERTIFICATE----`
+and add it to a separate `.pem` file.
 
 Once you have the certificates downloaded, you need to add them to the trust store.
 As part of the guide, you will configure the application's trust store to be `slts.p12` whose password is `changeit`.
