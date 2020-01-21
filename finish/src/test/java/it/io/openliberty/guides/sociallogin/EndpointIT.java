@@ -57,8 +57,8 @@ class EndpointIT {
         // tag::assertredirect[]
         String message = response.readEntity(String.class);
         String expectedMessage = "Social Media Selection Form";
-        assertTrue(message.contains(expectedMessage),
-        		"Incorrect response from " + url + ". Did not redirect to social login form");
+        String assertFailMessage = "Incorrect response from " + url + ". Did not redirect to social login form";
+        assertTrue(message.contains(expectedMessage), assertFailMessage);
         // end::assertredirect[]
         response.close();
     }

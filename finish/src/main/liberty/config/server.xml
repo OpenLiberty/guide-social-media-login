@@ -1,14 +1,16 @@
 <server description="Social Login Guide Server">
-    <!-- tag::features[] -->
+    <!-- tag::featureManager[] -->
     <featureManager>
         <feature>jaxrs-2.1</feature>
+        <!-- tag::newFeatures[] -->
         <feature>appSecurity-3.0</feature>
         <feature>transportSecurity-1.0</feature>
         <feature>socialLogin-1.0</feature>
         <feature>ssl-1.0</feature>
         <feature>jwt-1.0</feature>
+        <!-- end::newFeatures[] -->
     </featureManager>
-    <!-- end::features[] -->
+    <!-- end::featureManager[] -->
 
     <httpEndpoint httpPort="${default.http.port}" httpsPort="${default.https.port}"
                   id="defaultHttpEndpoint" host="localhost" />
@@ -20,12 +22,14 @@
               password="changeit"
               type="PKCS12" />
     <!-- end::keystore[] -->
+
     <!-- tag::truststore[] -->
     <keyStore id="socialLoginKeyStore"
               location="${server.output.dir}/resources/security/slts.p12"
               password="changeit"
               type="PKCS12" />
     <!-- end::truststore[] -->
+
     <!-- SSL configuration for auth services -->
     <!-- tag::sslConfig[] -->
     <ssl id="authServiceSslRef"
@@ -40,6 +44,7 @@
                  clientSecret=""
                  sslRef="authServiceSslRef"/>
     <!-- end::githubLogin[] -->
+
     <!-- Amazon Login -->
     <!-- tag::amazonLogin[] -->
     <oauth2Login id="amazonLogin"
@@ -57,6 +62,7 @@
                  userUniqueIdAttribute="user_id"
                  website="www.amazon.com" />
     <!-- end::amazonLogin[] -->
+
     <!-- Google OIDC Login using discovery URL -->
     <!-- tag::googleOIDCLogin[] -->
     <oidcLogin id="googleOIDCLogin"
@@ -74,7 +80,8 @@
     <!-- end::googleOIDCLogin[] -->
 
     <!-- tag::webApplication[] -->
-    <webApplication location="draft-guide-social-login.war" contextRoot="${app.context.root}">
+    <webApplication location="draft-guide-social-login.war"
+                    contextRoot="${app.context.root}">
         <!-- tag::applicationBnd[] -->
         <application-bnd>
             <security-role name="users">

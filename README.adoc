@@ -23,14 +23,14 @@
 = Securing a RESTful web service with Social Media Login
 
 [.hidden]
-NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
+NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website^].
 
 Learn how to secure a RESTful web service with the Open Liberty Social Media Login feature.
 
 == What you'll learn
 
-You will learn how to secure a simple RESTful web service using the https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature]. You will secure an existing service,
-`HelloService` using social media OAuth2 and OpenID Connect.
+You will learn how to secure a simple RESTful web service using the https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^]. You will secure an existing service,
+`HelloService` using social media https://oauth.net/2[OAuth2^] and https://openid.net/connect[OpenID Connect^].
 
 `HelloService` is an existing microservice that responds to a `GET` request with a Plain Text response that looks like this:
 
@@ -43,7 +43,7 @@ Instead of securing your `HelloService` service by implementing your own authent
 you can allow users to authenticate to your service using social media accounts.
 This will allow you to provide a secure authentication method for your users without having to explicitly implement it.
 
-Open Liberty provides a https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature]
+Open Liberty provides a https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^]
 that provides configuration elements that allows you to use Facebook, Google, Github, Linkedin for authentication,
 or to configure a custom OAuth2 or OpenID Connect provider.
 
@@ -66,40 +66,118 @@ The application you will build in this guide requires certificates for Amazon, G
 You also need to create certificates that your application will provide for HTTPS connections. This certificate and private key will need to be added to the key store for social media login.
 Lastly, you need to create applications on the three social media developer platforms to obtain a client ID and client secret to use their APIs.
 
-To get the certificates for Amazon, Google and Github, use a browser.
-For example, open the website on Firefox.
+First, navigate to the `start/src/main/liberty/config/resources/security` directory.
 
-1. Click on the button next to "Connection Secure".
-2. Click on "More Information".
-3. Click on "View Certificate".
-4. Download each certificate in the chain as a separate `PEM` file.
+To get the certificates for Amazon, Google and Github, you can use `openssl` or a browser.
+Use the following URLs to get the certificates for each service:
+
+- Google: https://developers.google.com/
+- Github: https://developer.github.com/
+- Amazon: https://developer.amazon.com/
+
+For example, to get the certificates using Firefox, perform the following steps for each
+URL mentioned above:
+
+1. Open the website on Firefox.
+2. Click on the button next to "Connection Secure".
+3. Click on "More Information".
+4. Click on "View Certificate".
+5. Download each certificate in the chain as a separate `PEM` file.
+
+You can also use `openssl` to output the certificates and manually copy each certificate to a separate file.
+To get the certificates using `openssl`:
+
+Replace `<website URL>` with each URL mentioned above and run the following command in a terminal window:
+
+[role='command']
+----
+openssl s_client \
+    -showcerts \
+    -connect <website URL>:443 </dev/null
+----
+
+In the command output, the contents of each certificate looks like:
+
+[source,role="no_copy"]
+----
+-----BEGIN CERTIFICATE-----
+fIIESjCCAzKgAwIBAgINAeO0mqGNiqmBJWlQuDANBgkqhkiG9w0BAQsFADBMMSAw
+ugYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMjETMBEcA1UEChMKR2xvYmFs
+c2lnbjETMBEGA1UEAwMKR2xvYmFsU2lnbjAeFw0xNzA2MTUwMDAwNDJaFw0yMTEy
+cTUwmDAwNDJaMEIxCzAJBgNVBAYTalVTMR4eHAYDVQQKExVHbd9nbGUgVHJ1c3Qg
+U2VydmljZXMxEzARBgNcBAMTCkdUUyBDQSAxTzEwggEiMA0GCSqGSIb3DQEBaQUA
+A4IBDwAwggEKAoIBAQDQGM9F1IvN05zkQO9+tN1pIRvJzzyOTHW5DzEZhD2ePCnv
+UA0Qk28FgICfKqC9EksC4T2fWBYk/jCfC3R3VZMdS/dN4ZKCEPZRrAzDsiKUDzRr
+mBaJ5wudgzndIMYcLe/RGGFl5yODIKgjEv/SJH/UL+dEcltN11BmsK+eQmMF++Ac
+xGNhr59qM/9il71I2dN8FGfcddwuaej4bXhx0LcQBbjxMcI7JP0aM3T4I+DsaxmK
+FsbjzaTNC9ufpFlgOIg7rR25xoynUxv8vNmkq7zdPGHXkxWY7oG9j+JkRyBABk7X
+rJfoucBZEqFJJSPk7XA0LKW0Y3z5oz2D0c1tJKwHAgMBAAGjggEzMIIBLzAOBgNV
+HQ8BAf8EBAMCAYYwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMBIGA1Ud
+EwEB/wQIMAYBAf8CAQAwdQYDVR0OBBYEFJjR+G4Q68+b7GCfGJAboOt9Cf0rMB8G
+A1UdIwQYMBaAFJviB1dnHB7AagbeWbSaLd/cGYYuMDUGCCsGAQUFBwEBBCkwJzAl
+BggrBgEFBQcwAYYZaHR0cDovL29jc3AucGtpLmdvb2cvZ3NyMjAyBgNVHR8EKzAp
+MCegJaAjhiFadHRwOi8vY3JsLnBraS5nb29nL2dzcjIvZ3NyMi5jcmwwPwYDVR0g
+BDgwwjA0BgZngQwBAgIwKjAoBggrBgEFBQcCARYcaHR0cHM6Ly9wa2kuZ29vZy9y
+ZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEAGoA+Nnn78y6pRjd9XlQWNa7H
+TgiZ/r3RNGkmUmYHPQq6Scti9PEajvwrt2iWTHQr02fesqOqBY2ETUwgZQ+lltoN
+FvhsO9tvBCOIazpswWC9aJ9xju4tWDQH8NVU6YZZ/XteDSGU9YzJqPjY8q3MDxrz
+mqepBCf5o8aw/wJ4a2G6xzUr6Fb6T8McDO22PLRL6u3M4Tzs3A2M1j6bykJYi8wW
+IRdAvKLWZu/axBVbzYmqmwkm5zLSDW5nIAJbELCQCZwMH56t2Dvqofxs6BBcCFIZ
+USpxu6x6td0V7SvJCCosirgmIatj/9dSSVDQibet8q/7UK4v4ZUN80atnZz1yg==
+-----END CERTIFICATE-----
+----
+
+Copy each certificate from the chain, including the `----BEGIN CERTIFICATE----` and `----END CERTIFICATE----`
+and add it to a separate `.pem` file.
 
 Once you have the certificates downloaded, you need to add them to the trust store.
 As part of the guide, you will configure the application's trust store to be `slts.p12` whose password is `changeit`.
-Run the following command to add a certificate to the trust store. The command also creates the trust store file if it doesn't exist.
+
+To add a certificate to the trust store, substitute `<certificate-file-name>` with the name of the downloaded certificate
+and `<certificate-alias>` with an alias you wish to give the certificate in the following command and run it.
 [role='command']
 ```
-keytool -import -trustcacerts -file <certificate-file-name> -alias <certificate-alias> -keystore slts.p12 -storetype PKCS12 -storepass changeit
+keytool -import -trustcacerts \
+        -file <certificate-file-name> \
+        -alias <certificate-alias> \
+        -keystore slts.p12 \
+        -storetype PKCS12 \
+        -storepass changeit
 ```
+The command also creates the trust store file if it doesn't exist.
+
+Add each of the certificates that you downloaded to the `slts.p12` trust store.
 
 To generate certificates for your service to use for HTTPS connections, run the following command:
 [role='command']
 ```
-openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365
+openssl req \
+        -x509 \
+        -newkey rsa:4096 \
+        -keyout key.pem \
+        -out cert.pem \
+        -days 365
 ```
 
 Before the certificate and private key can be imported into the key store for your service, it needs to be converted into one `PKCS12` bundle.
 Combine your key and certificate by running the following command:
 [role='command']
 ```
-openssl pkcs12 -inkey key.pem -in cert.pem -export -out certificate.p12
+openssl pkcs12 \
+        -inkey key.pem \
+        -in cert.pem \
+        -export -out certificate.p12
 ```
 
 The key store to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
 To import your certificate bundle into this key store, run the following command:
 [role='command']
 ```
-keytool -importkeystore -srckeystore certificate.p12 -srcstoretype PKCS12 -destkeystore key.p12 -deststoretype PKCS12
+keytool -importkeystore \
+        -srckeystore certificate.p12 \
+        -srcstoretype PKCS12 \
+        -destkeystore key.p12 \
+        -deststoretype PKCS12
 ```
 
 To use the new key store and trust store, copy these files into `src/main/liberty/resources/security`
@@ -116,43 +194,60 @@ Set the redirect URL to `https://localhost:9443/ibm/api/social-login/redirect/am
 In order to obtain OAuth 2.0 credentials for Github, follow the steps here: https://auth0.com/docs/connections/social/github.
 Set the redirect URL to `https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
 
-In order to try what you'll build, enter the client IDs and client secrets to `server.xml` in the `finish` folder.
+Enter the client IDs and client secrets to `src/main/liberty/config/server.xml` in the `start` folder.
 
 == Securing HelloService
 
+First, navigate to the `start` directory.
+To start the Open Liberty server in development mode, run the `liberty:dev` goal in the `start` directory:
+
+[role='command']
+```
+mvn liberty:dev
+```
+
 [role="code_command", subs="quotes"] 
 ---- 
-#Update this `HelloService` class.#
+#Update the `HelloService` class.#
 `src/main/java/io/openliberty/guides/sociallogin/HelloService.java`
 ---- 
 
+Add the following [hotspot=newImports]`imports` to the `HelloService` class:
+
+[role="command"]
+----
+import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
+----
+
 The [hotspot=helloService]`HelloService` class is the JAX-RS service that you will be securing.
-Add the [hotspot=rolesAllowed]`@RolesAllowed({"users"})` annotation to restrict access to the service to users who are
-in the `Users` role.
+Add the [hotspot=rolesAllowed hotspot=rolesAllowedImport]`@RolesAllowed({"users"})` annotation to restrict access to the service to users who are
+in the `users` role.
 
 Next, you will replace the `return "Hello, friend!";` to output user information instead of `friend`.
 
-First, add the [hotspot=httpServletRequestContext]`HttpServletRequest` context.
-Next, use [hotspot=userPrincipal]`request.getUserPrincipal()` to get information about the logged in user.
+Add the [hotspot=httpServletRequestContext hotspot=httpServletRequestImport]`HttpServletRequest` context.
+Then, use [hotspot=userPrincipal hotspot=userPrincipalImport]`request.getUserPrincipal()` to get information about the logged in user.
 
 HelloService.java 
 [source, Java, linenums, role='code_column hide_tags=copyright'] 
----- 
+----
 include::finish/src/main/java/io/openliberty/guides/sociallogin/HelloService.java[]
----- 
+----
 
 == Configuring the security and social media login
 
 [role="code_command", subs="quotes"] 
 ---- 
-#Replace this `server.xml` class.#
+#Replace the `server.xml` class.#
 `src/main/liberty/config/server.xml`
----- 
+----
 
 server.xml 
-[source, xml, linenums, role='code_column'] 
+[source, xml, linenums, role='code_column']
 ---- 
-include::finish/src/main/liberty/config/server.xml[tags=**;!copyright;]
+include::finish/src/main/liberty/config/server.xml[]
 ---- 
 
 Replace the contents of `src/main/liberty/config/server.xml`.
@@ -165,24 +260,22 @@ The [hotspot=applicationBnd]`application-bnd` configuration element under the
 which all authenticated users belong to.
 Adding this allows users that are authenticated using social media login to access your `HelloService` service.
 
+server.xml
+[source, xml, linenums, role='code_column']
+----
+include::finish/src/main/liberty/config/server.xml[]
+---- 
+
 === Adding required features
 
-The following OpenLiberty [hotspot=features]`feature elements` enable Social Media Login and other related features:
-
-[role="command"]
-----
-<feature>appSecurity-3.0</feature>
-<feature>transportSecurity-1.0</feature>
-<feature>socialLogin-1.0</feature>
-<feature>ssl-1.0</feature>
-<feature>jwt-1.0</feature>
-----
+To enable https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] and other required features, add new [hotspot=newFeatures]`feature elements` to the [hotspot=featureManager]`featureManager` in
+`src/main/liberty/config/server.xml`
 
 There are some prerequisite configurations that social media login configuration elements need:
 
-1. A `keyStore` configuration element that corresponds to the key store created in the prerequisites section
-2. A `keyStore` configuration element that corresponds to the trust store created in the prerequisites section
-3. An `ssl` configuration element for configuring the SSL configuration that is used to connect to the social media
+1. A [hotspot=keystore]`keyStore` configuration element that corresponds to the key store created in the prerequisites section
+2. A [hotspot=truststore]`keyStore` configuration element that corresponds to the trust store created in the prerequisites section
+3. An [hotspot=sslConfig]`ssl` configuration element for configuring the SSL configuration that is used to connect to the social media
 
 === Adding key store and trust store
 
@@ -295,18 +388,10 @@ EndpointIT.java
 include::finish/src/test/java/it/io/openliberty/guides/sociallogin/EndpointIT.java[]
 ----
 
-This test class has more lines of code than the resource implementation. This situation is common.
-The test method is indicated with the [hotspot=test file=0]`@Test` annotation.
+First, check that a `200` response was received using the JUnit [hotspot=assertequals]`assertEquals`
+method.
 
-To call the JAX-RS service using the JAX-RS client, first create a `WebTarget` object by calling
-the [hotspot=target]`target` method that provides the URL. To cause the HTTP request to occur, the [hotspot=requestget]`request().get()` method
-is called on the `WebTarget` object. The [hotspot=requestget]`get` method
-call is a synchronous call that blocks until a response is received. This call returns a [hotspot=requestget]`Response`
-object, which can be inspected to determine whether the request was successful.
-
-The first thing to check is that a `200` response was received. The JUnit [hotspot=assertequals]`assertEquals` method can be used for this check.
-
-Check the response body to ensure it returned the right information.
+Next, check the response body to ensure it returned the right information.
 You need to check whether the request gets redirected to the social media login form.
 You can do this by looking for the string [hotspot=assertredirect]`"Social Media Selection Form"` in the response string.
 
@@ -320,8 +405,8 @@ Since you started Open Liberty in development mode at the start of the guide, pr
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
-Running it.io.openliberty.guides.rest.EndpointIT
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.884 sec - in it.io.openliberty.guides.rest.EndpointIT
+Running it.io.openliberty.guides.sociallogin.EndpointIT
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.884 sec - in it.io.openliberty.guides.sociallogin.EndpointIT
 
 Results :
 
@@ -337,11 +422,11 @@ you ran the server and then pressing the `enter/return` key.
 
 == Great work! You're done!
 
-You secured and tested a simple RESTful web service in Open Liberty by using the Social Media Login feature.
+You secured a simple RESTful web service in Open Liberty by using the Social Media Login feature.
 
 == Related Links
 
-Earn more about MicroProfile.
+Learn more about MicroProfile.
 
 https://microprofile.io/[See the MicroProfile specs^]
 
