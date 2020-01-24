@@ -32,22 +32,22 @@ Learn how to secure a RESTful web service with the Open Liberty Social Media Log
 You will learn how to secure a simple RESTful web service using the https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^]. You will secure an existing service,
 `HelloService` using social media https://oauth.net/2[OAuth2^] and https://openid.net/connect[OpenID Connect^].
 
-`HelloService` is an existing microservice that responds to a `GET` request with a Plain Text response that looks like this:
+`HelloService` is a provided microservice that responds to a `GET` request with a Plain Text response that looks like this:
 
 [source,role="no_copy"]
 ----
 Hello, friend!
 ----
 
-Instead of securing your `HelloService` service by implementing your own authentication service,
-you can allow users to authenticate to your service using social media accounts.
+Instead of securing the `HelloService` service by implementing your own authentication service,
+you can allow users to authenticate to the service using social media accounts.
 This will allow you to provide a secure authentication method for your users without having to explicitly implement it.
 
 Open Liberty provides a https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^]
 that provides configuration elements that allows you to use Facebook, Google, Github, Linkedin for authentication,
 or to configure a custom OAuth2 or OpenID Connect provider.
 
-By the end of this guide, you will secure your `HelloService` service with three social media login choices:
+By the end of this guide, you will secure the `HelloService` service with three social media login choices:
 
 1. Github login
 2. Amazon login
@@ -64,7 +64,7 @@ include::{common-includes}/gitclone.adoc[]
 Before you can build the application, you will need to add the social media domains' certificates to the trust store for social media login.
 The application you will build in this guide requires certificates for Amazon, Google and Github to be added to the trust store.
 You also need to create certificates that your application will provide for HTTPS connections. This certificate and private key will need to be added to the key store for social media login.
-Lastly, you need to create applications on the three social media developer platforms to obtain a client ID and client secret to use their APIs.
+Lastly, you need to create an application on the three social media developer platforms to obtain a client ID and client secret to use their APIs.
 
 First, navigate to the `start/src/main/liberty/config/resources/security` directory.
 
@@ -102,28 +102,7 @@ In the command output, the contents of each certificate looks like:
 ----
 -----BEGIN CERTIFICATE-----
 fIIESjCCAzKgAwIBAgINAeO0mqGNiqmBJWlQuDANBgkqhkiG9w0BAQsFADBMMSAw
-ugYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMjETMBEcA1UEChMKR2xvYmFs
-c2lnbjETMBEGA1UEAwMKR2xvYmFsU2lnbjAeFw0xNzA2MTUwMDAwNDJaFw0yMTEy
-cTUwmDAwNDJaMEIxCzAJBgNVBAYTalVTMR4eHAYDVQQKExVHbd9nbGUgVHJ1c3Qg
-U2VydmljZXMxEzARBgNcBAMTCkdUUyBDQSAxTzEwggEiMA0GCSqGSIb3DQEBaQUA
-A4IBDwAwggEKAoIBAQDQGM9F1IvN05zkQO9+tN1pIRvJzzyOTHW5DzEZhD2ePCnv
-UA0Qk28FgICfKqC9EksC4T2fWBYk/jCfC3R3VZMdS/dN4ZKCEPZRrAzDsiKUDzRr
-mBaJ5wudgzndIMYcLe/RGGFl5yODIKgjEv/SJH/UL+dEcltN11BmsK+eQmMF++Ac
-xGNhr59qM/9il71I2dN8FGfcddwuaej4bXhx0LcQBbjxMcI7JP0aM3T4I+DsaxmK
-FsbjzaTNC9ufpFlgOIg7rR25xoynUxv8vNmkq7zdPGHXkxWY7oG9j+JkRyBABk7X
-rJfoucBZEqFJJSPk7XA0LKW0Y3z5oz2D0c1tJKwHAgMBAAGjggEzMIIBLzAOBgNV
-HQ8BAf8EBAMCAYYwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMBIGA1Ud
-EwEB/wQIMAYBAf8CAQAwdQYDVR0OBBYEFJjR+G4Q68+b7GCfGJAboOt9Cf0rMB8G
-A1UdIwQYMBaAFJviB1dnHB7AagbeWbSaLd/cGYYuMDUGCCsGAQUFBwEBBCkwJzAl
-BggrBgEFBQcwAYYZaHR0cDovL29jc3AucGtpLmdvb2cvZ3NyMjAyBgNVHR8EKzAp
-MCegJaAjhiFadHRwOi8vY3JsLnBraS5nb29nL2dzcjIvZ3NyMi5jcmwwPwYDVR0g
-BDgwwjA0BgZngQwBAgIwKjAoBggrBgEFBQcCARYcaHR0cHM6Ly9wa2kuZ29vZy9y
-ZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEAGoA+Nnn78y6pRjd9XlQWNa7H
-TgiZ/r3RNGkmUmYHPQq6Scti9PEajvwrt2iWTHQr02fesqOqBY2ETUwgZQ+lltoN
-FvhsO9tvBCOIazpswWC9aJ9xju4tWDQH8NVU6YZZ/XteDSGU9YzJqPjY8q3MDxrz
-mqepBCf5o8aw/wJ4a2G6xzUr6Fb6T8McDO22PLRL6u3M4Tzs3A2M1j6bykJYi8wW
-IRdAvKLWZu/axBVbzYmqmwkm5zLSDW5nIAJbELCQCZwMH56t2Dvqofxs6BBcCFIZ
-USpxu6x6td0V7SvJCCosirgmIatj/9dSSVDQibet8q/7UK4v4ZUN80atnZz1yg==
+... more lines ...
 -----END CERTIFICATE-----
 ----
 
