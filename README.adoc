@@ -190,14 +190,13 @@ mvn liberty:dev
 #Update the `HelloService` class.#
 `src/main/java/io/openliberty/guides/sociallogin/HelloService.java`
 ---- 
-
+[role="edit_command_text"]
 Add the following [hotspot=newImports]`imports` to the `HelloService` class:
 
-[role="command"]
+HelloService.java 
+[source, Java, linenums, role='code_column hide_tags=copyright'] 
 ----
-import javax.annotation.security.RolesAllowed;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Context;
+include::finish/src/main/java/io/openliberty/guides/sociallogin/HelloService.java[]
 ----
 
 The [hotspot=helloService]`HelloService` class is the JAX-RS service that you will be securing.
@@ -208,12 +207,6 @@ Next, you will replace the `return "Hello, friend!";` to output user information
 
 Add the [hotspot=httpServletRequestContext hotspot=httpServletRequestImport]`HttpServletRequest` context.
 Then, use [hotspot=userPrincipal hotspot=userPrincipalImport]`request.getUserPrincipal()` to get information about the logged in user.
-
-HelloService.java 
-[source, Java, linenums, role='code_column hide_tags=copyright'] 
-----
-include::finish/src/main/java/io/openliberty/guides/sociallogin/HelloService.java[]
-----
 
 == Configuring the security and social media login
 
@@ -347,7 +340,6 @@ WSPrincipal:<<your username>>
 
 No automated tests are provided in this guide.
 You can test this service manually by starting a server and pointing a web browser at http://localhost:9080/api/hello[the endpoint for Hello service^].
-
 
 == Great work! You're done!
 
