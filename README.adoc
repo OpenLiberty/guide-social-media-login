@@ -345,57 +345,8 @@ WSPrincipal:<<your username>>
 
 == Testing the service
 
-You can test this service manually by starting a server and pointing a web browser at the
-http://localhost:9080/api/hello[^] URL. Automated tests are a much better
-approach because they trigger a failure if a change introduces a bug. JUnit and the JAX-RS Client
-API provide a simple environment to test the application.
-
-You can write tests for the individual units of code outside of a running application server, or they
-can be written to call the application server directly. In this example, you will create a test that
-does the latter.
-
-[role="code_command hotspot", subs="quotes"]
-----
-#Update the `EndpointIT` class.#
-`src/test/java/it/io/openliberty/guides/rest/EndpointIT.java`
-----
-
-EndpointIT.java
-[source, Java, linenums, role="code_column hide_tags=comment"]
-----
-include::finish/src/test/java/it/io/openliberty/guides/sociallogin/EndpointIT.java[]
-----
-
-First, check that a `200` response was received using the JUnit [hotspot=assertequals]`assertEquals`
-method.
-
-Next, check the response body to ensure it returned the right information.
-You need to check whether the request gets redirected to the social media login form.
-You can do this by looking for the string [hotspot=assertredirect]`"Social Media Selection Form"` in the response string.
-
-=== Running the tests
-
-Since you started Open Liberty in development mode at the start of the guide, press
-`enter/return` key to run the tests. You will see the following output:
-
-[source,role="no_copy"]
-----
--------------------------------------------------------
- T E S T S
--------------------------------------------------------
-Running it.io.openliberty.guides.sociallogin.EndpointIT
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.884 sec - in it.io.openliberty.guides.sociallogin.EndpointIT
-
-Results :
-
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
-----
-
-To see whether the tests detect a failure, add an assertion that you know fails, or change the existing
-assertion to a constant value that doesn't match the social media login form.
-
-When you are done checking out the service, exit development mode by typing `q` in the shell session where
-you ran the server and then pressing the `enter/return` key.
+No automated tests are provided in this guide.
+You can test this service manually by starting a server and pointing a web browser at http://localhost:9080/api/hello[the endpoint for Hello service^].
 
 
 == Great work! You're done!
