@@ -185,13 +185,18 @@ To start the Open Liberty server in development mode, run the `liberty:dev` goal
 mvn liberty:dev
 ```
 
+The [hotspot=helloService]`HelloService` class is the JAX-RS service that you will be securing.
+
 [role="code_command", subs="quotes"] 
 ---- 
 #Update the `HelloService` class.#
 `src/main/java/io/openliberty/guides/sociallogin/HelloService.java`
 ---- 
 [role="edit_command_text"]
-Add the following [hotspot=newImports]`imports` to the `HelloService` class:
+Add the required [hotspot=newImports]`imports` to the `HelloService` class.
+Add the [hotspot=rolesAllowed hotspot=rolesAllowedImport]`@RolesAllowed({"users"})` annotation.
+Add the [hotspot=httpServletRequestContext hotspot=httpServletRequestImport]`HttpServletRequest` context.
+Replace the `return "Hello, friend!";` to [hotspot=userPrincipal] `output user information`.
 
 HelloService.java 
 [source, Java, linenums, role='code_column hide_tags=copyright'] 
@@ -199,14 +204,11 @@ HelloService.java
 include::finish/src/main/java/io/openliberty/guides/sociallogin/HelloService.java[]
 ----
 
-The [hotspot=helloService]`HelloService` class is the JAX-RS service that you will be securing.
-Add the [hotspot=rolesAllowed hotspot=rolesAllowedImport]`@RolesAllowed({"users"})` annotation to restrict access to the service to users who are
+The [hotspot=rolesAllowed hotspot=rolesAllowedImport]`@RolesAllowed({"users"})` annotation restricts access to the service to users who are
 in the `users` role.
 
-Next, you will replace the `return "Hello, friend!";` to output user information instead of `friend`.
-
-Add the [hotspot=httpServletRequestContext hotspot=httpServletRequestImport]`HttpServletRequest` context.
-Then, use [hotspot=userPrincipal hotspot=userPrincipalImport]`request.getUserPrincipal()` to get information about the logged in user.
+The [hotspot=httpServletRequestContext hotspot=httpServletRequestImport]`HttpServletRequest` context allows you to use 
+[hotspot=userPrincipal hotspot=userPrincipalImport]`request.getUserPrincipal()` to get information about the logged in user instead of outputting `friend`.
 
 == Configuring the security and social media login
 
