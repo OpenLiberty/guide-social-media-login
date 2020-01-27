@@ -189,26 +189,33 @@ The [hotspot=helloService]`HelloService` class is the JAX-RS service that you wi
 
 [role="code_command", subs="quotes"] 
 ---- 
-#Update the `HelloService` class.#
+#Replace this `HelloService` class.#
 `src/main/java/io/openliberty/guides/sociallogin/HelloService.java`
 ---- 
-[role="edit_command_text"]
-Add the required [hotspot=newImports]`imports` to the `HelloService` class.
-Add the [hotspot=rolesAllowed hotspot=rolesAllowedImport]`@RolesAllowed({"users"})` annotation.
+
+The following [hotspot=newImports]`new imports` are required for the `HelloService` class:
+[source]
+----
+- [hotspot=rolesAllowedImport]`javax.annotation.security.RolesAllowed`
+- [hotspot=httpServletRequestImport`javax.servlet.http.HttpServletRequest`
+- [hotspot=httpServletRequestContext]`javax.ws.rs.core.Context`
+----
+
+The [hotspot=rolesAllowed hotspot=rolesAllowedImport]`@RolesAllowed({"users"})` annotation restricts access to the service to users who are
+in the `users` role.
+
 Add the [hotspot=httpServletRequestContext hotspot=httpServletRequestImport]`HttpServletRequest` context.
-Replace the `return "Hello, friend!";` to [hotspot=userPrincipal] `output user information`.
+
+The `return "Hello, friend!";` is replaced to [hotspot=userPrincipal] `output user information`.
+The [hotspot=httpServletRequestContext hotspot=httpServletRequestImport]`HttpServletRequest` context, which is injected using the
+[hotspot=]contextAnnotation`@Config` annotation, allows you to get information about the logged in user
+using [hotspot=userPrincipal hotspot=userPrincipalImport]`request.getUserPrincipal()`.
 
 HelloService.java 
 [source, Java, linenums, role='code_column hide_tags=copyright'] 
 ----
 include::finish/src/main/java/io/openliberty/guides/sociallogin/HelloService.java[]
 ----
-
-The [hotspot=rolesAllowed hotspot=rolesAllowedImport]`@RolesAllowed({"users"})` annotation restricts access to the service to users who are
-in the `users` role.
-
-The [hotspot=httpServletRequestContext hotspot=httpServletRequestImport]`HttpServletRequest` context allows you to use 
-[hotspot=userPrincipal hotspot=userPrincipalImport]`request.getUserPrincipal()` to get information about the logged in user instead of outputting `friend`.
 
 == Configuring the security and social media login
 
