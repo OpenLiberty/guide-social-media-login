@@ -51,4 +51,4 @@ public class HelloService {
     }
     // end::userPrincipal[]
 }
-// tag::helloService[]
+// end::helloService[]
