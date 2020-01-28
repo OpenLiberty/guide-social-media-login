@@ -32,14 +32,18 @@ if [ "${STATUS}" -ne "200" ]
     then
         echo "FAIL: Endpoint returned ${STATUS}, expected 200."
         exit 1
+    else
+        echo "Return code check passed."
 fi
 
 # Curl the hello endpoint and verify that it redirects to the social media selection form
-RESPONSE=$(curl "http://localhost:9080/api/hello")
+RESPONSE=$(curl --silent "http://localhost:9080/api/hello" | grep "Social Media Selection Form")
 if [ -z "${RESPONSE}" ]
     then
         echo "FAIL: Could not find string literal \"Social Media Selection Form\" in response."
         exit 1
+    else
+        echo "Response body check passed."
 fi
 
 mvn liberty:stop
