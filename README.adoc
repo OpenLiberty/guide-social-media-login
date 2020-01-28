@@ -131,12 +131,13 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role='command']
 ----
-keytool -import -trustcacerts \
-        -file <certificate-file-name> \
-        -alias <certificate-alias> \
-        -keystore slts.p12 \
-        -storetype PKCS12 \
-        -storepass changeit
+keytool \
+    -import -trustcacerts \
+    -file <certificate-name> \
+    -alias <certificate-alias> \
+    -keystore slts.p12 \
+    -storetype PKCS12 \
+    -storepass changeit
 ----
 --
 
@@ -144,12 +145,13 @@ keytool -import -trustcacerts \
 --
 [role='command']
 ----
-keytool -import -trustcacerts `
-        - file <certificate-file-name> `
-        - alias <certificate-alias> `
-        - keystore slts.p12 `
-        - storetype PKCS12 `
-        - storepass changeit
+keytool `
+    -import -trustcacerts `
+    - file <certificate-name> `
+    - alias <certificate-alias> `
+    - keystore slts.p12 `
+    - storetype PKCS12 `
+    - storepass changeit
 ----
 --
 
@@ -164,12 +166,12 @@ To generate certificates for your service to use for HTTPS connections, run the 
 [role='command']
 ```
 openssl req \
-        -x509 \
-        -newkey rsa:4096 \
-        -keyout key.pem \
-        -out cert.pem \
-        -days 365 \
-        -subj "/C=CA/CN=localhost"
+    -x509 \
+    -newkey rsa:4096 \
+    -keyout key.pem \
+    -out cert.pem \
+    -days 365 \
+    -subj "/C=CA/CN=localhost"
 ```
 
 Before the certificate and private key can be imported into the key store for your service, it needs to be converted into one `PKCS12` bundle.
@@ -177,20 +179,21 @@ Combine your key and certificate by running the following command:
 [role='command']
 ```
 openssl pkcs12 \
-        -inkey key.pem \
-        -in cert.pem \
-        -export -out certificate.p12
+    -inkey key.pem \
+    -in cert.pem \
+    -export -out certificate.p12
 ```
 
 The key store to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
 To import your certificate bundle into this key store, run the following command:
 [role='command']
 ```
-keytool -importkeystore \
-        -srckeystore certificate.p12 \
-        -srcstoretype PKCS12 \
-        -destkeystore key.p12 \
-        -deststoretype PKCS12
+keytool \
+    -importkeystore \
+    -srckeystore certificate.p12 \
+    -srcstoretype PKCS12 \
+    -destkeystore key.p12 \
+    -deststoretype PKCS12
 ```
 --
 
@@ -200,11 +203,11 @@ To generate certificates for your service to use for HTTPS connections, run the 
 [role='command']
 ```
 New-SelfSignedCertificate `
-        -Subject "C=CA,CN=localhost" `
-        -KeyAlgorithm RSA `
-        -KeyLength 4096 `
-        -CertStoreLocation "Cert:\CurrentUser\My" `
-        -FriendlyName "SocialLoginServer" 
+    -Subject "C=CA,CN=localhost" `
+    -KeyAlgorithm RSA `
+    -KeyLength 4096 `
+    -CertStoreLocation "Cert:\CurrentUser\My" `
+    -FriendlyName "SocialLoginServer" 
 ```
 
 Before the certificate and private key can be imported into the key store for your service, it needs to be converted into one `PKCS12` bundle.
@@ -224,11 +227,12 @@ The key store to be used by social media login will be configured to be `key.p12
 To import your certificate bundle into this key store, run the following command:
 [role='command']
 ```
-keytool -importkeystore `
-        -srckeystore certificate.pfx `
-        -srcstoretype PKCS12 `
-        -destkeystore key.p12 `
-        -deststoretype PKCS12
+keytool `
+    -importkeystore `
+    -srckeystore certificate.pfx `
+    -srcstoretype PKCS12 `
+    -destkeystore key.p12 `
+    -deststoretype PKCS12
 ```
 --
 
