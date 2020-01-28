@@ -15,7 +15,7 @@
 :page-description: Learn how to secure a RESTful web service with the Open Liberty Social Media Login feature.
 :guide-author: Open Liberty
 :page-tags: ['Social Media Login', 'Java EE', 'Jakarta EE']
-:page-related-guides: ['rest-client-java', 'rest-client-angularjs']
+:page-related-guides: ['microprofile-jwt', 'security-intro', 'rest-client-java', 'rest-client-angularjs']
 :page-permalink: /guides/{projectid}
 :page-seo-title: Securing a RESTful web service with Social Media Login
 :page-seo-description: A tutorial on how to secure a RESTful web service in Open Liberty using the SocialLogin feature
@@ -123,7 +123,7 @@ URL mentioned above:
 Once you have the certificates downloaded, you need to add them to the trust store.
 As part of the guide, you will configure the application's trust store to be `slts.p12` whose password is `changeit`.
 
-To add a certificate to the trust store, substitute `<certificate-file-name>` with the name of the downloaded certificate
+To add a certificate to the trust store, substitute `<certificate-name>` with the name of the downloaded certificate
 and `<certificate-alias>` with an alias you wish to give the certificate in the following command and run it.
 
 include::{common-includes}/os-tabs.adoc[]
@@ -263,7 +263,7 @@ The [hotspot=helloService]`HelloService` class is the JAX-RS service that you wi
 
 [role="code_command", subs="quotes"] 
 ---- 
-#Replace this `HelloService` class.#
+#Replace the `HelloService` class.#
 `src/main/java/io/openliberty/guides/sociallogin/HelloService.java`
 ---- 
 
@@ -305,8 +305,8 @@ The explanation for these changes are in the following sections.
 
 === Configuring the security roles
 
-The [hotspot=applicationBnd]`application-bnd` configuration element under the
-[hotspot=webApplication]`webApplication` configuration element creates a new security role `users`,
+The [hotspot=applicationBnd]`<application-bnd />` configuration element under the
+[hotspot=webApplication]`<webApplication />` configuration element creates a new security role `users`,
 which all authenticated users belong to.
 Adding this allows users that are authenticated using social media login to access your `HelloService` service.
 
@@ -318,14 +318,14 @@ include::finish/src/main/liberty/config/server.xml[]
 
 === Adding required features
 
-To enable https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] and other required features, add new [hotspot=newFeatures]`feature elements` to the [hotspot=featureManager]`featureManager` in
+To enable https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] and other required features, add new [hotspot=newFeatures]`<feature /> elements` to the [hotspot=featureManager]`featureManager` in
 `src/main/liberty/config/server.xml`
 
 There are some prerequisite configurations that social media login configuration elements need:
 
-1. A [hotspot=keystore]`keyStore` configuration element that corresponds to the key store created in the prerequisites section
-2. A [hotspot=truststore]`keyStore` configuration element that corresponds to the trust store created in the prerequisites section
-3. An [hotspot=sslConfig]`ssl` configuration element for configuring the SSL configuration that is used to connect to the social media
+1. A [hotspot=keystore]`<keyStore />` configuration element that corresponds to the key store created in the prerequisites section
+2. A [hotspot=truststore]`<keyStore />` configuration element that corresponds to the trust store created in the prerequisites section
+3. An [hotspot=sslConfig]`<ssl />` configuration element for configuring the SSL configuration that is used to connect to the social media
 
 === Adding key store and trust store
 
@@ -347,16 +347,16 @@ and [hotspot=truststore]`socialLoginKeyStore` as the trust store will be provide
 
 === Adding Github login configuration
 
-The [hotspot=githubLogin]`githubLogin` configuration element will configure Github login.
+The [hotspot=githubLogin]`<githubLogin />` configuration element will configure Github login.
 Replace the values of the [hotspot=githubLogin]`clientId` and [hotspot=githubLogin]`clientSecret` with the credentials you created for your Github application
 in the prerequisites section. The [hotspot=githubLogin]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
 
 === Adding Amazon login configuration
 
-The [hotspot=amazonLogin]`amazonLogin` configuration uses a custom `oauth2Login` configuration element.
+The [hotspot=amazonLogin]`amazonLogin` configuration uses a custom `<oauth2Login />` configuration element.
 Replace the values of [hotspot=amazonLogin]`clientId` and [hotspot=amazonLogin]`clientSecret` with the credentials you created for your Amazon application
 in the prerequisites section. The [hotspot=amazonLogin]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
-The following attributes are set for your [hotspot=amazonLogin]`oauth2Login` configuration element:
+The following attributes are set for your [hotspot=amazonLogin]`<oauth2Login />` configuration element:
 
 - [hotspot=amazonLogin]`responseType`: `code`
 - [hotspot=amazonLogin]`tokenEndpointAuthMethod`: `client_secret_post`
@@ -372,14 +372,14 @@ The following attributes are set for your [hotspot=amazonLogin]`oauth2Login` con
 Further documentation on these attributes can be found on the https://openliberty.io/docs/ref/config/oauth2Login.html[Open Liberty config reference on `oauth2Login`^].
 The values for these attributes can be found in the https://developer.amazon.com/docs/login-with-amazon/minitoc-lwa-overview.html[Login With Amazon API documentation^].
 
-Make sure that the `id` of your [hotspot=amazonLogin]`oauth2Login` configuration matches the redirect URL (if you set the `id` to `amazonLogin`, the redirect URL must end with `.../amazonLogin`).
+Make sure that the [hotspot=amazonLogin]`id` of your [hotspot=amazonLogin]`<oauth2Login />` configuration matches the redirect URL (if you set the [hotspot=amazonLogin]`id` to `amazonLogin`, the redirect URL must end with `.../amazonLogin`).
 
 === Adding Google login configuration
 
-The [hotspot=googleOIDCLogin]`googleOIDCLogin` configuration uses a custom `oidcLogin` configuration element.
+The [hotspot=googleOIDCLogin]`googleOIDCLogin` configuration uses a custom `<oidcLogin />` configuration element.
 Repalce the values of [hotspot=googleOIDCLogin]`clientId` and [hotspot=googleOIDCLogin]`clientSecret` with the credentials you created for your Google application
 in the prerequisites section. The [hotspot=googleOIDCLogin]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
-The following attributes are set for your [hotspot=googleOIDCLogin]`oidcLogin` configuration element:
+The following attributes are set for your [hotspot=googleOIDCLogin]`<oidcLogin />` configuration element:
 
 - [hotspot=googleOIDCLogin]`displayName`: `Google`
 - [hotspot=googleOIDCLogin]`authorizationEndpoint`: `\https://accounts.google.com/o/oauth2/v2/auth`
@@ -393,7 +393,7 @@ The following attributes are set for your [hotspot=googleOIDCLogin]`oidcLogin` c
 Further documentation on these attributes can be found on the https://openliberty.io/docs/ref/config/oidcLogin.html[Open Liberty config reference on `oidcLogin`^].
 The values of these attributes can be found in the https://developers.google.com/identity/protocols/OpenIDConnect[Google API documentation^].
 
-Make sure that the [hotspot=googleOIDCLogin]`id` of your [hotspot=googleOIDCLogin]`oidcLogin` configuration matches the redirect URL (if you set the [hotspot=googleOIDCLogin]`id` to `googleOIDCLogin`, the redirect URL must end with `.../googleOIDCLogin`).
+Make sure that the [hotspot=googleOIDCLogin]`id` of your [hotspot=googleOIDCLogin]`<oidcLogin />` configuration matches the redirect URL (if you set the [hotspot=googleOIDCLogin]`id` to `googleOIDCLogin`, the redirect URL must end with `.../googleOIDCLogin`).
 
 == Building and running the application
 
