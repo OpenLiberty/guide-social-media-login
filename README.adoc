@@ -63,28 +63,23 @@ include::{common-includes}/gitclone.adoc[]
 
 Before you can build the application, you will need to add the social media domains' certificates to the trust store for social media login.
 The application you will build in this guide requires certificates for Amazon, Google and Github to be added to the trust store.
-You also need to create certificates that your application will provide for HTTPS connections. This certificate and private key will need to be added to the key store for social media login.
+You also need to create certificates that your application will provide for HTTPS connections.
+This certificate and private key will need to be added to the key store for social media login.
 Lastly, you need to create an application on the three social media developer platforms to obtain a client ID and client secret to use their APIs.
 
 First, navigate to the `start/src/main/liberty/config/resources/security` directory.
 
-To get the certificates for Amazon, Google and Github, you can use `openssl` or a browser.
-Use the following URLs to get the certificates for each service:
+The instructions to get the certificates for Amazon, Google and Github depend on your OS and environment.
+Use the following URLs when following the specific instructions for your OS to get the certificates for each service:
 
 - Google: https://developers.google.com/
 - Github: https://developer.github.com/
 - Amazon: https://developer.amazon.com/
 
-For example, to get the certificates using Firefox, perform the following steps for each
-URL mentioned above:
-
-1. Open the website on Firefox.
-2. Click on the button next to "Connection Secure".
-3. Click on "More Information".
-4. Click on "View Certificate".
-5. Download each certificate in the chain as a separate `PEM` file.
-
-You can also use `openssl` to output the certificates and manually copy each certificate to a separate file.
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
+You can use `openssl` to output the certificate chain for each URL and manually copy each certificate into a separate file.
 To get the certificates using `openssl`:
 
 Replace `<website URL>` with each URL mentioned above and run the following command in a terminal window:
@@ -108,25 +103,63 @@ fIIESjCCAzKgAwIBAgINAeO0mqGNiqmBJWlQuDANBgkqhkiG9w0BAQsFADBMMSAw
 
 Copy each certificate from the chain, including the `----BEGIN CERTIFICATE----` and `----END CERTIFICATE----`
 and add it to a separate `.pem` file.
+--
+
+[.tab_content.windows_section]
+--
+Since there is no `openssl` command on Windows by default, the certificates can be retreived from the URLs using an internet browser.
+For example, to get the certificates using Firefox, perform the following steps for each
+URL mentioned above:
+
+1. Open the website on Firefox.
+2. Click on the "Lock" icon to the left of the URL.
+3. Click on the button next to "Connection Secure".
+4. Click on "More Information".
+5. Click on "View Certificate".
+6. Switch to the "Details" tab.
+7. For each certificate in the chain, click on the "Export..." button to export it as a separate `PEM` file.
+--
 
 Once you have the certificates downloaded, you need to add them to the trust store.
 As part of the guide, you will configure the application's trust store to be `slts.p12` whose password is `changeit`.
 
 To add a certificate to the trust store, substitute `<certificate-file-name>` with the name of the downloaded certificate
 and `<certificate-alias>` with an alias you wish to give the certificate in the following command and run it.
+
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
 [role='command']
-```
+----
 keytool -import -trustcacerts \
         -file <certificate-file-name> \
         -alias <certificate-alias> \
         -keystore slts.p12 \
         -storetype PKCS12 \
         -storepass changeit
-```
+----
+--
+
+[.tab_content.windows_section]
+--
+[role='command']
+----
+keytool -import -trustcacerts `
+        - file <certificate-file-name> `
+        - alias <certificate-alias> `
+        - keystore slts.p12 `
+        - storetype PKCS12 `
+        - storepass changeit
+----
+--
+
 The command also creates the trust store file if it doesn't exist.
 
 Add each of the certificates that you downloaded to the `slts.p12` trust store.
 
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
 To generate certificates for your service to use for HTTPS connections, run the following command:
 [role='command']
 ```
@@ -135,7 +168,8 @@ openssl req \
         -newkey rsa:4096 \
         -keyout key.pem \
         -out cert.pem \
-        -days 365
+        -days 365 \
+        -subj "/C=CA/CN=localhost"
 ```
 
 Before the certificate and private key can be imported into the key store for your service, it needs to be converted into one `PKCS12` bundle.
@@ -158,9 +192,45 @@ keytool -importkeystore \
         -destkeystore key.p12 \
         -deststoretype PKCS12
 ```
+--
 
-To use the new key store and trust store, copy these files into `src/main/liberty/resources/security`
-in the `start` and `finish` directories.
+[.tab_content.windows_section]
+--
+To generate certificates for your service to use for HTTPS connections, run the following command:
+[role='command']
+```
+New-SelfSignedCertificate `
+        -Subject "C=CA,CN=localhost" `
+        -KeyAlgorithm RSA `
+        -KeyLength 4096 `
+        -CertStoreLocation "Cert:\CurrentUser\My" `
+        -FriendlyName "SocialLoginServer" 
+```
+
+Before the certificate and private key can be imported into the key store for your service, it needs to be converted into one `PKCS12` bundle.
+Export your newly created certificate by:
+
+1. Search for "Manage user certificates" in the Start menu.
+2. Epand "Personal".
+3. Click on "Certificates".
+4. Right-click the certificate entry with friendly name "SocialLoginServer".
+5. Hover over "All tasks" in the dropdown menu to expand another dropdown menu.
+6. Click "Export...". Then click "Next".
+7. Select the radio button "Yes, export the private key".
+8. Continue through the rest of the prompts in the Export wizard.
+9. When prompted for a file name, click "Browse" to save the file in the current working directory.
+
+The key store to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
+To import your certificate bundle into this key store, run the following command:
+[role='command']
+```
+keytool -importkeystore `
+        -srckeystore certificate.pfx `
+        -srcstoretype PKCS12 `
+        -destkeystore key.p12 `
+        -deststoretype PKCS12
+```
+--
 
 The last prerequisite step is obtaining client ID and client secret for access to the three social media developer APIs.
 
@@ -197,7 +267,7 @@ The following [hotspot=newImports]`new imports` are required for the `HelloServi
 
 - [hotspot=rolesAllowedImport]`javax.annotation.security.RolesAllowed`
 - [hotspot=httpServletRequestImport]`javax.servlet.http.HttpServletRequest`
-- [hotspot=httpServletRequestContext]`javax.ws.rs.core.Context`
+- [hotspot=httpServletRequestImport]`javax.ws.rs.core.Context`
 
 The [hotspot=rolesAllowed hotspot=rolesAllowedImport]`@RolesAllowed({"users"})` annotation restricts access to the service to users who are
 in the `users` role.
