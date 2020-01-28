@@ -35,7 +35,7 @@ if [ "${STATUS}" -ne "200" ]
 fi
 
 # Curl the hello endpoint and verify that it redirects to the social media selection form
-RESPONSE=$(curl "http://localhost:9080/api/hello")
+RESPONSE=$(curl --silent "http://localhost:9080/api/hello")
 if [ -z "${RESPONSE}" ]
     then
         echo "FAIL: Could not find string literal \"Social Media Selection Form\" in response."
