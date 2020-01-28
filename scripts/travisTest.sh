@@ -25,5 +25,21 @@ mvn -q clean package liberty:create liberty:install-feature liberty:deploy
 #       liberty:stop              - Stop a Liberty server.
 #       failsafe:verify           - Verifies that the integration tests of an application passed.
 mvn liberty:start
-mvn failsafe:integration-test liberty:stop
-mvn failsafe:verify
+
+# Check that the endpoint returns 200
+STATUS="$(curl --write-out "%{http_code}\n" --silent --output /dev/null "http://localhost:9080/api/hello")"
+if [ "${STATUS}" -ne "200" ]
+    then
+        echo "FAIL: Endpoint returned ${STATUS}, expected 200."
+        exit 1
+fi
+
+# Curl the hello endpoint and verify that it redirects to the social media selection form
+RESPONSE=$(curl "http://localhost:9080/api/hello")
+if [ -z "${RESPONSE}" ]
+    then
+        echo "FAIL: Could not find string literal \"Social Media Selection Form\" in response."
+        exit 1
+fi
+
+mvn liberty:stop
