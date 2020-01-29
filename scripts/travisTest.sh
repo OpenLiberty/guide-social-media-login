@@ -36,7 +36,7 @@ if [ "${STATUS}" -ne "200" ]
         echo "Return code check passed."
 fi
 
-# Curl the hello endpoint and verify that it redirects to the social media selection form
+# Check that the endpoint redirects to the social media selection form
 RESPONSE=$(curl --silent "http://localhost:9080/api/hello" | grep "Social Media Selection Form")
 if [ -z "${RESPONSE}" ]
     then

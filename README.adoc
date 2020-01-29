@@ -318,7 +318,7 @@ include::finish/src/main/liberty/config/server.xml[]
 
 === Adding required features
 
-To enable https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] and other required features, add new [hotspot=newFeatures]`<feature /> elements` to the [hotspot=featureManager]`featureManager` in
+To enable https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] and other required features, add new [hotspot=newFeatures]`<feature /> elements` to the [hotspot=featureManager]`<featureManager />` in
 `src/main/liberty/config/server.xml`
 
 There are some prerequisite configurations that social media login configuration elements need:
