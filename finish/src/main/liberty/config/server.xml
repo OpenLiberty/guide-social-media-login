@@ -40,8 +40,8 @@
     <!-- Social Login Configuration -->
     <!-- Github Login -->
     <!-- tag::githubLogin[] -->
-    <githubLogin clientId="" 
-                 clientSecret=""
+    <githubLogin clientId="GITHUB CLIENT ID"
+                 clientSecret="GITHUB CLIENT SECRET"
                  sslRef="authServiceSslRef"/>
     <!-- end::githubLogin[] -->
 
@@ -49,8 +49,8 @@
     <!-- tag::amazonLogin[] -->
     <oauth2Login id="amazonLogin"
                  displayName="Amazon"
-                 clientId=""
-                 clientSecret=""
+                 clientId="AMAZON CLIENT ID"
+                 clientSecret="AMAZON CLIENT SECRET"
                  responseType="code"
                  sslRef="authServiceSslRef"
                  tokenEndpointAuthMethod="client_secret_post"
@@ -67,8 +67,8 @@
     <!-- tag::googleOIDCLogin[] -->
     <oidcLogin id="googleOIDCLogin"
                displayName="Google"
-               clientId=""
-               clientSecret=""
+               clientId="GOOGLE CLIENT ID"
+               clientSecret="GOOGLE CLIENT SECRET"
                sslRef="authServiceSslRef"
                authorizationEndpoint="https://accounts.google.com/o/oauth2/v2/auth"
                tokenEndpoint="https://www.googleapis.com/oauth2/v4/token"

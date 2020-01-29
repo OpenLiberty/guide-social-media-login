@@ -31,7 +31,9 @@ import javax.ws.rs.core.Context;
 public class HelloService {
 
     // tag::httpServletRequestContext[]
+    // tag::contextAnnotation[]
     @Context
+    // end::contextAnnotation[]
     HttpServletRequest request;
     // end::httpServletRequestContext[]
 
@@ -49,4 +51,4 @@ public class HelloService {
     }
     // end::userPrincipal[]
 }
-// tag::helloService[]
+// end::helloService[]
