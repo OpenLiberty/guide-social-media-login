@@ -278,7 +278,7 @@ in the `users` role.
 
 The `return "Hello, friend!";` is replaced to [hotspot=userPrincipal]`output user information`.
 The [hotspot=httpServletRequestContext]`HttpServletRequest` context, which is injected using the
-[hotspot=contextAnnotation]`@Config` annotation, allows you to get information about the logged in user
+[hotspot=contextAnnotation]`@Context` annotation, allows you to get information about the logged in user
 using [hotspot=userPrincipal]`request.getUserPrincipal()`.
 
 HelloService.java 
@@ -318,7 +318,7 @@ include::finish/src/main/liberty/config/server.xml[]
 
 === Adding required features
 
-To enable https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] and other required features, add new [hotspot=newFeatures]`<feature /> elements` to the [hotspot=featureManager]`<featureManager />` in
+To enable https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] and other required features, add new [hotspot=newFeatures]`<feature />` elements to the [hotspot=featureManager]`<featureManager />` in
 `src/main/liberty/config/server.xml`
 
 There are some prerequisite configurations that social media login configuration elements need:
@@ -348,52 +348,52 @@ and [hotspot=truststore]`socialLoginKeyStore` as the trust store will be provide
 === Adding Github login configuration
 
 The [hotspot=githubLogin]`<githubLogin />` configuration element will configure Github login.
-Replace the values of the [hotspot=githubLogin]`clientId` and [hotspot=githubLogin]`clientSecret` with the credentials you created for your Github application
-in the prerequisites section. The [hotspot=githubLogin]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
+Replace the values of the [hotspot=43]`clientId` and [hotspot=44]`clientSecret` with the credentials you created for your Github application
+in the prerequisites section. The [hotspot=45]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
 
 === Adding Amazon login configuration
 
 The [hotspot=amazonLogin]`amazonLogin` configuration uses a custom `<oauth2Login />` configuration element.
-Replace the values of [hotspot=amazonLogin]`clientId` and [hotspot=amazonLogin]`clientSecret` with the credentials you created for your Amazon application
-in the prerequisites section. The [hotspot=amazonLogin]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
+Replace the values of [hotspot=52]`clientId` and [hotspot=53]`clientSecret` with the credentials you created for your Amazon application
+in the prerequisites section. The [hotspot=55]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
 The following attributes are set for your [hotspot=amazonLogin]`<oauth2Login />` configuration element:
 
-- [hotspot=amazonLogin]`responseType`: `code`
-- [hotspot=amazonLogin]`tokenEndpointAuthMethod`: `client_secret_post`
-- [hotspot=amazonLogin]`authorizationEndpoint`: `\https://www.amazon.com/ap/oa`
-- [hotspot=amazonLogin]`tokenEndpoint`: `\https://api.amazon.com/auth/o2/token`
-- [hotspot=amazonLogin]`scope`: `profile`
-- [hotspot=amazonLogin]`userApi`: `\https://api.amazon.com/user/profile`
-- [hotspot=amazonLogin]`userNameAttribute`: `name`
-- [hotspot=amazonLogin]`userUniqueIdAttribute`: `user_id`
-- [hotspot=amazonLogin]`website`: `www.amazon.com`
-- [hotspot=amazonLogin]`displayName`: `Amazon`
+- [hotspot=54]`responseType`: `code`
+- [hotspot=56]`tokenEndpointAuthMethod`: `client_secret_post`
+- [hotspot=57]`authorizationEndpoint`: `\https://www.amazon.com/ap/oa`
+- [hotspot=58]`tokenEndpoint`: `\https://api.amazon.com/auth/o2/token`
+- [hotspot=60]`scope`: `profile`
+- [hotspot=59]`userApi`: `\https://api.amazon.com/user/profile`
+- [hotspot=61]`userNameAttribute`: `name`
+- [hotspot=62]`userUniqueIdAttribute`: `user_id`
+- [hotspot=63]`website`: `www.amazon.com`
+- [hotspot=51]`displayName`: `Amazon`
 
-Further documentation on these attributes can be found on the https://openliberty.io/docs/ref/config/oauth2Login.html[Open Liberty config reference on `oauth2Login`^].
+Further documentation on these attributes can be found on the https://openliberty.io/docs/ref/config/oauth2Login.html[Open Liberty config reference on oauth2Login^].
 The values for these attributes can be found in the https://developer.amazon.com/docs/login-with-amazon/minitoc-lwa-overview.html[Login With Amazon API documentation^].
 
-Make sure that the [hotspot=amazonLogin]`id` of your [hotspot=amazonLogin]`<oauth2Login />` configuration matches the redirect URL (if you set the [hotspot=amazonLogin]`id` to `amazonLogin`, the redirect URL must end with `.../amazonLogin`).
+Make sure that the [hotspot=50]`id` of your [hotspot=amazonLogin]`<oauth2Login />` configuration matches the redirect URL (if you set the [hotspot=50]`id` to `amazonLogin`, the redirect URL must end with `.../amazonLogin`).
 
 === Adding Google login configuration
 
 The [hotspot=googleOIDCLogin]`googleOIDCLogin` configuration uses a custom `<oidcLogin />` configuration element.
-Repalce the values of [hotspot=googleOIDCLogin]`clientId` and [hotspot=googleOIDCLogin]`clientSecret` with the credentials you created for your Google application
-in the prerequisites section. The [hotspot=googleOIDCLogin]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
+Repalce the values of [hotspot=70]`clientId` and [hotspot=71]`clientSecret` with the credentials you created for your Google application
+in the prerequisites section. The [hotspot=72]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
 The following attributes are set for your [hotspot=googleOIDCLogin]`<oidcLogin />` configuration element:
 
-- [hotspot=googleOIDCLogin]`displayName`: `Google`
-- [hotspot=googleOIDCLogin]`authorizationEndpoint`: `\https://accounts.google.com/o/oauth2/v2/auth`
-- [hotspot=googleOIDCLogin]`tokenEndpoint`: `\https://www.googleapis.com/oauth2/v4/token`
-- [hotspot=googleOIDCLogin]`jwksUri`: `\https://www.googleapis.com/oauth2/v3/certs`
-- [hotspot=googleOIDCLogin]`scope`: `openid profile email`
-- [hotspot=googleOIDCLogin]`userNameAttribute`: `email`
-- [hotspot=googleOIDCLogin]`realmNameAttribute`: `iss`
-- [hotspot=googleOIDCLogin]`issuer`: `\https://accounts.google.com`
+- [hotspot=69]`displayName`: `Google`
+- [hotspot=73]`authorizationEndpoint`: `\https://accounts.google.com/o/oauth2/v2/auth`
+- [hotspot=74]`tokenEndpoint`: `\https://www.googleapis.com/oauth2/v4/token`
+- [hotspot=75]`jwksUri`: `\https://www.googleapis.com/oauth2/v3/certs`
+- [hotspot=76]`scope`: `openid profile email`
+- [hotspot=77]`userNameAttribute`: `email`
+- [hotspot=78]`realmNameAttribute`: `iss`
+- [hotspot=79]`issuer`: `\https://accounts.google.com`
 
-Further documentation on these attributes can be found on the https://openliberty.io/docs/ref/config/oidcLogin.html[Open Liberty config reference on `oidcLogin`^].
+Further documentation on these attributes can be found on the https://openliberty.io/docs/ref/config/oidcLogin.html[Open Liberty config reference on oidcLogin^].
 The values of these attributes can be found in the https://developers.google.com/identity/protocols/OpenIDConnect[Google API documentation^].
 
-Make sure that the [hotspot=googleOIDCLogin]`id` of your [hotspot=googleOIDCLogin]`<oidcLogin />` configuration matches the redirect URL (if you set the [hotspot=googleOIDCLogin]`id` to `googleOIDCLogin`, the redirect URL must end with `.../googleOIDCLogin`).
+Make sure that the [hotspot=68]`id` of your [hotspot=googleOIDCLogin]`<oidcLogin />` configuration matches the redirect URL (if you set the [hotspot=68]`id` to `googleOIDCLogin`, the redirect URL must end with `.../googleOIDCLogin`).
 
 == Building and running the application
 
