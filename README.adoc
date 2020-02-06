@@ -116,8 +116,17 @@ URL mentioned above:
 3. Click on the button next to "Connection Secure".
 4. Click on "More Information".
 5. Click on "View Certificate".
+
+Depending on your version of Firefox, your instructions may differ. For versions 70 and below, perform the following steps:
+
 6. Switch to the "Details" tab.
 7. For each certificate in the chain, click on the "Export..." button to export it as a separate `PEM` file.
+
+For versions 71 and above, clicking on "View Certificate" should open a new Firefox tab titled "Certificate".
+Each certificate in the chain is in a separate tab in this page. For each certificate in the chain, perform the following steps:
+
+6. Navigate to the "Miscellaneous" section.
+7. Click on "PEM (cert)" next to "Download" to download the certificate into a separate file.
 --
 
 Once you have the certificates downloaded, you need to add them to the trust store.
@@ -147,11 +156,11 @@ keytool \
 ----
 keytool `
     -import -trustcacerts `
-    - file <certificate-name> `
-    - alias <certificate-alias> `
-    - keystore slts.p12 `
-    - storetype PKCS12 `
-    - storepass changeit
+    -file <certificate-name> `
+    -alias <certificate-alias> `
+    -keystore slts.p12 `
+    -storetype PKCS12 `
+    -storepass changeit
 ----
 --
 
@@ -202,7 +211,7 @@ keytool \
 To generate certificates for your service to use for HTTPS connections, run the following command:
 [role='command']
 ```
-New-SelfSignedCertificate `
+powershell New-SelfSignedCertificate `
     -Subject "C=CA,CN=localhost" `
     -KeyAlgorithm RSA `
     -KeyLength 4096 `
