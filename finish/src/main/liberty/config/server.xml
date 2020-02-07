@@ -80,7 +80,7 @@
     <!-- end::googleOIDCLogin[] -->
 
     <!-- tag::webApplication[] -->
-    <webApplication location="draft-guide-social-login.war"
+    <webApplication location="guide-social-login.war"
                     contextRoot="${app.context.root}">
         <!-- tag::applicationBnd[] -->
         <application-bnd>

@@ -5,5 +5,5 @@
     <httpEndpoint httpPort="${default.http.port}" httpsPort="${default.https.port}"
                   id="defaultHttpEndpoint" host="*" />
 
-    <webApplication location="draft-guide-social-login.war" contextRoot="${app.context.root}"/>
+    <webApplication location="guide-social-login.war" contextRoot="${app.context.root}"/>
 </server>
