@@ -107,7 +107,7 @@ and add it to a separate `.pem` file.
 
 [.tab_content.windows_section]
 --
-Since there is no `openssl` command on Windows by default, the certificates can be retreived from the URLs using an internet browser.
+Since there is no `openssl` command on Windows by default, the certificates can be retrieved from the URLs using an internet browser.
 For example, to get the certificates using Firefox, perform the following steps for each
 URL mentioned above:
 
@@ -117,16 +117,17 @@ URL mentioned above:
 4. Click on "More Information".
 5. Click on "View Certificate".
 
-Depending on your version of Firefox, your instructions may differ. For versions 70 and below, perform the following steps:
+Clicking on "View Certificate" should open a new Firefox tab titled "Certificate".
+Each certificate in the chain is in a separate tab in this page.
+For each certificate in the chain, perform the following steps:
 
-6. Switch to the "Details" tab.
-7. For each certificate in the chain, click on the "Export..." button to export it as a separate `PEM` file.
+1. Navigate to the "Miscellaneous" section.
+2. Click on "PEM (cert)" next to "Download" to download the certificate into a separate file.
 
-For versions 71 and above, clicking on "View Certificate" should open a new Firefox tab titled "Certificate".
-Each certificate in the chain is in a separate tab in this page. For each certificate in the chain, perform the following steps:
+For Firefox versions 70 and below, clicking on "View Certificate" should open a dialog box.
 
-6. Navigate to the "Miscellaneous" section.
-7. Click on "PEM (cert)" next to "Download" to download the certificate into a separate file.
+1. Switch to the "Details" tab.
+2. For each certificate in the chain, click on the "Export..." button to export it as a separate `PEM` file.
 --
 
 Once you have the certificates downloaded, you need to add them to the trust store.
@@ -154,12 +155,12 @@ keytool \
 --
 [role='command']
 ----
-keytool `
-    -import -trustcacerts `
-    -file <certificate-name> `
-    -alias <certificate-alias> `
-    -keystore slts.p12 `
-    -storetype PKCS12 `
+keytool ^
+    -import -trustcacerts ^
+    -file <certificate-name> ^
+    -alias <certificate-alias> ^
+    -keystore slts.p12 ^
+    -storetype PKCS12 ^
     -storepass changeit
 ----
 --
@@ -184,7 +185,7 @@ openssl req \
 ```
 
 Before the certificate and private key can be imported into the key store for your service, it needs to be converted into one `PKCS12` bundle.
-Combine your key and certificate by running the following command:
+Combine your key and certificate by running the following command. When prompted, set the password for the exported certificate bundle to `changeit`.
 [role='command']
 ```
 openssl pkcs12 \
@@ -211,12 +212,12 @@ keytool \
 To generate certificates for your service to use for HTTPS connections, run the following command:
 [role='command']
 ```
-powershell New-SelfSignedCertificate `
-    -Subject "C=CA,CN=localhost" `
-    -KeyAlgorithm RSA `
-    -KeyLength 4096 `
-    -CertStoreLocation "Cert:\CurrentUser\My" `
-    -FriendlyName "SocialLoginServer" 
+powershell New-SelfSignedCertificate ^
+    -Subject \"C=CA,CN=localhost\" ^
+    -KeyAlgorithm RSA ^
+    -KeyLength 4096 ^
+    -CertStoreLocation "Cert:\CurrentUser\My" ^
+    -FriendlyName "SocialLoginServer"
 ```
 
 Before the certificate and private key can be imported into the key store for your service, it needs to be converted into one `PKCS12` bundle.
