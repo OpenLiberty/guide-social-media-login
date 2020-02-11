@@ -72,9 +72,9 @@ First, navigate to the `start/src/main/liberty/config/resources/security` direct
 The instructions to get the certificates for Amazon, Google and Github depend on your OS and environment.
 Use the following URLs when following the specific instructions for your OS to get the certificates for each service:
 
-- Google: https://developers.google.com/
-- Github: https://developer.github.com/
-- Amazon: https://developer.amazon.com/
+- Google: https://developers.google.com/[developers.google.com]
+- Github: https://developer.github.com/[developer.github.com]
+- Amazon: https://developer.amazon.com/[developer.amazon.com]
 
 include::{common-includes}/os-tabs.adoc[]
 [.tab_content.linux_section.mac_section]
@@ -249,6 +249,9 @@ keytool `
 The last prerequisite step is obtaining client ID and client secret for access to the three social media developer APIs.
 
 In order to obtain OAuth 2.0 credentials for Google, visit the https://console.developers.google.com/[Google API Console].
+Sign in using your Google account.
+Navigate to the "Credentials" tab. Click on the "Create Credentials" button. Select "OAuth Client ID" from the different options.
+Set the application type to "Web Application" and fill the rest of the form.
 Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin`.
 
 In order to obtain OAuth 2.0 credentials for Amazon, follow the steps here: https://auth0.com/docs/connections/social/amazon.
