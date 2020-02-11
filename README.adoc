@@ -250,6 +250,7 @@ The last prerequisite step is obtaining client ID and client secret for access t
 
 In order to obtain OAuth 2.0 credentials for Google, visit the https://console.developers.google.com/[Google API Console].
 Sign in using your Google account.
+If you haven't created a project on Google API Console before, you need to create one now before you can set up credentials.
 Navigate to the "Credentials" tab. Click on the "Create Credentials" button. Select "OAuth Client ID" from the different options.
 Set the application type to "Web Application" and fill the rest of the form.
 Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin`.
