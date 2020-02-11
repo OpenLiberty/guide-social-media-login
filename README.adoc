@@ -249,13 +249,14 @@ keytool `
 The last prerequisite step is obtaining client ID and client secret for access to the three social media developer APIs.
 
 In order to obtain OAuth 2.0 credentials for Google,
-1. Visit the https://console.developers.google.com/[Google API Console].
-2. Sign in using your Google account.
-    1. If you haven't created a project on Google API Console before, you need to create one now before you can set up credentials.
-    2. Once you have created the project, navigate to the "OAuth consent screen" tab. Click "External" and "Create". Fill in the "Application name".
-3. Navigate to the "Credentials" tab. Click on the "Create Credentials" button. Select "OAuth Client ID" from the different options.
-4. Set the application type to "Web Application" and fill the rest of the form.
-5. Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin`.
+
+. Visit the https://console.developers.google.com/[Google API Console].
+. Sign in using your Google account.
+.. If you haven't created a project on Google API Console before, you need to create one now before you can set up credentials.
+.. Once you have created the project, navigate to the "OAuth consent screen" tab. Click "External" and "Create". Fill in the "Application name".
+. Navigate to the "Credentials" tab. Click on the "Create Credentials" button. Select "OAuth Client ID" from the different options.
+. Set the application type to "Web Application" and fill the rest of the form.
+. Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin`.
 
 In order to obtain OAuth 2.0 credentials for Amazon, follow the steps here: https://auth0.com/docs/connections/social/amazon.
 Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/amazonLogin`.
