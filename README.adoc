@@ -32,7 +32,7 @@ Learn how to secure a RESTful web service with the Open Liberty Social Media Log
 You will learn how to secure a simple RESTful web service using the https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^]. You will secure an existing service,
 `HelloService` using social media https://oauth.net/2[OAuth2^] and https://openid.net/connect[OpenID Connect^].
 
-`HelloService` is a provided microservice that responds to a `GET` request with a Plain Text response that looks like this:
+`HelloService` is a provided microservice that responds to a `GET` request with a plain text response that looks like this:
 
 [source,role="no_copy"]
 ----
@@ -44,12 +44,12 @@ you can allow users to authenticate to the service using social media accounts.
 This will allow you to provide a secure authentication method for your users without having to explicitly implement it.
 
 Open Liberty provides a https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^]
-that provides configuration elements that allows you to use Facebook, Google, Github, Linkedin for authentication,
+that provides configuration elements that allow you to use Facebook, Google, GitHub, Linkedin for authentication,
 or to configure a custom OAuth2 or OpenID Connect provider.
 
-By the end of this guide, you will secure the `HelloService` service with three social media login choices:
+By the end of this guide, you will be able to secure the HelloService service using the following social media developer platforms:
 
-1. Github login
+1. GitHub login
 2. Amazon login
 3. Google login
 
@@ -59,22 +59,21 @@ By the end of this guide, you will secure the `HelloService` service with three 
 [role='command']
 include::{common-includes}/gitclone.adoc[]
 
-== Setting up the certificates and trust store
+== Setting up the certificates and truststore
 
-Before you can build the application, you will need to add the social media domains' certificates to the trust store for social media login.
-The application you will build in this guide requires certificates for Amazon, Google and Github to be added to the trust store.
+The application you will build in this guide requires certificates for Amazon, Google and GitHub to be added to the truststore.
 You also need to create certificates that your application will provide for HTTPS connections.
-This certificate and private key will need to be added to the key store for social media login.
+This certificate and private key will need to be added to the keystore for social media login.
 Lastly, you need to create an application on the three social media developer platforms to obtain a client ID and client secret to use their APIs.
 
 First, navigate to the `start/src/main/liberty/config/resources/security` directory.
 
-The instructions to get the certificates for Amazon, Google and Github depend on your OS and environment.
-Use the following URLs when following the specific instructions for your OS to get the certificates for each service:
+The instructions to get the certificates for Amazon, Google and GitHub depend on your OS and environment.
+Use the following URLs and follow the specific instructions for your OS to get the certificates for each service:
 
-- Google: https://developers.google.com/
-- Github: https://developer.github.com/
-- Amazon: https://developer.amazon.com/
+- Google: https://developers.google.com/[developers.google.com]
+- GitHub: https://developer.github.com/[developer.github.com]
+- Amazon: https://developer.amazon.com/[developer.amazon.com]
 
 include::{common-includes}/os-tabs.adoc[]
 [.tab_content.linux_section.mac_section]
@@ -130,10 +129,10 @@ For Firefox versions 70 and below, clicking on "View Certificate" should open a 
 2. For each certificate in the chain, click on the "Export..." button to export it as a separate `PEM` file.
 --
 
-Once you have the certificates downloaded, you need to add them to the trust store.
-As part of the guide, you will configure the application's trust store to be `slts.p12` whose password is `changeit`.
+Once the certificates have been downloaded, you need to add the domain certificates of the social media developer platforms to the trust store for social media login.
+As part of the guide, you will configure the application's truststore to be `slts.p12` whose password is `changeit`.
 
-To add a certificate to the trust store, substitute `<certificate-name>` with the name of the downloaded certificate
+To add a certificate to the truststore, substitute `<certificate-name>` with the name of the downloaded certificate
 and `<certificate-alias>` with an alias you wish to give the certificate in the following command and run it.
 
 include::{common-includes}/os-tabs.adoc[]
@@ -165,9 +164,9 @@ keytool ^
 ----
 --
 
-The command also creates the trust store file if it doesn't exist.
+The command also creates the truststore file if it doesn't exist.
 
-Add each of the certificates that you downloaded to the `slts.p12` trust store.
+Add each of the certificates that you downloaded to the `slts.p12` truststore.
 
 include::{common-includes}/os-tabs.adoc[]
 [.tab_content.linux_section.mac_section]
@@ -184,7 +183,7 @@ openssl req \
     -subj "/C=CA/CN=localhost"
 ```
 
-Before the certificate and private key can be imported into the key store for your service, it needs to be converted into one `PKCS12` bundle.
+Before the certificate and private key can be imported into the keystore for your service, it needs to be converted into one `PKCS12` bundle.
 Combine your key and certificate by running the following command. When prompted, set the password for the exported certificate bundle to `changeit`.
 [role='command']
 ```
@@ -194,8 +193,8 @@ openssl pkcs12 \
     -export -out certificate.p12
 ```
 
-The key store to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
-To import your certificate bundle into this key store, run the following command:
+The keystore to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
+To import your certificate bundle into this keystore, run the following command:
 [role='command']
 ```
 keytool \
@@ -220,7 +219,7 @@ powershell New-SelfSignedCertificate ^
     -FriendlyName "SocialLoginServer"
 ```
 
-Before the certificate and private key can be imported into the key store for your service, it needs to be converted into one `PKCS12` bundle.
+Before the certificate and private key can be imported into the keystore for your service, it needs to be converted into one `PKCS12` bundle.
 Export your newly created certificate by:
 
 1. Search for "Manage user certificates" in the Start menu.
@@ -233,8 +232,8 @@ Export your newly created certificate by:
 8. Continue through the rest of the prompts in the Export wizard.
 9. When prompted for a file name, click "Browse" to save the file in the current working directory.
 
-The key store to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
-To import your certificate bundle into this key store, run the following command:
+The keystore to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
+To import your certificate bundle into this keystore, run the following command:
 [role='command']
 ```
 keytool `
@@ -248,13 +247,20 @@ keytool `
 
 The last prerequisite step is obtaining client ID and client secret for access to the three social media developer APIs.
 
-In order to obtain OAuth 2.0 credentials for Google, visit the https://console.developers.google.com/[Google API Console].
-Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin`.
+In order to obtain OAuth 2.0 credentials for Google,
+
+. Visit the https://console.developers.google.com/[Google API Console].
+. Sign in using your Google account.
+.. If you haven't created a project on Google API Console before, you need to create one now before you can set up credentials.
+.. Once you have created the project, navigate to the "OAuth consent screen" tab. Click "External" and "Create". Fill in the "Application name".
+. Navigate to the "Credentials" tab. Click on the "Create Credentials" button. Select "OAuth Client ID" from the different options.
+. Set the application type to "Web Application" and fill the rest of the form.
+. Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin`.
 
 In order to obtain OAuth 2.0 credentials for Amazon, follow the steps here: https://auth0.com/docs/connections/social/amazon.
 Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/amazonLogin`.
 
-In order to obtain OAuth 2.0 credentials for Github, follow the steps here: https://auth0.com/docs/connections/social/github.
+In order to obtain OAuth 2.0 credentials for GitHub, follow the steps here: https://auth0.com/docs/connections/social/github.
 Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
 
 Enter the client IDs and client secrets to `src/main/liberty/config/server.xml` in the `start` folder.
@@ -262,7 +268,7 @@ Enter the client IDs and client secrets to `src/main/liberty/config/server.xml` 
 == Securing HelloService
 
 First, navigate to the `start` directory.
-To start the Open Liberty server in development mode, run the `liberty:dev` goal in the `start` directory:
+To start the Open Liberty server in development mode, run the `liberty:dev` goal:
 
 [role='command']
 ```
@@ -277,11 +283,11 @@ The [hotspot=helloService]`HelloService` class is the JAX-RS service that you wi
 `src/main/java/io/openliberty/guides/sociallogin/HelloService.java`
 ---- 
 
-The following [hotspot=newImports]`new imports` are required for the `HelloService` class:
+The following new imports are required for the `HelloService` class:
 
 - [hotspot=rolesAllowedImport hotspot=rolesAllowed]`javax.annotation.security.RolesAllowed`
-- [hotspot=httpServletRequestContextImport hotspot=httpServletRequestContext]`javax.servlet.http.HttpServletRequest`
-- [hotspot=httpServletRequestContextImport hotspot=httpServletRequestContext]`javax.ws.rs.core.Context`
+- [hotspot=httpServletRequestImport hotspot=httpServletRequestContext]`javax.servlet.http.HttpServletRequest`
+- [hotspot=contextImport hotspot=httpServletRequestContext]`javax.ws.rs.core.Context`
 
 The [hotspot=rolesAllowed]`@RolesAllowed({"users"})` annotation restricts access to the service to users who are
 in the `users` role.
@@ -311,7 +317,7 @@ server.xml
 include::finish/src/main/liberty/config/server.xml[]
 ---- 
 
-The explanation for these changes are in the following sections.
+The explanations for these changes are in the following sections.
 
 === Configuring the security roles
 
@@ -333,32 +339,32 @@ To enable https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social M
 
 There are some prerequisite configurations that social media login configuration elements need:
 
-1. A [hotspot=keystore]`<keyStore />` configuration element that corresponds to the key store created in the prerequisites section
-2. A [hotspot=truststore]`<keyStore />` configuration element that corresponds to the trust store created in the prerequisites section
+1. A [hotspot=keystore]`<keyStore />` configuration element that corresponds to the keystore created in the prerequisites section
+2. A [hotspot=truststore]`<keyStore />` configuration element that corresponds to the truststore created in the prerequisites section
 3. An [hotspot=sslConfig]`<ssl />` configuration element for configuring the SSL configuration that is used to connect to the social media
 
-=== Adding key store and trust store
+=== Adding keystore and truststore
 
-In the first section, you created two key stores, `slts.p12` and `key.p12`.
-Now you will configure your application to use these key stores.
+In the first section, you created two keystores, `slts.p12` and `key.p12`.
+Now you will configure your application to use these keystores.
 Files in the `src/liberty` folder are copied into the location specified by `${server.output.dir}`,
-so the location of these key stores is `${server.output.dir}/resources/security`.
+so the location of these keystores is `${server.output.dir}/resources/security`.
 
-The [hotspot=keystore]`defaultKeyStore` configuration element whose location is `${server.output.dir}/resources/security/key.p12`
+The [hotspot=keystore]`defaultKeyStore` configuration element, whose location is `${server.output.dir}/resources/security/key.p12`,
 will be used to provide SSL certificates when initiating HTTPS connections for social media login.
-Provide the password that you used when creating the key store.
+Provide the password that you used when creating the keystore.
 
-The [hotspot=truststore]`socialLoginKeyStore` configuration element whose locaiton is `${server.output.dir}/resources/security/slts.p12`
+The [hotspot=truststore]`socialLoginKeyStore` configuration element, whose location is `${server.output.dir}/resources/security/slts.p12`,
 will be used to store trusted certificates when initiating HTTPS connections to social media APIs for authorization and authentication.
-Provide the password that you usd when creating the trust store.
+Provide the password that you usd when creating the truststore.
 
-The [hotspot=sslConfig]`authServiceSslRef` configuration element which references [hotspot=keystore]`defaultKeyStore` as the key store
-and [hotspot=truststore]`socialLoginKeyStore` as the trust store will be provided to social media login configurations.
+The [hotspot=sslConfig]`authServiceSslRef` configuration element, which references [hotspot=keystore]`defaultKeyStore` as the keystore
+and [hotspot=truststore]`socialLoginKeyStore` as the truststore, will be provided to social media login configurations.
 
-=== Adding Github login configuration
+=== Adding GitHub login configuration
 
-The [hotspot=githubLogin]`<githubLogin />` configuration element will configure Github login.
-Replace the values of the [hotspot=43]`clientId` and [hotspot=44]`clientSecret` with the credentials you created for your Github application
+The [hotspot=githubLogin]`<githubLogin />` configuration element will configure GitHub login.
+Replace the values of the [hotspot=43]`clientId` and [hotspot=44]`clientSecret` with the credentials you created for your GitHub application
 in the prerequisites section. The [hotspot=45]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
 
 === Adding Amazon login configuration
@@ -405,7 +411,7 @@ The values of these attributes can be found in the https://developers.google.com
 
 Make sure that the [hotspot=68]`id` of your [hotspot=googleOIDCLogin]`<oidcLogin />` configuration matches the redirect URL (if you set the [hotspot=68]`id` to `googleOIDCLogin`, the redirect URL must end with `.../googleOIDCLogin`).
 
-== Building and running the application
+== Running the application
 
 The Open Liberty server was started in development mode at the beginning of the guide and all the 
 changes were automatically picked up.
@@ -413,7 +419,7 @@ changes were automatically picked up.
 Check out the service that you created at the
 http://localhost:9080/api/hello[^] URL.
 
-When the server updates its configuration, when you access https://localhost:9080/api/hello[the endpoint for Hello service^],
+When you access https://localhost:9080/api/hello[the endpoint for Hello service^],
 you should be redirected to a Social Media Login Form. This form allows you to choose which login provider you want to use
 for authentication. When you select a login choice, you will be redirected to the login page of that service.
 
