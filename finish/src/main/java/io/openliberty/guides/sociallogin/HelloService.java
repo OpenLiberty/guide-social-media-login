@@ -24,7 +24,7 @@ import javax.annotation.security.RolesAllowed;
 // tag::httpServletRequestImport[]
 import javax.servlet.http.HttpServletRequest;
 // end::httpServletRequestImport[]
-// tag::ContextImport[]
+// tag::contextImport[]
 import javax.ws.rs.core.Context;
 // end::contextImport[]
 // end::httpServletRequestContextImport[]

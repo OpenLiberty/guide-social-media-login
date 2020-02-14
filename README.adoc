@@ -285,9 +285,9 @@ The [hotspot=helloService]`HelloService` class is the JAX-RS service that you wi
 
 The following new imports are required for the `HelloService` class:
 
-- [hotspot=rolesAllowedImport]`javax.annotation.security.RolesAllowed`
+- [hotspot=rolesAllowedImport hotspot=rolesAllowed]`javax.annotation.security.RolesAllowed`
 - [hotspot=httpServletRequestImport hotspot=httpServletRequestContext]`javax.servlet.http.HttpServletRequest`
-- [hotspot=ContextImport hotspot=httpServletRequestContext]`javax.ws.rs.core.Context`
+- [hotspot=contextImport hotspot=httpServletRequestContext]`javax.ws.rs.core.Context`
 
 The [hotspot=rolesAllowed]`@RolesAllowed({"users"})` annotation restricts access to the service to users who are
 in the `users` role.
