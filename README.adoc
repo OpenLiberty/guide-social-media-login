@@ -317,7 +317,7 @@ server.xml
 include::finish/src/main/liberty/config/server.xml[]
 ---- 
 
-The explanation for these changes are in the following sections.
+The explanations for these changes are in the following sections.
 
 === Configuring the security roles
 
@@ -350,16 +350,16 @@ Now you will configure your application to use these keystores.
 Files in the `src/liberty` folder are copied into the location specified by `${server.output.dir}`,
 so the location of these keystores is `${server.output.dir}/resources/security`.
 
-The [hotspot=keystore]`defaultKeyStore` configuration element whose location is `${server.output.dir}/resources/security/key.p12`
+The [hotspot=keystore]`defaultKeyStore` configuration element, whose location is `${server.output.dir}/resources/security/key.p12`,
 will be used to provide SSL certificates when initiating HTTPS connections for social media login.
 Provide the password that you used when creating the keystore.
 
-The [hotspot=truststore]`socialLoginKeyStore` configuration element whose location is `${server.output.dir}/resources/security/slts.p12`
+The [hotspot=truststore]`socialLoginKeyStore` configuration element, whose location is `${server.output.dir}/resources/security/slts.p12`,
 will be used to store trusted certificates when initiating HTTPS connections to social media APIs for authorization and authentication.
 Provide the password that you usd when creating the truststore.
 
-The [hotspot=sslConfig]`authServiceSslRef` configuration element which references [hotspot=keystore]`defaultKeyStore` as the keystore
-and [hotspot=truststore]`socialLoginKeyStore` as the truststore will be provided to social media login configurations.
+The [hotspot=sslConfig]`authServiceSslRef` configuration element, which references [hotspot=keystore]`defaultKeyStore` as the keystore
+and [hotspot=truststore]`socialLoginKeyStore` as the truststore, will be provided to social media login configurations.
 
 === Adding GitHub login configuration
 
@@ -419,7 +419,7 @@ changes were automatically picked up.
 Check out the service that you created at the
 http://localhost:9080/api/hello[^] URL.
 
-When the server updates its configuration, when you access https://localhost:9080/api/hello[the endpoint for Hello service^],
+When you access https://localhost:9080/api/hello[the endpoint for Hello service^],
 you should be redirected to a Social Media Login Form. This form allows you to choose which login provider you want to use
 for authentication. When you select a login choice, you will be redirected to the login page of that service.
 
