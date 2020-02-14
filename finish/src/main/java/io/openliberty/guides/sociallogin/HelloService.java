@@ -21,8 +21,12 @@ import javax.ws.rs.core.MediaType;
 import javax.annotation.security.RolesAllowed;
 // end::rolesAllowedImport[]
 // tag::httpServletRequestContextImport[]
+// tag::httpServletRequestImport[]
 import javax.servlet.http.HttpServletRequest;
+// end::httpServletRequestImport[]
+// tag::ContextImport[]
 import javax.ws.rs.core.Context;
+// end::contextImport[]
 // end::httpServletRequestContextImport[]
 // end::newImports[]
 
