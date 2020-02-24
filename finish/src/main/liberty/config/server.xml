@@ -40,8 +40,8 @@
     <!-- Social Login Configuration -->
     <!-- Github Login -->
     <!-- tag::githubLogin[] -->
-    <githubLogin clientId="GITHUB CLIENT ID"
-                 clientSecret="GITHUB CLIENT SECRET"
+    <githubLogin clientId="CLIENT ID"
+                 clientSecret="CLIENT SECRET"
                  sslRef="authServiceSslRef"/>
     <!-- end::githubLogin[] -->
 
@@ -49,8 +49,8 @@
     <!-- tag::amazonLogin[] -->
     <oauth2Login id="amazonLogin"
                  displayName="Amazon"
-                 clientId="AMAZON CLIENT ID"
-                 clientSecret="AMAZON CLIENT SECRET"
+                 clientId="CLIENT ID"
+                 clientSecret="CLIENT SECRET"
                  responseType="code"
                  sslRef="authServiceSslRef"
                  tokenEndpointAuthMethod="client_secret_post"
@@ -67,8 +67,8 @@
     <!-- tag::googleOIDCLogin[] -->
     <oidcLogin id="googleOIDCLogin"
                displayName="Google"
-               clientId="GOOGLE CLIENT ID"
-               clientSecret="GOOGLE CLIENT SECRET"
+               clientId="CLIENT ID"
+               clientSecret="CLIENT SECRET"
                sslRef="authServiceSslRef"
                authorizationEndpoint="https://accounts.google.com/o/oauth2/v2/auth"
                tokenEndpoint="https://www.googleapis.com/oauth2/v4/token"
@@ -84,9 +84,11 @@
                     contextRoot="${app.context.root}">
         <!-- tag::applicationBnd[] -->
         <application-bnd>
+            <!-- tag::users[] -->
             <security-role name="users">
                 <special-subject type="ALL_AUTHENTICATED_USERS"/>
             </security-role>
+            <!-- end::users[] -->
         </application-bnd>
         <!-- end::applicationBnd[] -->
     </webApplication>
