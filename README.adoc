@@ -30,9 +30,9 @@ Learn how to secure a RESTful web service with the Open Liberty Social Media Log
 == What you'll learn
 
 You will learn how to secure a simple RESTful web service using the https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^]. You will secure an existing service,
-`HelloService` using social media https://oauth.net/2[OAuth2^] and https://openid.net/connect[OpenID Connect^].
+`HelloService`, using social media https://oauth.net/2[OAuth2^] and https://openid.net/connect[OpenID Connect^].
 
-`HelloService` is a provided microservice that responds to a `GET` request with a plain text response that looks like this:
+`HelloService` is a provided microservice that responds to a `GET` request with the following Plain Text response:
 
 [source,role="no_copy"]
 ----
@@ -44,14 +44,11 @@ you can allow users to authenticate to the service using social media accounts.
 This will allow you to provide a secure authentication method for your users without having to explicitly implement it.
 
 Open Liberty provides a https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^]
-that provides configuration elements that allow you to use Facebook, Google, GitHub, Linkedin for authentication,
+that provides configuration elements that allow you to use Facebook, Google, GitHub or Linkedin for authentication,
 or to configure a custom OAuth2 or OpenID Connect provider.
 
-By the end of this guide, you will be able to secure the HelloService service using the following social media developer platforms:
-
-1. GitHub login
-2. Amazon login
-3. Google login
+By the end of this guide, you will be able to secure the HelloService service using three
+social media developer platforms: GitHub, Amazon and Google.
 
 // =================================================================================================
 // Getting Started
@@ -71,37 +68,82 @@ First, navigate to the `start/src/main/liberty/config/resources/security` direct
 The instructions to get the certificates for Amazon, Google and GitHub depend on your OS and environment.
 Use the following URLs and follow the specific instructions for your OS to get the certificates for each service:
 
-- Google: https://developers.google.com/[developers.google.com]
-- GitHub: https://developer.github.com/[developer.github.com]
-- Amazon: https://developer.amazon.com/[developer.amazon.com]
+* Google: 
+** https://accounts.google.com/[accounts.google.com^]
+** https://www.googleapis.com/[www.googleapis.com^]
+* GitHub:
+** https://www.github.com/[www.github.com^]
+** https://api.github.com/[api.github.com^]
+* Amazon: 
+** https://www.amazon.com/[www.amazon.com]
+** https://api.amazon.com/[api.amazon.com]
 
 include::{common-includes}/os-tabs.adoc[]
 [.tab_content.linux_section.mac_section]
 --
-You can use `openssl` to output the certificate chain for each URL and manually copy each certificate into a separate file.
-To get the certificates using `openssl`:
+You can use `openssl` to output the certificate chain for each URL and copy each certificate into a separate file.
 
-Replace `<website URL>` with each URL mentioned above and run the following command in a terminal window:
+To get the certificates for Amazon using `openssl`:
 
 [role='command']
 ----
 openssl s_client \
     -showcerts \
-    -connect <website URL>:443 </dev/null
+    -connect www.amazon.com:443 \
+    < /dev/null \
+    2> /dev/null \
+    | sed -n '/BEGIN/,/END/p' \
+    > amazon.pem
+
+openssl s_client \
+    -showcerts \
+    -connect api.amazon.com:443 \
+    < /dev/null \
+    2> /dev/null \
+    | sed -n '/BEGIN/,/END/p' \
+    > amazon_api.pem
 ----
 
-In the command output, the contents of each certificate looks like:
+To get the certificates for Google:
 
-[source,role="no_copy"]
+[role='command']
 ----
------BEGIN CERTIFICATE-----
-fIIESjCCAzKgAwIBAgINAeO0mqGNiqmBJWlQuDANBgkqhkiG9w0BAQsFADBMMSAw
-... more lines ...
------END CERTIFICATE-----
+openssl s_client \
+    -showcerts \
+    -connect accounts.google.com:443 \
+    < /dev/null \
+    2> /dev/null \
+    | sed -n '/BEGIN/,/END/p' \
+    > google.pem
+
+openssl s_client \
+    -showcerts \
+    -connect www.googleapis.com:443 \
+    < /dev/null \
+    2> /dev/null \
+    | sed -n '/BEGIN/,/END/p' \
+    > google_api.pem
 ----
 
-Copy each certificate from the chain, including the `----BEGIN CERTIFICATE----` and `----END CERTIFICATE----`
-and add it to a separate `.pem` file.
+To get the certificates for GitHub:
+[role='command']
+----
+openssl s_client \
+    -showcerts \
+    -connect www.github.com:443 \
+    < /dev/null \
+    2> /dev/null \
+    | sed -n '/BEGIN/,/END/p' \
+    > github.pem
+
+openssl s_client \
+    -showcerts \
+    -connect api.github.com:443 \
+    < /dev/null \
+    2> /dev/null \
+    | sed -n '/BEGIN/,/END/p' \
+    > github_api.pem
+----
 --
 
 [.tab_content.windows_section]
@@ -249,13 +291,13 @@ The last prerequisite step is obtaining client ID and client secret for access t
 
 In order to obtain OAuth 2.0 credentials for Google,
 
-. Visit the https://console.developers.google.com/[Google API Console].
-. Sign in using your Google account.
-.. If you haven't created a project on Google API Console before, you need to create one now before you can set up credentials.
-.. Once you have created the project, navigate to the "OAuth consent screen" tab. Click "External" and "Create". Fill in the "Application name".
-. Navigate to the "Credentials" tab. Click on the "Create Credentials" button. Select "OAuth Client ID" from the different options.
-. Set the application type to "Web Application" and fill the rest of the form.
-. Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin`.
+* Visit the https://console.developers.google.com/[Google API Console].
+* Sign in using your Google account.
+** If you haven't created a project on Google API Console before, you need to create one now before you can set up credentials.
+** Once you have created the project, navigate to the "OAuth consent screen" tab. Click "External" and "Create". Fill in the "Application name".
+* Navigate to the "Credentials" tab. Click on the "Create Credentials" button. Select "OAuth Client ID" from the different options.
+* Set the application type to "Web Application" and fill the rest of the form.
+* Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin`.
 
 In order to obtain OAuth 2.0 credentials for Amazon, follow the steps here: https://auth0.com/docs/connections/social/amazon.
 Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/amazonLogin`.
