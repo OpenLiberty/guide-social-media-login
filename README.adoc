@@ -44,7 +44,7 @@ you can allow users to authenticate to the service using social media accounts.
 This will allow you to provide a secure authentication method for your users without having to explicitly implement it.
 
 Open Liberty provides a https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^]
-that provides configuration elements that allow you to use Facebook, Google, GitHub or Linkedin for authentication,
+that provides configuration elements that allow you to use Facebook, Google, GitHub, or Linkedin for authentication,
 or to configure a custom OAuth2 or OpenID Connect provider.
 
 By the end of this guide, you will be able to secure the HelloService service using three
@@ -313,7 +313,7 @@ sections.
 First, navigate to the `start` directory.
 
 [role='command']
-link:https://raw.githubusercontent.com/OpenLiberty/guides-common/master/devmode-start.adoc[]
+include::{common-includes}/devmode-start.adoc[]
 
 The [hotspot=helloService]`HelloService` class is the JAX-RS service that you will be securing.
 
