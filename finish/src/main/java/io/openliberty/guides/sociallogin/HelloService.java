@@ -30,8 +30,8 @@ import javax.ws.rs.core.Context;
 // end::httpServletRequestContextImport[]
 // end::newImports[]
 
-// tag::helloService[]
 @Path("hello")
+// tag::helloService[]
 public class HelloService {
 
     // tag::httpServletRequestContext[]
