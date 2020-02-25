@@ -151,7 +151,7 @@ keytool ^
 google_cert.sh
 [source, sh, linenums, role='code_column hide_tags=copyright'] 
 ---- 
-include::finish/src/main/liberty/config/resources/security/google_cert.sh[]
+include::finish/src/main/liberty/config/resources/security/scripts/google_cert.sh[]
 ----
 
 Run the [hotspot file=0]`google_cert.sh` script under the `scripts` folder:
