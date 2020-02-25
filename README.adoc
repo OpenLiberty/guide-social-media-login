@@ -146,6 +146,28 @@ keytool ^
 ```
 --
 
+=== Setting up for Google
+
+google_cert.sh
+[source, sh, linenums, role='code_column hide_tags=copyright'] 
+---- 
+include::finish/src/main/liberty/config/resources/security/google_cert.sh[]
+----
+
+Run the [hotspot file=0]`google_cert.sh` script under the `scripts` folder:
+[role='command']
+```sh
+./scripts/google_cert.sh
+```
+
+This script will download the TLS server public keys required for Google from the following domains:
+
+- `accounts.google.com` (saved as `google.pem`)
+- `googleapis.com` (saved as `googleapis.pem`)
+
+It also adds the public keys into a truststore, `slts.p12` that you will configure your application to use for
+SSL later in the guide.
+
 The instructions to get the certificates for Amazon, Google and GitHub depend on your OS and environment.
 Use the following URLs and follow the specific instructions for your OS to get the certificates for each service:
 
