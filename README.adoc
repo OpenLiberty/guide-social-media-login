@@ -65,6 +65,87 @@ Lastly, you need to create an application on the three social media developer pl
 
 First, navigate to the `start/src/main/liberty/config/resources/security` directory.
 
+=== Generating a self signed certificate
+Your application requires a TLS server certificate to securely communicate using HTTPS. In this section, you will
+generate a self signed certificate and add it to your application's keystore.
+
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
+To generate certificates for your service to use for HTTPS connections, run the following command:
+[role='command']
+```
+openssl req \
+    -x509 \
+    -newkey rsa:4096 \
+    -keyout key.pem \
+    -out cert.pem \
+    -days 365 \
+    -subj "/C=CA/CN=localhost"
+```
+
+Before the certificate and private key can be imported into the keystore for your service, it needs to be converted into one `PKCS12` bundle.
+Combine your key and certificate by running the following command. When prompted, set the password for the exported certificate bundle to `changeit`.
+[role='command']
+```
+openssl pkcs12 \
+    -inkey key.pem \
+    -in cert.pem \
+    -export -out certificate.p12
+```
+
+The keystore to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
+To import your certificate bundle into this keystore, run the following command:
+[role='command']
+```
+keytool \
+    -importkeystore \
+    -srckeystore certificate.p12 \
+    -srcstoretype PKCS12 \
+    -destkeystore key.p12 \
+    -deststoretype PKCS12
+```
+--
+
+[.tab_content.windows_section]
+--
+To generate certificates for your service to use for HTTPS connections, run the following command:
+[role='command']
+```
+powershell New-SelfSignedCertificate ^
+    -Subject \"C=CA,CN=localhost\" ^
+    -KeyAlgorithm RSA ^
+    -KeyLength 4096 ^
+    -CertStoreLocation "Cert:\CurrentUser\My" ^
+    -FriendlyName "SocialLoginServer"
+```
+
+Before the certificate and private key can be imported into the keystore for your service, it needs to be converted into one `PKCS12` bundle.
+Export your newly created certificate by:
+
+1. Search for "Manage user certificates" in the Start menu.
+2. Epand "Personal".
+3. Click on "Certificates".
+4. Right-click the certificate entry with friendly name "SocialLoginServer".
+5. Hover over "All tasks" in the dropdown menu to expand another dropdown menu.
+6. Click "Export...". Then click "Next".
+7. Select the radio button "Yes, export the private key".
+8. Continue through the rest of the prompts in the Export wizard.
+9. When prompted for a file name, click "Browse" to save the file in the current working directory.
+
+The keystore to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
+To import your certificate bundle into this keystore, run the following command:
+[role='command']
+```
+keytool ^
+    -importkeystore ^
+    -srckeystore certificate.pfx ^
+    -srcstoretype PKCS12 ^
+    -destkeystore key.p12 ^
+    -deststoretype PKCS12
+```
+--
+
 The instructions to get the certificates for Amazon, Google and GitHub depend on your OS and environment.
 Use the following URLs and follow the specific instructions for your OS to get the certificates for each service:
 
@@ -209,83 +290,6 @@ keytool ^
 The command also creates the truststore file if it doesn't exist.
 
 Add each of the certificates that you downloaded to the `slts.p12` truststore.
-
-include::{common-includes}/os-tabs.adoc[]
-[.tab_content.linux_section.mac_section]
---
-To generate certificates for your service to use for HTTPS connections, run the following command:
-[role='command']
-```
-openssl req \
-    -x509 \
-    -newkey rsa:4096 \
-    -keyout key.pem \
-    -out cert.pem \
-    -days 365 \
-    -subj "/C=CA/CN=localhost"
-```
-
-Before the certificate and private key can be imported into the keystore for your service, it needs to be converted into one `PKCS12` bundle.
-Combine your key and certificate by running the following command. When prompted, set the password for the exported certificate bundle to `changeit`.
-[role='command']
-```
-openssl pkcs12 \
-    -inkey key.pem \
-    -in cert.pem \
-    -export -out certificate.p12
-```
-
-The keystore to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
-To import your certificate bundle into this keystore, run the following command:
-[role='command']
-```
-keytool \
-    -importkeystore \
-    -srckeystore certificate.p12 \
-    -srcstoretype PKCS12 \
-    -destkeystore key.p12 \
-    -deststoretype PKCS12
-```
---
-
-[.tab_content.windows_section]
---
-To generate certificates for your service to use for HTTPS connections, run the following command:
-[role='command']
-```
-powershell New-SelfSignedCertificate ^
-    -Subject \"C=CA,CN=localhost\" ^
-    -KeyAlgorithm RSA ^
-    -KeyLength 4096 ^
-    -CertStoreLocation "Cert:\CurrentUser\My" ^
-    -FriendlyName "SocialLoginServer"
-```
-
-Before the certificate and private key can be imported into the keystore for your service, it needs to be converted into one `PKCS12` bundle.
-Export your newly created certificate by:
-
-1. Search for "Manage user certificates" in the Start menu.
-2. Epand "Personal".
-3. Click on "Certificates".
-4. Right-click the certificate entry with friendly name "SocialLoginServer".
-5. Hover over "All tasks" in the dropdown menu to expand another dropdown menu.
-6. Click "Export...". Then click "Next".
-7. Select the radio button "Yes, export the private key".
-8. Continue through the rest of the prompts in the Export wizard.
-9. When prompted for a file name, click "Browse" to save the file in the current working directory.
-
-The keystore to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
-To import your certificate bundle into this keystore, run the following command:
-[role='command']
-```
-keytool `
-    -importkeystore `
-    -srckeystore certificate.pfx `
-    -srcstoretype PKCS12 `
-    -destkeystore key.p12 `
-    -deststoretype PKCS12
-```
---
 
 The last prerequisite step is obtaining client ID and client secret for access to the three social media developer APIs.
 
