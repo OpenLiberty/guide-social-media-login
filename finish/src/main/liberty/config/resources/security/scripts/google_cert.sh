@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# tag::certificate[]
 keytool \
     -printcert -rfc \
     -sslserver accounts.google.com:443 \
@@ -8,7 +9,9 @@ keytool \
     -printcert -rfc \
     -sslserver www.googleapis.com:443 \
     > googleapis.pem
+# end::certificate[]
 
+# tag::truststore[]
 keytool \
     -import -trustcacerts \
     -file google.pem
@@ -23,3 +26,4 @@ keytool \
     -keystore slts.p12
     -storetype PKCS12
     -storepass changeit
+# end::truststore[]

@@ -160,13 +160,12 @@ Run the [hotspot file=0]`google_cert.sh` script under the `scripts` folder:
 ./scripts/google_cert.sh
 ```
 
-This script will download the TLS server public keys required for Google from the following domains:
+This script uses [hotspot=certificate]`keytool` to download the TLS server public keys required for Google from the following domains:
 
 - `accounts.google.com` (saved as `google.pem`)
-- `googleapis.com` (saved as `googleapis.pem`)
+- `www.googleapis.com` (saved as `googleapis.pem`)
 
-It also adds the public keys into a truststore, `slts.p12` that you will configure your application to use for
-SSL later in the guide.
+It also adds the public keys into a truststore, [hotspot=certificate]`slts.p12` that you will configure your application to use for SSL later in the guide.
 
 === Setting up for GitHub
 
