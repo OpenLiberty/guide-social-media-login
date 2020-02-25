@@ -168,6 +168,50 @@ This script will download the TLS server public keys required for Google from th
 It also adds the public keys into a truststore, `slts.p12` that you will configure your application to use for
 SSL later in the guide.
 
+=== Setting up for GitHub
+
+github_cert.sh
+[source, sh, linenums, role='code_column hide_tags=copyright'] 
+---- 
+include::finish/src/main/liberty/config/resources/security/scripts/github_cert.sh[]
+----
+
+Run the [hotspot file=0]`github_cert.sh` script under the `scripts` folder:
+[role='command']
+```sh
+./scripts/github_cert.sh
+```
+
+This script will download the TLS server public keys required for GitHub from the following domains:
+
+- `www.github.com` (saved as `github.pem`)
+- `api.github.com` (saved as `github_api.pem`)
+
+It also adds the public keys into a truststore, `slts.p12` that you will configure your application to use for
+SSL later in the guide.
+
+=== Setting up for Amazon
+
+amazon_cert.sh
+[source, sh, linenums, role='code_column hide_tags=copyright'] 
+---- 
+include::finish/src/main/liberty/config/resources/security/scripts/amazon_cert.sh[]
+----
+
+Run the [hotspot file=0]`amazon_cert.sh` script under the `scripts` folder:
+[role='command']
+```sh
+./scripts/amazon_cert.sh
+```
+
+This script will download the TLS server public keys required for Amazon from the following domains:
+
+- `www.amazon.com` (saved as `amazon.pem`)
+- `api.amazon.com` (saved as `amazon_api.pem`)
+
+It also adds the public keys into a truststore, `slts.p12` that you will configure your application to use for
+SSL later in the guide.
+
 The instructions to get the certificates for Amazon, Google and GitHub depend on your OS and environment.
 Use the following URLs and follow the specific instructions for your OS to get the certificates for each service:
 
