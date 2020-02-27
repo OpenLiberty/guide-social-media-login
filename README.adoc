@@ -123,7 +123,7 @@ Export your newly created certificate by:
 6. Click "Export...". Then click "Next".
 7. Select the radio button "Yes, export the private key".
 8. Continue through the rest of the prompts in the Export wizard.
-9. When prompted for a file name, click "Browse" to save the file in the current working directory.
+9. When prompted for a file name, click "Browse" to save the file as `certificate.pfx` in the current working directory.
 --
 
 The keystore to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
