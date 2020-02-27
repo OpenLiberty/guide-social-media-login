@@ -191,7 +191,7 @@ include::{common-includes}/os-tabs.adoc[]
 [.tab_content.linux_section.mac_section]
 --
 [role='command']
----
+```
 keytool \
     -import -trustcacerts \
     -file google.pem \
@@ -206,12 +206,12 @@ keytool \
     -keystore slts.p12 \
     -storetype PKCS12 \
     -storepass changeit
----
+```
 --
 [.tab_content.windows_section]
 --
 [role='command']
----
+```
 keytool ^
     -import -trustcacerts ^
     -file google.pem ^
@@ -226,7 +226,7 @@ keytool ^
     -keystore slts.p12 ^
     -storetype PKCS12 ^
     -storepass changeit
----
+```
 --
 
 === Setting up for GitHub
@@ -273,7 +273,7 @@ include::{common-includes}/os-tabs.adoc[]
 [.tab_content.linux_section.mac_section]
 --
 [role='command']
----
+```
 keytool \
     -import -trustcacerts \
     -file github.pem \
@@ -288,12 +288,12 @@ keytool \
     -keystore slts.p12 \
     -storetype PKCS12 \
     -storepass changeit
----
+```
 --
 [.tab_content.windows_section]
 --
 [role='command']
----
+```
 keytool ^
     -import -trustcacerts ^
     -file github.pem ^
@@ -308,7 +308,7 @@ keytool ^
     -keystore slts.p12 ^
     -storetype PKCS12 ^
     -storepass changeit
----
+```
 --
 
 === Setting up for Amazon
@@ -356,7 +356,7 @@ include::{common-includes}/os-tabs.adoc[]
 [.tab_content.linux_section.mac_section]
 --
 [role='command']
----
+```
 keytool \
     -import -trustcacerts \
     -file amazon.pem \
@@ -371,12 +371,12 @@ keytool \
     -keystore slts.p12 \
     -storetype PKCS12 \
     -storepass changeit
----
+```
 --
 [.tab_content.windows_section]
 --
 [role='command']
----
+```
 keytool ^
     -import -trustcacerts ^
     -file amazon.pem ^
@@ -391,7 +391,7 @@ keytool ^
     -keystore slts.p12 ^
     -storetype PKCS12 ^
     -storepass changeit
----
+```
 --
 
 == OLD
