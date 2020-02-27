@@ -141,7 +141,7 @@ keytool \
     -deststoretype PKCS12
 ```
 --
-[.tab.content.windows_section]
+[.tab_content.windows_section]
 --
 [role='command']
 ```
