@@ -148,213 +148,253 @@ keytool ^
 
 === Setting up for Google
 
-google_cert.sh
-[source, sh, linenums, role='code_column hide_tags=copyright'] 
----- 
-include::finish/src/main/liberty/config/resources/security/scripts/google_cert.sh[]
-----
+For your application to communicate securely with Google using HTTPS, the TLS server public key certificates for the following domains need to be added to your application's truststore:
 
-Run the [hotspot file=0]`google_cert.sh` script under the `scripts` folder:
+- `accounts.google.com` (will be saved as `google.pem`)
+- `www.googleapis.com` (will be saved as `googleapis.pem`)
+
+To download the certificates, run the following commands:
+
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
 [role='command']
-```sh
-./scripts/google_cert.sh
 ```
+keytool \
+    -printcert -rfc \
+    -sslserver accounts.google.com:443 \
+    > google.pem
+keytool \
+    -printcert -rfc \
+    -sslserver www.googleapis.com:443 \
+    > googleapis.pem
+```
+--
+[.tab_content.windows_section]
+--
+[role='command']
+```
+keytool ^
+    -printcert -rfc ^
+    -sslserver accounts.google.com:443 ^
+    > google.pem
+keytool ^
+    -printcert -rfc ^
+    -sslserver www.googleapis.com:443 ^
+    > googleapis.pem
+```
+--
 
-This script uses [hotspot=certificate]`keytool` to download the TLS server public keys required for Google from the following domains:
+Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`. You will configure your application's truststore to be this keystore later in this guide.
 
-- `accounts.google.com` (saved as `google.pem`)
-- `www.googleapis.com` (saved as `googleapis.pem`)
-
-It also adds the public keys into a truststore, [hotspot=certificate]`slts.p12` that you will configure your application to use for SSL later in the guide.
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
+[role='command']
+---
+keytool \
+    -import -trustcacerts \
+    -file google.pem \
+    -alias google \
+    -keystore slts.p12 \
+    -storetype PKCS12 \
+    -storepass changeit
+keytool \
+    -import -trustcacerts \
+    -file googleapis.pem \
+    -alias googleapis \
+    -keystore slts.p12 \
+    -storetype PKCS12 \
+    -storepass changeit
+---
+--
+[.tab_content.windows_section]
+--
+[role='command']
+---
+keytool ^
+    -import -trustcacerts ^
+    -file google.pem ^
+    -alias google ^
+    -keystore slts.p12 ^
+    -storetype PKCS12 ^
+    -storepass changeit
+keytool ^
+    -import -trustcacerts ^
+    -file googleapis.pem ^
+    -alias googleapis ^
+    -keystore slts.p12 ^
+    -storetype PKCS12 ^
+    -storepass changeit
+---
+--
 
 === Setting up for GitHub
+For your application to communicate securely with GitHub using HTTPS, the TLS server public key certificates for the following domains need to be added to your application's truststore:
 
-github_cert.sh
-[source, sh, linenums, role='code_column hide_tags=copyright'] 
----- 
-include::finish/src/main/liberty/config/resources/security/scripts/github_cert.sh[]
-----
+- `www.github.com` (will be saved as `github.pem`)
+- `api.github.com` (will be saved as `github_api.pem`)
 
-Run the [hotspot file=0]`github_cert.sh` script under the `scripts` folder:
+To download the certificates, run the following commands:
+
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
 [role='command']
-```sh
-./scripts/github_cert.sh
 ```
+keytool \
+    -printcert -rfc \
+    -sslserver www.github.com:443 \
+    > github.pem
+keytool \
+    -printcert -rfc \
+    -sslserver api.github.com:443 \
+    > github_api.pem
+```
+--
+[.tab_content.windows_section]
+--
+[role='command']
+```
+keytool ^
+    -printcert -rfc ^
+    -sslserver www.github.com:443 ^
+    > github.pem
+keytool ^
+    -printcert -rfc ^
+    -sslserver api.github.com:443 ^
+    > github_api.pem
+```
+--
 
-This script will download the TLS server public keys required for GitHub from the following domains:
+Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`. You will configure your application's truststore to be this keystore later in this guide.
 
-- `www.github.com` (saved as `github.pem`)
-- `api.github.com` (saved as `github_api.pem`)
-
-It also adds the public keys into a truststore, `slts.p12` that you will configure your application to use for
-SSL later in the guide.
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
+[role='command']
+---
+keytool \
+    -import -trustcacerts \
+    -file github.pem \
+    -alias github \
+    -keystore slts.p12 \
+    -storetype PKCS12 \
+    -storepass changeit
+keytool \
+    -import -trustcacerts \
+    -file github_api.pem \
+    -alias github_api \
+    -keystore slts.p12 \
+    -storetype PKCS12 \
+    -storepass changeit
+---
+--
+[.tab_content.windows_section]
+--
+[role='command']
+---
+keytool ^
+    -import -trustcacerts ^
+    -file github.pem ^
+    -alias github ^
+    -keystore slts.p12 ^
+    -storetype PKCS12 ^
+    -storepass changeit
+keytool ^
+    -import -trustcacerts ^
+    -file github_api.pem ^
+    -alias github_api ^
+    -keystore slts.p12 ^
+    -storetype PKCS12 ^
+    -storepass changeit
+---
+--
 
 === Setting up for Amazon
 
-amazon_cert.sh
-[source, sh, linenums, role='code_column hide_tags=copyright'] 
----- 
-include::finish/src/main/liberty/config/resources/security/scripts/amazon_cert.sh[]
-----
-
-Run the [hotspot file=0]`amazon_cert.sh` script under the `scripts` folder:
-[role='command']
-```sh
-./scripts/amazon_cert.sh
-```
-
-This script will download the TLS server public keys required for Amazon from the following domains:
+For your application to communicate securely with GitHub using HTTPS, the TLS server public key certificates for the following domains need to be added to your application's truststore:
 
 - `www.amazon.com` (saved as `amazon.pem`)
 - `api.amazon.com` (saved as `amazon_api.pem`)
 
-It also adds the public keys into a truststore, `slts.p12` that you will configure your application to use for
-SSL later in the guide.
-
-The instructions to get the certificates for Amazon, Google and GitHub depend on your OS and environment.
-Use the following URLs and follow the specific instructions for your OS to get the certificates for each service:
-
-* Google: 
-** https://accounts.google.com/[accounts.google.com^]
-** https://www.googleapis.com/[www.googleapis.com^]
-* GitHub:
-** https://www.github.com/[www.github.com^]
-** https://api.github.com/[api.github.com^]
-* Amazon: 
-** https://www.amazon.com/[www.amazon.com]
-** https://api.amazon.com/[api.amazon.com]
+To download the certificates, run the following commands:
 
 include::{common-includes}/os-tabs.adoc[]
 [.tab_content.linux_section.mac_section]
 --
-You can use `openssl` to output the certificate chain for each URL and copy each certificate into a separate file.
-
-To get the certificates for Amazon using `openssl`:
-
 [role='command']
-----
-openssl s_client \
-    -showcerts \
-    -connect www.amazon.com:443 \
-    < /dev/null \
-    2> /dev/null \
-    | sed -n '/BEGIN/,/END/p' \
+```
+keytool \
+    -printcert -rfc \
+    -sslserver www.amazon.com:443 \
     > amazon.pem
-
-openssl s_client \
-    -showcerts \
-    -connect api.amazon.com:443 \
-    < /dev/null \
-    2> /dev/null \
-    | sed -n '/BEGIN/,/END/p' \
+keytool \
+    -printcert -rfc \
+    -sslserver api.amazon.com:443 \
     > amazon_api.pem
-----
-
-To get the certificates for Google:
-
-[role='command']
-----
-openssl s_client \
-    -showcerts \
-    -connect accounts.google.com:443 \
-    < /dev/null \
-    2> /dev/null \
-    | sed -n '/BEGIN/,/END/p' \
-    > google.pem
-
-openssl s_client \
-    -showcerts \
-    -connect www.googleapis.com:443 \
-    < /dev/null \
-    2> /dev/null \
-    | sed -n '/BEGIN/,/END/p' \
-    > google_api.pem
-----
-
-To get the certificates for GitHub:
-[role='command']
-----
-openssl s_client \
-    -showcerts \
-    -connect www.github.com:443 \
-    < /dev/null \
-    2> /dev/null \
-    | sed -n '/BEGIN/,/END/p' \
-    > github.pem
-
-openssl s_client \
-    -showcerts \
-    -connect api.github.com:443 \
-    < /dev/null \
-    2> /dev/null \
-    | sed -n '/BEGIN/,/END/p' \
-    > github_api.pem
-----
+```
 --
-
 [.tab_content.windows_section]
 --
-Since there is no `openssl` command on Windows by default, the certificates can be retrieved from the URLs using an internet browser.
-For example, to get the certificates using Firefox, perform the following steps for each
-URL mentioned above:
-
-1. Open the website on Firefox.
-2. Click on the "Lock" icon to the left of the URL.
-3. Click on the button next to "Connection Secure".
-4. Click on "More Information".
-5. Click on "View Certificate".
-
-Clicking on "View Certificate" should open a new Firefox tab titled "Certificate".
-Each certificate in the chain is in a separate tab in this page.
-For each certificate in the chain, perform the following steps:
-
-1. Navigate to the "Miscellaneous" section.
-2. Click on "PEM (cert)" next to "Download" to download the certificate into a separate file.
-
-For Firefox versions 70 and below, clicking on "View Certificate" should open a dialog box.
-
-1. Switch to the "Details" tab.
-2. For each certificate in the chain, click on the "Export..." button to export it as a separate `PEM` file.
+[role='command']
+```
+keytool ^
+    -printcert -rfc ^
+    -sslserver www.amazon.com:443 ^
+    > amazon.pem
+keytool ^
+    -printcert -rfc ^
+    -sslserver api.amazon.com:443 ^
+    > amazon_api.pem
+```
 --
 
-Once the certificates have been downloaded, you need to add the domain certificates of the social media developer platforms to the trust store for social media login.
-As part of the guide, you will configure the application's truststore to be `slts.p12` whose password is `changeit`.
-
-To add a certificate to the truststore, substitute `<certificate-name>` with the name of the downloaded certificate
-and `<certificate-alias>` with an alias you wish to give the certificate in the following command and run it.
+Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`. You will configure your application's truststore to be this keystore later in this guide.
 
 include::{common-includes}/os-tabs.adoc[]
 [.tab_content.linux_section.mac_section]
 --
 [role='command']
-----
+---
 keytool \
     -import -trustcacerts \
-    -file <certificate-name> \
-    -alias <certificate-alias> \
+    -file amazon.pem \
+    -alias amazon \
     -keystore slts.p12 \
     -storetype PKCS12 \
     -storepass changeit
-----
+keytool \
+    -import -trustcacerts \
+    -file amazon_api.pem \
+    -alias amazon_api \
+    -keystore slts.p12 \
+    -storetype PKCS12 \
+    -storepass changeit
+---
 --
-
 [.tab_content.windows_section]
 --
 [role='command']
-----
+---
 keytool ^
     -import -trustcacerts ^
-    -file <certificate-name> ^
-    -alias <certificate-alias> ^
+    -file amazon.pem ^
+    -alias amazon ^
     -keystore slts.p12 ^
     -storetype PKCS12 ^
     -storepass changeit
-----
+keytool ^
+    -import -trustcacerts ^
+    -file amazon_api.pem ^
+    -alias amazon_api ^
+    -keystore slts.p12 ^
+    -storetype PKCS12 ^
+    -storepass changeit
+---
 --
 
-The command also creates the truststore file if it doesn't exist.
-
-Add each of the certificates that you downloaded to the `slts.p12` truststore.
+== OLD
 
 The last prerequisite step is obtaining client ID and client secret for access to the three social media developer APIs.
 
