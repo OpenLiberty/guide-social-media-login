@@ -236,6 +236,24 @@ keytool ^
 ```
 --
 
+The last prerequisite step for Google is obtaining client ID and client secret for access to the Google developer API.
+
+In order to obtain OAuth 2.0 credentials for Google,
+
+. Visit the https://console.developers.google.com/[Google API Console^].
+. Sign in using your Google account.
+. If you haven't created a project on Google API Console before,
+.. Create a new project.
+.. Navigate to the "OAuth consent screen" tab.
+.. Click "External", then click "Create".
+.. Fill in "Application name", then click "Save".
+. Navigate to the "Credentials" tab.
+. Click on the "CREATE CREDENTIALS" button.
+. Select "OAuth client ID" from the different options.
+. Set the application type to "Web application".
+. Enter the name of your OAuth 2.0 Client ID. This is different from your app name and will not be shown to end users. 
+. Add `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin` to "Authorized redirect URIs", then click "Create".
+
 === Setting up for GitHub
 For your application to communicate securely with GitHub using HTTPS, the TLS server public key certificates for the following domains need to be added to your application's truststore:
 
@@ -317,6 +335,17 @@ keytool ^
     -storepass changeit
 ```
 --
+
+The last prerequisite step for GitHub is obtaining client ID and client secret for access to the GitHub developer API.
+
+In order to obtain OAuth 2.0 credentials for GitHub,
+
+. Log into https://github.com/[GitHub^].
+. Navigate to https://github.com/settings/developers[OAuth Apps^] and click on "New OAuth App".
+. Enter an application name.
+. Set "Homepage URL" to `\https://localhost:9444/`.
+. Set "Authorization callback URL" to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
+. Click on "Register application".
 
 === Setting up for Amazon
 
@@ -401,28 +430,17 @@ keytool ^
 ```
 --
 
-== OLD
+The last prerequisite step for GitHub is obtaining client ID and client secret for access to the GitHub developer API.
 
-The last prerequisite step is obtaining client ID and client secret for access to the three social media developer APIs.
+In order to obtain OAuth 2.0 credentials for GitHub,
 
-In order to obtain OAuth 2.0 credentials for Google,
-
-* Visit the https://console.developers.google.com/[Google API Console].
-* Sign in using your Google account.
-** If you haven't created a project on Google API Console before, you need to create one now before you can set up credentials.
-** Once you have created the project, navigate to the "OAuth consent screen" tab. Click "External" and "Create". Fill in the "Application name".
-* Navigate to the "Credentials" tab. Click on the "Create Credentials" button. Select "OAuth Client ID" from the different options.
-* Set the application type to "Web Application" and fill the rest of the form.
-* Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin`.
-
-In order to obtain OAuth 2.0 credentials for Amazon, follow the steps here: https://auth0.com/docs/connections/social/amazon.
-Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/amazonLogin`.
-
-In order to obtain OAuth 2.0 credentials for GitHub, follow the steps here: https://auth0.com/docs/connections/social/github.
-Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
-
-You will enter the client IDs and client secrets into your server configuration file in the following
-sections.
+. Navigate to https://login.amazon.com/[Login with Amazon^].
+. Hover over "Sign-in" and click on "Developer Portal".
+. Login into your Amazon account.
+. Click on "Create a New Security Profile".
+. Enter a name and description.
+. Set "Consent Privacy Notice URL" to "https://localhost.com/privacy".
+. Click on "Save".
 
 == Securing HelloService
 
