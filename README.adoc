@@ -69,10 +69,10 @@ First, navigate to the `start/src/main/liberty/config/resources/security` direct
 Your application requires a TLS server certificate to securely communicate using HTTPS. In this section, you will
 generate a self signed certificate and add it to your application's keystore.
 
+To generate certificates for your service to use for HTTPS connections, run the following command:
 include::{common-includes}/os-tabs.adoc[]
 [.tab_content.linux_section.mac_section]
 --
-To generate certificates for your service to use for HTTPS connections, run the following command:
 [role='command']
 ```
 openssl req \
@@ -83,33 +83,9 @@ openssl req \
     -days 365 \
     -subj "/C=CA/CN=localhost"
 ```
-
-Before the certificate and private key can be imported into the keystore for your service, it needs to be converted into one `PKCS12` bundle.
-Combine your key and certificate by running the following command. When prompted, set the password for the exported certificate bundle to `changeit`.
-[role='command']
-```
-openssl pkcs12 \
-    -inkey key.pem \
-    -in cert.pem \
-    -export -out certificate.p12
-```
-
-The keystore to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
-To import your certificate bundle into this keystore, run the following command:
-[role='command']
-```
-keytool \
-    -importkeystore \
-    -srckeystore certificate.p12 \
-    -srcstoretype PKCS12 \
-    -destkeystore key.p12 \
-    -deststoretype PKCS12
-```
 --
-
 [.tab_content.windows_section]
 --
-To generate certificates for your service to use for HTTPS connections, run the following command:
 [role='command']
 ```
 powershell New-SelfSignedCertificate ^
@@ -119,8 +95,24 @@ powershell New-SelfSignedCertificate ^
     -CertStoreLocation "Cert:\CurrentUser\My" ^
     -FriendlyName "SocialLoginServer"
 ```
+--
 
 Before the certificate and private key can be imported into the keystore for your service, it needs to be converted into one `PKCS12` bundle.
+
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
+Combine your key and certificate by running the following command. When prompted, set the password for the exported certificate bundle to `changeit`.
+[role='command']
+```
+openssl pkcs12 \
+    -inkey key.pem \
+    -in cert.pem \
+    -export -out certificate.p12
+```
+--
+[.tab_content.windows_section]
+--
 Export your newly created certificate by:
 
 1. Search for "Manage user certificates" in the Start menu.
@@ -132,9 +124,25 @@ Export your newly created certificate by:
 7. Select the radio button "Yes, export the private key".
 8. Continue through the rest of the prompts in the Export wizard.
 9. When prompted for a file name, click "Browse" to save the file in the current working directory.
+--
 
 The keystore to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
 To import your certificate bundle into this keystore, run the following command:
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
+[role='command']
+```
+keytool \
+    -importkeystore \
+    -srckeystore certificate.p12 \
+    -srcstoretype PKCS12 \
+    -destkeystore key.p12 \
+    -deststoretype PKCS12
+```
+--
+[.tab.content.windows_section]
+--
 [role='command']
 ```
 keytool ^
@@ -147,7 +155,6 @@ keytool ^
 --
 
 === Setting up for Google
-
 For your application to communicate securely with Google using HTTPS, the TLS server public key certificates for the following domains need to be added to your application's truststore:
 
 - `accounts.google.com` (will be saved as `google.pem`)
