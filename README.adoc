@@ -65,155 +65,14 @@ Lastly, you need to create an application on the three social media developer pl
 
 First, navigate to the `start/src/main/liberty/config/resources/security` directory.
 
-The instructions to get the certificates for Amazon, Google and GitHub depend on your OS and environment.
-Use the following URLs and follow the specific instructions for your OS to get the certificates for each service:
+=== Generating a self signed certificate
+Your application requires a TLS server certificate to securely communicate using HTTPS. In this section, you will
+generate a self signed certificate and add it to your application's keystore.
 
-* Google: 
-** https://accounts.google.com/[accounts.google.com^]
-** https://www.googleapis.com/[www.googleapis.com^]
-* GitHub:
-** https://www.github.com/[www.github.com^]
-** https://api.github.com/[api.github.com^]
-* Amazon: 
-** https://www.amazon.com/[www.amazon.com]
-** https://api.amazon.com/[api.amazon.com]
-
-include::{common-includes}/os-tabs.adoc[]
-[.tab_content.linux_section.mac_section]
---
-You can use `openssl` to output the certificate chain for each URL and copy each certificate into a separate file.
-
-To get the certificates for Amazon using `openssl`:
-
-[role='command']
-----
-openssl s_client \
-    -showcerts \
-    -connect www.amazon.com:443 \
-    < /dev/null \
-    2> /dev/null \
-    | sed -n '/BEGIN/,/END/p' \
-    > amazon.pem
-
-openssl s_client \
-    -showcerts \
-    -connect api.amazon.com:443 \
-    < /dev/null \
-    2> /dev/null \
-    | sed -n '/BEGIN/,/END/p' \
-    > amazon_api.pem
-----
-
-To get the certificates for Google:
-
-[role='command']
-----
-openssl s_client \
-    -showcerts \
-    -connect accounts.google.com:443 \
-    < /dev/null \
-    2> /dev/null \
-    | sed -n '/BEGIN/,/END/p' \
-    > google.pem
-
-openssl s_client \
-    -showcerts \
-    -connect www.googleapis.com:443 \
-    < /dev/null \
-    2> /dev/null \
-    | sed -n '/BEGIN/,/END/p' \
-    > google_api.pem
-----
-
-To get the certificates for GitHub:
-[role='command']
-----
-openssl s_client \
-    -showcerts \
-    -connect www.github.com:443 \
-    < /dev/null \
-    2> /dev/null \
-    | sed -n '/BEGIN/,/END/p' \
-    > github.pem
-
-openssl s_client \
-    -showcerts \
-    -connect api.github.com:443 \
-    < /dev/null \
-    2> /dev/null \
-    | sed -n '/BEGIN/,/END/p' \
-    > github_api.pem
-----
---
-
-[.tab_content.windows_section]
---
-Since there is no `openssl` command on Windows by default, the certificates can be retrieved from the URLs using an internet browser.
-For example, to get the certificates using Firefox, perform the following steps for each
-URL mentioned above:
-
-1. Open the website on Firefox.
-2. Click on the "Lock" icon to the left of the URL.
-3. Click on the button next to "Connection Secure".
-4. Click on "More Information".
-5. Click on "View Certificate".
-
-Clicking on "View Certificate" should open a new Firefox tab titled "Certificate".
-Each certificate in the chain is in a separate tab in this page.
-For each certificate in the chain, perform the following steps:
-
-1. Navigate to the "Miscellaneous" section.
-2. Click on "PEM (cert)" next to "Download" to download the certificate into a separate file.
-
-For Firefox versions 70 and below, clicking on "View Certificate" should open a dialog box.
-
-1. Switch to the "Details" tab.
-2. For each certificate in the chain, click on the "Export..." button to export it as a separate `PEM` file.
---
-
-Once the certificates have been downloaded, you need to add the domain certificates of the social media developer platforms to the trust store for social media login.
-As part of the guide, you will configure the application's truststore to be `slts.p12` whose password is `changeit`.
-
-To add a certificate to the truststore, substitute `<certificate-name>` with the name of the downloaded certificate
-and `<certificate-alias>` with an alias you wish to give the certificate in the following command and run it.
-
-include::{common-includes}/os-tabs.adoc[]
-[.tab_content.linux_section.mac_section]
---
-[role='command']
-----
-keytool \
-    -import -trustcacerts \
-    -file <certificate-name> \
-    -alias <certificate-alias> \
-    -keystore slts.p12 \
-    -storetype PKCS12 \
-    -storepass changeit
-----
---
-
-[.tab_content.windows_section]
---
-[role='command']
-----
-keytool ^
-    -import -trustcacerts ^
-    -file <certificate-name> ^
-    -alias <certificate-alias> ^
-    -keystore slts.p12 ^
-    -storetype PKCS12 ^
-    -storepass changeit
-----
---
-
-The command also creates the truststore file if it doesn't exist.
-
-Add each of the certificates that you downloaded to the `slts.p12` truststore.
-
-include::{common-includes}/os-tabs.adoc[]
-[.tab_content.linux_section.mac_section]
---
 To generate certificates for your service to use for HTTPS connections, run the following command:
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
 [role='command']
 ```
 openssl req \
@@ -224,33 +83,9 @@ openssl req \
     -days 365 \
     -subj "/C=CA/CN=localhost"
 ```
-
-Before the certificate and private key can be imported into the keystore for your service, it needs to be converted into one `PKCS12` bundle.
-Combine your key and certificate by running the following command. When prompted, set the password for the exported certificate bundle to `changeit`.
-[role='command']
-```
-openssl pkcs12 \
-    -inkey key.pem \
-    -in cert.pem \
-    -export -out certificate.p12
-```
-
-The keystore to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
-To import your certificate bundle into this keystore, run the following command:
-[role='command']
-```
-keytool \
-    -importkeystore \
-    -srckeystore certificate.p12 \
-    -srcstoretype PKCS12 \
-    -destkeystore key.p12 \
-    -deststoretype PKCS12
-```
 --
-
 [.tab_content.windows_section]
 --
-To generate certificates for your service to use for HTTPS connections, run the following command:
 [role='command']
 ```
 powershell New-SelfSignedCertificate ^
@@ -260,8 +95,24 @@ powershell New-SelfSignedCertificate ^
     -CertStoreLocation "Cert:\CurrentUser\My" ^
     -FriendlyName "SocialLoginServer"
 ```
+--
 
 Before the certificate and private key can be imported into the keystore for your service, it needs to be converted into one `PKCS12` bundle.
+
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
+Combine your key and certificate by running the following command. When prompted, set the password for the exported certificate bundle to `changeit`.
+[role='command']
+```
+openssl pkcs12 \
+    -inkey key.pem \
+    -in cert.pem \
+    -export -out certificate.p12
+```
+--
+[.tab_content.windows_section]
+--
 Export your newly created certificate by:
 
 1. Search for "Manage user certificates" in the Start menu.
@@ -272,41 +123,324 @@ Export your newly created certificate by:
 6. Click "Export...". Then click "Next".
 7. Select the radio button "Yes, export the private key".
 8. Continue through the rest of the prompts in the Export wizard.
-9. When prompted for a file name, click "Browse" to save the file in the current working directory.
+9. When prompted for a file name, click "Browse" to save the file as `certificate.pfx` in the current working directory.
+--
 
 The keystore to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
 To import your certificate bundle into this keystore, run the following command:
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
 [role='command']
 ```
-keytool `
-    -importkeystore `
-    -srckeystore certificate.pfx `
-    -srcstoretype PKCS12 `
-    -destkeystore key.p12 `
+keytool \
+    -importkeystore \
+    -srckeystore certificate.p12 \
+    -srcstoretype PKCS12 \
+    -destkeystore key.p12 \
+    -deststoretype PKCS12
+```
+--
+[.tab_content.windows_section]
+--
+[role='command']
+```
+keytool ^
+    -importkeystore ^
+    -srckeystore certificate.pfx ^
+    -srcstoretype PKCS12 ^
+    -destkeystore key.p12 ^
     -deststoretype PKCS12
 ```
 --
 
-The last prerequisite step is obtaining client ID and client secret for access to the three social media developer APIs.
+=== Setting up for Google
+For your application to communicate securely with Google using HTTPS, the TLS server public key certificates for the following domains need to be added to your application's truststore:
+
+- `accounts.google.com` (will be saved as `google.pem`)
+- `www.googleapis.com` (will be saved as `googleapis.pem`)
+
+To download the certificates, run the following commands:
+
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
+[role='command']
+```
+keytool \
+    -printcert -rfc \
+    -sslserver accounts.google.com:443 \
+    > google.pem
+keytool \
+    -printcert -rfc \
+    -sslserver www.googleapis.com:443 \
+    > googleapis.pem
+```
+--
+[.tab_content.windows_section]
+--
+[role='command']
+```
+keytool ^
+    -printcert -rfc ^
+    -sslserver accounts.google.com:443 ^
+    > google.pem
+keytool ^
+    -printcert -rfc ^
+    -sslserver www.googleapis.com:443 ^
+    > googleapis.pem
+```
+--
+
+Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`. You will configure your application's truststore to be this keystore later in this guide.
+
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
+[role='command']
+```
+keytool \
+    -import -trustcacerts \
+    -file google.pem \
+    -alias google \
+    -keystore slts.p12 \
+    -storetype PKCS12 \
+    -storepass changeit
+keytool \
+    -import -trustcacerts \
+    -file googleapis.pem \
+    -alias googleapis \
+    -keystore slts.p12 \
+    -storetype PKCS12 \
+    -storepass changeit
+```
+--
+[.tab_content.windows_section]
+--
+[role='command']
+```
+keytool ^
+    -import -trustcacerts ^
+    -file google.pem ^
+    -alias google ^
+    -keystore slts.p12 ^
+    -storetype PKCS12 ^
+    -storepass changeit
+keytool ^
+    -import -trustcacerts ^
+    -file googleapis.pem ^
+    -alias googleapis ^
+    -keystore slts.p12 ^
+    -storetype PKCS12 ^
+    -storepass changeit
+```
+--
+
+The last prerequisite step for Google is obtaining client ID and client secret for access to the Google developer API.
 
 In order to obtain OAuth 2.0 credentials for Google,
 
-* Visit the https://console.developers.google.com/[Google API Console].
-* Sign in using your Google account.
-** If you haven't created a project on Google API Console before, you need to create one now before you can set up credentials.
-** Once you have created the project, navigate to the "OAuth consent screen" tab. Click "External" and "Create". Fill in the "Application name".
-* Navigate to the "Credentials" tab. Click on the "Create Credentials" button. Select "OAuth Client ID" from the different options.
-* Set the application type to "Web Application" and fill the rest of the form.
-* Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin`.
+. Visit the https://console.developers.google.com/[Google API Console^].
+. Sign in using your Google account.
+. If you haven't created a project on Google API Console before,
+.. Create a new project.
+.. Navigate to the "OAuth consent screen" tab.
+.. Click "External", then click "Create".
+.. Fill in "Application name", then click "Save".
+. Navigate to the "Credentials" tab.
+. Click on the "CREATE CREDENTIALS" button.
+. Select "OAuth client ID" from the different options.
+. Set the application type to "Web application".
+. Enter the name of your OAuth 2.0 Client ID. This is different from your app name and will not be shown to end users. 
+. Add `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin` to "Authorized redirect URIs", then click "Create".
 
-In order to obtain OAuth 2.0 credentials for Amazon, follow the steps here: https://auth0.com/docs/connections/social/amazon.
-Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/amazonLogin`.
+=== Setting up for GitHub
+For your application to communicate securely with GitHub using HTTPS, the TLS server public key certificates for the following domains need to be added to your application's truststore:
 
-In order to obtain OAuth 2.0 credentials for GitHub, follow the steps here: https://auth0.com/docs/connections/social/github.
-Set the redirect URL to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
+- `www.github.com` (will be saved as `github.pem`)
+- `api.github.com` (will be saved as `github_api.pem`)
 
-You will enter the client IDs and client secrets into your server configuration file in the following
-sections.
+To download the certificates, run the following commands:
+
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
+[role='command']
+```
+keytool \
+    -printcert -rfc \
+    -sslserver www.github.com:443 \
+    > github.pem
+keytool \
+    -printcert -rfc \
+    -sslserver api.github.com:443 \
+    > github_api.pem
+```
+--
+[.tab_content.windows_section]
+--
+[role='command']
+```
+keytool ^
+    -printcert -rfc ^
+    -sslserver www.github.com:443 ^
+    > github.pem
+keytool ^
+    -printcert -rfc ^
+    -sslserver api.github.com:443 ^
+    > github_api.pem
+```
+--
+
+Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`. You will configure your application's truststore to be this keystore later in this guide.
+
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
+[role='command']
+```
+keytool \
+    -import -trustcacerts \
+    -file github.pem \
+    -alias github \
+    -keystore slts.p12 \
+    -storetype PKCS12 \
+    -storepass changeit
+keytool \
+    -import -trustcacerts \
+    -file github_api.pem \
+    -alias github_api \
+    -keystore slts.p12 \
+    -storetype PKCS12 \
+    -storepass changeit
+```
+--
+[.tab_content.windows_section]
+--
+[role='command']
+```
+keytool ^
+    -import -trustcacerts ^
+    -file github.pem ^
+    -alias github ^
+    -keystore slts.p12 ^
+    -storetype PKCS12 ^
+    -storepass changeit
+keytool ^
+    -import -trustcacerts ^
+    -file github_api.pem ^
+    -alias github_api ^
+    -keystore slts.p12 ^
+    -storetype PKCS12 ^
+    -storepass changeit
+```
+--
+
+The last prerequisite step for GitHub is obtaining client ID and client secret for access to the GitHub developer API.
+
+In order to obtain OAuth 2.0 credentials for GitHub,
+
+. Log into https://github.com/[GitHub^].
+. Navigate to https://github.com/settings/developers[OAuth Apps^] and click on "New OAuth App".
+. Enter an application name.
+. Set "Homepage URL" to `\https://localhost:9444/`.
+. Set "Authorization callback URL" to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
+. Click on "Register application".
+
+=== Setting up for Amazon
+
+For your application to communicate securely with GitHub using HTTPS, the TLS server public key certificates for the following domains need to be added to your application's truststore:
+
+- `www.amazon.com` (saved as `amazon.pem`)
+- `api.amazon.com` (saved as `amazon_api.pem`)
+
+To download the certificates, run the following commands:
+
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
+[role='command']
+```
+keytool \
+    -printcert -rfc \
+    -sslserver www.amazon.com:443 \
+    > amazon.pem
+keytool \
+    -printcert -rfc \
+    -sslserver api.amazon.com:443 \
+    > amazon_api.pem
+```
+--
+[.tab_content.windows_section]
+--
+[role='command']
+```
+keytool ^
+    -printcert -rfc ^
+    -sslserver www.amazon.com:443 ^
+    > amazon.pem
+keytool ^
+    -printcert -rfc ^
+    -sslserver api.amazon.com:443 ^
+    > amazon_api.pem
+```
+--
+
+Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`. You will configure your application's truststore to be this keystore later in this guide.
+
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.linux_section.mac_section]
+--
+[role='command']
+```
+keytool \
+    -import -trustcacerts \
+    -file amazon.pem \
+    -alias amazon \
+    -keystore slts.p12 \
+    -storetype PKCS12 \
+    -storepass changeit
+keytool \
+    -import -trustcacerts \
+    -file amazon_api.pem \
+    -alias amazon_api \
+    -keystore slts.p12 \
+    -storetype PKCS12 \
+    -storepass changeit
+```
+--
+[.tab_content.windows_section]
+--
+[role='command']
+```
+keytool ^
+    -import -trustcacerts ^
+    -file amazon.pem ^
+    -alias amazon ^
+    -keystore slts.p12 ^
+    -storetype PKCS12 ^
+    -storepass changeit
+keytool ^
+    -import -trustcacerts ^
+    -file amazon_api.pem ^
+    -alias amazon_api ^
+    -keystore slts.p12 ^
+    -storetype PKCS12 ^
+    -storepass changeit
+```
+--
+
+The last prerequisite step for GitHub is obtaining client ID and client secret for access to the GitHub developer API.
+
+In order to obtain OAuth 2.0 credentials for GitHub,
+
+. Navigate to https://login.amazon.com/[Login with Amazon^].
+. Hover over "Sign-in" and click on "Developer Portal".
+. Login into your Amazon account.
+. Click on "Create a New Security Profile".
+. Enter a name and description.
+. Set "Consent Privacy Notice URL" to "https://localhost.com/privacy".
+. Click on "Save".
 
 == Securing HelloService
 
