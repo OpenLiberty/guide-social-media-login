@@ -20,26 +20,17 @@ import javax.ws.rs.core.MediaType;
 // tag::rolesAllowedImport[]
 import javax.annotation.security.RolesAllowed;
 // end::rolesAllowedImport[]
-// tag::httpServletRequestContextImport[]
-// tag::httpServletRequestImport[]
-import javax.servlet.http.HttpServletRequest;
-// end::httpServletRequestImport[]
+// tag::securityContextImport[]
+import javax.ws.rs.core.SecurityContext;
+// end::securityContextImport[]
 // tag::contextImport[]
 import javax.ws.rs.core.Context;
 // end::contextImport[]
-// end::httpServletRequestContextImport[]
 // end::newImports[]
 
 @Path("hello")
 // tag::helloService[]
 public class HelloService {
-
-    // tag::httpServletRequestContext[]
-    // tag::contextAnnotation[]
-    @Context
-    // end::contextAnnotation[]
-    HttpServletRequest request;
-    // end::httpServletRequestContext[]
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -47,11 +38,10 @@ public class HelloService {
     @RolesAllowed({"users"})
     // end::rolesAllowed[]
     // tag::userPrincipal[]
-    public String greet() {
-        if (request.getUserPrincipal() == null) return "Hello, friend!";
-        return "Hello, "
-        		+ request.getUserPrincipal().getName() 
-        		+ '\n' + request.getUserPrincipal().toString();
+    public String greet( // tag::securityContext[]
+            @Context SecurityContext securityContext // end::securityContext[]
+    ) {
+        return "Hello, " + securityContext.getUserPrincipal().getName();
     }
     // end::userPrincipal[]
 }

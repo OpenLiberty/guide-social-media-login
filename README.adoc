@@ -83,6 +83,9 @@ openssl req \
     -days 365 \
     -subj "/C=CA/CN=localhost"
 ```
+
+When prompted for `PEM pass phrase`, enter a pass phrase for `key.pem`.
+
 --
 [.tab_content.windows_section]
 --
@@ -102,7 +105,8 @@ Before the certificate and private key can be imported into the keystore for you
 include::{common-includes}/os-tabs.adoc[]
 [.tab_content.linux_section.mac_section]
 --
-Combine your key and certificate by running the following command. When prompted, set the password for the exported certificate bundle to `changeit`.
+Combine your key and certificate by running the following command.
+When prompted for `Export Password`, set the password for the exported certificate bundle, `certificate.p12`.
 [role='command']
 ```
 openssl pkcs12 \
@@ -205,14 +209,16 @@ keytool \
     -alias github \
     -keystore slts.p12 \
     -storetype PKCS12 \
-    -storepass changeit
+    -storepass changeit \
+    -noprompt
 keytool \
     -import -trustcacerts \
     -file github_api.pem \
     -alias github_api \
     -keystore slts.p12 \
     -storetype PKCS12 \
-    -storepass changeit
+    -storepass changeit \
+    -noprompt
 ```
 --
 [.tab_content.windows_section]
