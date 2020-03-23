@@ -40,12 +40,12 @@ Hello, friend!
 ----
 
 Instead of securing the `HelloService` service by implementing your own authentication service,
-you can allow users to authenticate to the service using social media accounts.
+you can allow users to authenticate the service using social media accounts.
 This will allow you to provide a secure authentication method for your users without having to explicitly implement it.
 
 Open Liberty provides a https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^]
-that provides configuration elements that allow you to use Facebook, Google, GitHub, or Linkedin for authentication,
-or to configure a custom OAuth2 or OpenID Connect provider.
+that provides configuration elements that allow you to use Facebook, Google, GitHub, or LinkedIn for authentication,
+or to configure a custom OAuth2 or OpenID Connect provider like Amazon.
 
 By the end of this guide, you will be able to secure the HelloService service using three
 social media developer platforms: GitHub, Amazon and Google.
@@ -59,7 +59,7 @@ include::{common-includes}/gitclone.adoc[]
 == Setting up the certificates and truststore
 
 The application you will build in this guide requires certificates for Amazon, Google and GitHub to be added to the truststore.
-You also need to create certificates that your application will provide for HTTPS connections.
+You also need to create a public key certificate that your application will provide for HTTPS connections, and corresponding private key.
 This certificate and private key will need to be added to the keystore for social media login.
 Lastly, you need to create an application on the three social media developer platforms to obtain a client ID and client secret to use their APIs.
 
