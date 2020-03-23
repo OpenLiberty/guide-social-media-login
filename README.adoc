@@ -231,14 +231,16 @@ keytool \
     -alias github ^
     -keystore slts.p12 ^
     -storetype PKCS12 ^
-    -storepass changeit
+    -storepass changeit ^
+    -noprompt
 %JAVA_HOME%\bin\keytool ^
     -import -trustcacerts ^
     -file github_api.pem ^
     -alias github_api ^
     -keystore slts.p12 ^
     -storetype PKCS12 ^
-    -storepass changeit
+    -storepass changeit ^
+    -noprompt
 ```
 --
 
@@ -305,14 +307,16 @@ keytool \
     -alias amazon \
     -keystore slts.p12 \
     -storetype PKCS12 \
-    -storepass changeit
+    -storepass changeit \
+    -noprompt
 keytool \
     -import -trustcacerts \
     -file amazon_api.pem \
     -alias amazon_api \
     -keystore slts.p12 \
     -storetype PKCS12 \
-    -storepass changeit
+    -storepass changeit \
+    -noprompt
 ```
 --
 [.tab_content.windows_section]
@@ -325,14 +329,16 @@ keytool \
     -alias amazon ^
     -keystore slts.p12 ^
     -storetype PKCS12 ^
-    -storepass changeit
+    -storepass changeit ^
+    -nporompt
 %JAVA_HOME%\bin\keytool ^
     -import -trustcacerts ^
     -file amazon_api.pem ^
     -alias amazon_api ^
     -keystore slts.p12 ^
     -storetype PKCS12 ^
-    -storepass changeit
+    -storepass changeit ^
+    -noprompt
 ```
 --
 
@@ -345,7 +351,7 @@ In order to obtain OAuth 2.0 credentials for GitHub,
 . Login into your Amazon account.
 . Click on "Create a New Security Profile".
 . Enter a name and description.
-. Set "Consent Privacy Notice URL" to "https://localhost.com/privacy".
+. Set "Consent Privacy Notice URL" to `\https://localhost.com/privacy`.
 . Click on "Save".
 
 === Setting up for Google
@@ -399,14 +405,16 @@ keytool \
     -alias google \
     -keystore slts.p12 \
     -storetype PKCS12 \
-    -storepass changeit
+    -storepass changeit \
+    -noprompt
 keytool \
     -import -trustcacerts \
     -file googleapis.pem \
     -alias googleapis \
     -keystore slts.p12 \
     -storetype PKCS12 \
-    -storepass changeit
+    -storepass changeit \
+    -noprompt
 ```
 --
 [.tab_content.windows_section]
@@ -419,14 +427,16 @@ keytool \
     -alias google ^
     -keystore slts.p12 ^
     -storetype PKCS12 ^
-    -storepass changeit
+    -storepass changeit ^
+    -noprompt
  %JAVA_HOME%\bin\keytool ^
     -import -trustcacerts ^
     -file googleapis.pem ^
     -alias googleapis ^
     -keystore slts.p12 ^
     -storetype PKCS12 ^
-    -storepass changeit
+    -storepass changeit ^
+    -noprompt
 ```
 --
 
@@ -474,7 +484,7 @@ in the `users` role.
 
 The `return "Hello, friend!";` is replaced to output user information.
 The [hotspot=httpServletRequestContext]`HttpServletRequest` context, which is injected using the
-[hotspot=contextAnnotation]`@Context` annotation, allows you to get information about the logged in user
+[hotspot=contextAnnotation]`@Context` annotation, allows you to get information about the logged-in user
 using [hotspot=userPrincipal]`request.getUserPrincipal()`.
 
 HelloService.java 
