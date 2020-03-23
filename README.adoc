@@ -59,17 +59,17 @@ include::{common-includes}/gitclone.adoc[]
 == Setting up the certificates and truststore
 
 The application you will build in this guide requires certificates for Amazon, Google and GitHub to be added to the truststore.
-You also need to create a public key certificate that your application will provide for HTTPS connections, and corresponding private key.
+You also need to create a server certificate that your application will provide for HTTPS connections, and corresponding private key to decrypt the incoming secure data.
 This certificate and private key will need to be added to the keystore for social media login.
 Lastly, you need to create an application on the three social media developer platforms to obtain a client ID and client secret to use their APIs.
 
 First, navigate to the `start/src/main/liberty/config/resources/security` directory.
 
 === Generating a self signed certificate
-Your application requires a TLS server certificate to securely communicate using HTTPS. In this section, you will
+Your application requires a TLS server certificate and corresponding private key to securely communicate using HTTPS. In this section, you will
 generate a self signed certificate and add it to your application's keystore.
 
-To generate certificates for your service to use for HTTPS connections, run the following command:
+To generate a server certificate and private key for your service to use for HTTPS connections, run the following command:
 include::{common-includes}/os-tabs.adoc[]
 [.tab_content.linux_section.mac_section]
 --
@@ -247,7 +247,7 @@ The last prerequisite step for GitHub is obtaining client ID and client secret f
 In order to obtain OAuth 2.0 credentials for GitHub,
 
 . Log into https://github.com/[GitHub^].
-. Navigate to https://github.com/settings/developers[OAuth Apps^] and click on "New OAuth App".
+. Navigate to https://github.com/settings/developers[OAuth Apps^] and click on "Register a new application".
 . Enter an application name.
 . Set "Homepage URL" to `\https://localhost:9443/`.
 . Set "Authorization callback URL" to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
