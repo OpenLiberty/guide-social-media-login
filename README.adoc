@@ -14,11 +14,11 @@
 :page-essential-order: 1
 :page-description: Learn how to secure a RESTful web service with the Open Liberty Social Media Login feature.
 :guide-author: Open Liberty
-:page-tags: ['Social Media Login', 'Java EE', 'Jakarta EE', 'Security']
+:page-tags: ['Java EE', 'Jakarta EE', 'Security']
 :page-related-guides: ['microprofile-jwt', 'security-intro', 'rest-client-java', 'rest-client-angularjs']
 :page-permalink: /guides/{projectid}
 :page-seo-title: Securing a RESTful web service with Social Media Login
-:page-seo-description: A tutorial on how to secure a RESTful web service in Open Liberty using the SocialLogin feature
+:page-seo-description: A tutorial on how to secure a RESTful web service in Open Liberty using the Social Media Login feature
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 = Securing a RESTful web service with Social Media Login
 
@@ -249,7 +249,7 @@ In order to obtain OAuth 2.0 credentials for GitHub,
 . Log into https://github.com/[GitHub^].
 . Navigate to https://github.com/settings/developers[OAuth Apps^] and click on "New OAuth App".
 . Enter an application name.
-. Set "Homepage URL" to `\https://localhost:9444/`.
+. Set "Homepage URL" to `\https://localhost:9443/`.
 . Set "Authorization callback URL" to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
 . Click on "Register application".
 
@@ -504,7 +504,7 @@ The explanations for these changes are in the following sections.
 The [hotspot=applicationBnd]`<application-bnd />` configuration element under the
 [hotspot=webApplication]`<webApplication />` configuration element creates a new security role [hotspot=users]`users`,
 which all authenticated users belong to.
-Adding this allows users that are authenticated using social media login to access your [hotspot=helloService]`HelloService` service.
+Adding this allows users that are authenticated using social media login to access your `HelloService` service.
 
 server.xml
 [source, xml, linenums, role='code_column']
@@ -515,7 +515,7 @@ include::finish/src/main/liberty/config/server.xml[]
 === Adding required features
 
 To enable https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] and other required features, add new [hotspot=newFeatures]`<feature />` elements to the [hotspot=featureManager]`<featureManager />` in
-[hotspot file=0]`src/main/liberty/config/server.xml`
+`server.xml`
 
 There are some prerequisite configurations that social media login configuration elements need:
 
@@ -528,7 +528,7 @@ corresponds to the keystore created in the prerequisites section
 
 In the first section, you created two keystores, `slts.p12` and `key.p12`.
 Now you will configure your application to use these keystores.
-Files in the `src/liberty` folder are copied into the location specified by `${server.output.dir}`,
+Files in the `src/main/liberty` folder are copied into the location specified by `${server.output.dir}`,
 so the location of these keystores is `${server.output.dir}/resources/security`.
 
 The [hotspot=keystore]`defaultKeyStore` configuration element, whose location is `${server.output.dir}/resources/security/key.p12`,
