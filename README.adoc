@@ -43,12 +43,17 @@ Instead of securing the `HelloService` service by implementing your own authenti
 you can allow users to authenticate the service using social media accounts.
 This will allow you to provide a secure authentication method for your users without having to explicitly implement it.
 
-Open Liberty provides a https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^]
-that provides configuration elements that allow you to use Facebook, Google, GitHub, or LinkedIn for authentication,
-or to configure a custom OAuth2 or OpenID Connect provider like Amazon.
+Open Liberty provides a https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login Feature^]
+that provides configuration elements that allow you to configure an OAuth2 or OpenID Connect provider.
+The feature also provides preconfigured elements for common social media platforms like Facebook, Google, GitHub, LinkedIn and Twitter,
+which only require that you provide the credentials obtained by registering for an application on that platform.
 
-By the end of this guide, you will be able to secure the HelloService service using three
-social media developer platforms: GitHub, Amazon and Google.
+By the end of this guide, you will be able to secure the HelloService service using:
+
+1. A pre-configured social media login (GitHub)
+1. A custom OAuth2 login provider configuration (Amazon)
+1. A custom OIDC login provider configuration (Google)
+
 
 // =================================================================================================
 // Getting Started
@@ -67,94 +72,36 @@ First, navigate to the `start/src/main/liberty/config/resources/security` direct
 
 === Generating a self signed certificate
 Your application requires a TLS server certificate and corresponding private key to securely communicate using HTTPS. In this section, you will
-generate a self signed certificate and add it to your application's keystore.
+generate a self signed certificate and add it to your `key.p12`, which you will be your application's keystore.
 
-To generate a server certificate and private key for your service to use for HTTPS connections, run the following command:
+To create a self-signed certificate and add it to `key.p12` using the Java `keytool`,
+run the following command. Replace `[keystore-password]` with a password for your keystore.
+You will need this password in later sections in the guide.
 include::{common-includes}/os-tabs.adoc[]
 [.tab_content.linux_section.mac_section]
 --
 [role='command']
 ```
-openssl req \
-    -x509 \
-    -newkey rsa:4096 \
-    -keyout key.pem \
-    -out cert.pem \
-    -days 365 \
-    -subj "/C=CA/CN=localhost"
-```
-
-When prompted for `PEM pass phrase`, enter a pass phrase for `key.pem`.
-
---
-[.tab_content.windows_section]
---
-[role='command']
-```
-powershell New-SelfSignedCertificate ^
-    -Subject \"C=CA,CN=localhost\" ^
-    -KeyAlgorithm RSA ^
-    -KeyLength 4096 ^
-    -CertStoreLocation "Cert:\CurrentUser\My" ^
-    -FriendlyName "SocialLoginServer"
-```
---
-
-Before the certificate and private key can be imported into the keystore for your service, it needs to be converted into one `PKCS12` bundle.
-
-include::{common-includes}/os-tabs.adoc[]
-[.tab_content.linux_section.mac_section]
---
-Combine your key and certificate by running the following command.
-When prompted for `Export Password`, set the password for the exported certificate bundle, `certificate.p12`.
-[role='command']
-```
-openssl pkcs12 \
-    -inkey key.pem \
-    -in cert.pem \
-    -export -out certificate.p12
+keytool -genkey \
+    -keyalg RSA \
+    -alias selfsigned \
+    -keystore key.p12 \
+    -storetype PKCS12
+    -storepass [keystore-password] \
+    -validity 360 \
+    -keysize 2048
 ```
 --
 [.tab_content.windows_section]
---
-Export your newly created certificate by:
-
-1. Search for "Manage user certificates" in the Start menu.
-2. Epand "Personal".
-3. Click on "Certificates".
-4. Right-click the certificate entry with friendly name "SocialLoginServer".
-5. Hover over "All tasks" in the dropdown menu to expand another dropdown menu.
-6. Click "Export...". Then click "Next".
-7. Select the radio button "Yes, export the private key".
-8. Continue through the rest of the prompts in the Export wizard.
-9. When prompted for a file name, click "Browse" to save the file as `certificate.pfx` in the current working directory.
---
-
-The keystore to be used by social media login will be configured to be `key.p12` whose password is `changeit`.
-To import your certificate bundle into this keystore, run the following command:
-include::{common-includes}/os-tabs.adoc[]
-[.tab_content.linux_section.mac_section]
---
-[role='command']
 ```
-keytool \
-    -importkeystore \
-    -srckeystore certificate.p12 \
-    -srcstoretype PKCS12 \
-    -destkeystore key.p12 \
-    -deststoretype PKCS12
-```
---
-[.tab_content.windows_section]
---
-[role='command']
-```
-%JAVA_HOME%\bin\keytool ^
-    -importkeystore ^
-    -srckeystore certificate.pfx ^
-    -srcstoretype PKCS12 ^
-    -destkeystore key.p12 ^
-    -deststoretype PKCS12
+%JAVA_HOME%\bin\keytool -genkey ^
+    -keyalg RSA ^
+    -alias selfsigned ^
+    -keystore key.p12 ^
+    -storetype PKCS12 ^
+    -storepass [truststore-password] ^
+    -validity 360 ^
+    -keysize 2048
 ```
 --
 
@@ -196,7 +143,8 @@ keytool \
 ```
 --
 
-Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`. You will configure your application's truststore to be this keystore later in this guide.
+Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`, which will be your application's truststore. Replace `[truststore-password]` with a password for your truststore.
+You will need this password in later sections in the guide.
 
 include::{common-includes}/os-tabs.adoc[]
 [.tab_content.linux_section.mac_section]
@@ -294,7 +242,8 @@ keytool \
 ```
 --
 
-Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`. You will configure your application's truststore to be this keystore later in this guide.
+Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`, which will be your application's truststore. Replace `[truststore-password]` with a password for your truststore.
+You will need this password in later sections in the guide.
 
 include::{common-includes}/os-tabs.adoc[]
 [.tab_content.linux_section.mac_section]
@@ -342,7 +291,7 @@ keytool \
 ```
 --
 
-The last prerequisite step for GitHub is obtaining client ID and client secret for access to the GitHub developer API.
+The last prerequisite step for Amazon is obtaining client ID and client secret for access to the Login with Amazon API.
 
 In order to obtain OAuth 2.0 credentials for GitHub,
 
@@ -392,7 +341,8 @@ keytool \
 ```
 --
 
-Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`. You will configure your application's truststore to be this keystore later in this guide.
+Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`, which will be your application's truststore. Replace `[truststore-password]` with a password for your truststore.
+You will need this password in later sections in the guide.
 
 include::{common-includes}/os-tabs.adoc[]
 [.tab_content.linux_section.mac_section]
@@ -468,7 +418,7 @@ include::{common-includes}/devmode-start.adoc[]
 The [hotspot=helloService]`HelloService` class is the JAX-RS service that you will be securing.
 
 [role="code_command hotspot file=0", subs="quotes"] 
----- 
+----
 #Replace the `HelloService` class.#
 `src/main/java/io/openliberty/guides/sociallogin/HelloService.java`
 ---- 
