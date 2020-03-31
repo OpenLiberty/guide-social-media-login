@@ -38,8 +38,10 @@ public class HelloService {
     @RolesAllowed({"users"})
     // end::rolesAllowed[]
     // tag::userPrincipal[]
-    public String greet( // tag::securityContext[]
-            @Context SecurityContext securityContext // end::securityContext[]
+    public String greet( 
+        // tag::securityContext[]
+        @Context SecurityContext securityContext
+        // end::securityContext[]
     ) {
         return "Hello, " + securityContext.getUserPrincipal().getName();
     }

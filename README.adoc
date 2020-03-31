@@ -51,9 +51,8 @@ which only require that you provide the credentials obtained by registering for 
 By the end of this guide, you will be able to secure the HelloService service using:
 
 1. A pre-configured social media login (GitHub)
-1. A custom OAuth2 login provider configuration (Amazon)
-1. A custom OIDC login provider configuration (Google)
-
+2. A custom OAuth2 login provider configuration (Amazon)
+3. A custom OIDC login provider configuration (Google)
 
 // =================================================================================================
 // Getting Started
@@ -93,6 +92,8 @@ keytool -genkey \
 ```
 --
 [.tab_content.windows_section]
+--
+[role='command']
 ```
 %JAVA_HOME%\bin\keytool -genkey ^
     -keyalg RSA ^
@@ -366,6 +367,7 @@ keytool \
     -storepass changeit \
     -noprompt
 ```
+
 --
 [.tab_content.windows_section]
 --
@@ -421,21 +423,21 @@ The [hotspot=helloService]`HelloService` class is the JAX-RS service that you wi
 ----
 #Replace the `HelloService` class.#
 `src/main/java/io/openliberty/guides/sociallogin/HelloService.java`
----- 
+----
 
 The following new imports are required for the [hotspot=helloService]`HelloService` class:
 
 - [hotspot=rolesAllowedImport]`javax.annotation.security.RolesAllowed`
-- [hotspot=httpServletRequestImport]`javax.servlet.http.HttpServletRequest`
+- [hotspot=securityContextImport]`javax.ws.rs.core.SecurityContext`
 - [hotspot=contextImport]`javax.ws.rs.core.Context`
 
 The [hotspot=rolesAllowed]`@RolesAllowed({"users"})` annotation restricts access to the service to users who are
 in the `users` role.
 
 The `return "Hello, friend!";` is replaced to output user information.
-The [hotspot=httpServletRequestContext]`HttpServletRequest` context, which is injected using the
-[hotspot=contextAnnotation]`@Context` annotation, allows you to get information about the logged-in user
-using [hotspot=userPrincipal]`request.getUserPrincipal()`.
+The [hotspot=securityContext]`SecurityContext` context, which is injected using the
+[hotspot=securityContext]`@Context` annotation, allows you to get information about the logged-in user
+using [hotspot=userPrincipal]`securitContext.getUserPrincipal()`.
 
 HelloService.java 
 [source, Java, linenums, role='code_column hide_tags=copyright'] 
@@ -446,16 +448,16 @@ include::finish/src/main/java/io/openliberty/guides/sociallogin/HelloService.jav
 == Configuring the security and social media login
 
 [role="code_command hotspot file=0", subs="quotes"] 
----- 
+----
 #Replace the server configuration file.#
 `src/main/liberty/config/server.xml`
 ----
 
 server.xml 
 [source, xml, linenums, role='code_column']
----- 
+----
 include::finish/src/main/liberty/config/server.xml[]
----- 
+----
 
 The explanations for these changes are in the following sections.
 
@@ -465,12 +467,6 @@ The [hotspot=applicationBnd]`<application-bnd />` configuration element under th
 [hotspot=webApplication]`<webApplication />` configuration element creates a new security role [hotspot=users]`users`,
 which all authenticated users belong to.
 Adding this allows users that are authenticated using social media login to access your `HelloService` service.
-
-server.xml
-[source, xml, linenums, role='code_column']
-----
-include::finish/src/main/liberty/config/server.xml[]
----- 
 
 === Adding required features
 
@@ -493,26 +489,56 @@ so the location of these keystores is `${server.output.dir}/resources/security`.
 
 The [hotspot=keystore]`defaultKeyStore` configuration element, whose location is `${server.output.dir}/resources/security/key.p12`,
 will be used to provide SSL certificates when initiating HTTPS connections for social media login.
-Provide the password that you used when creating the keystore.
+
+[role="code_command hotspot=sections", subs="quotes"] 
+----
+#Update the `server.xml` file.#
+`src/liberty/config/server.xml`
+----
+[role="edit_command_text"]
+Replace [hotspot=29]`[keystore-password]` with the password that you used when creating the keystore in the previous sections.
 
 The [hotspot=truststore]`socialLoginKeyStore` configuration element, whose location is `${server.output.dir}/resources/security/slts.p12`,
 will be used to store trusted certificates when initiating HTTPS connections to social media APIs for authorization and authentication.
-Provide the password that you usd when creating the truststore.
+
+[role="code_command hotspot=sections", subs="quotes"] 
+----
+#Update the `server.xml` file.#
+`src/liberty/config/server.xml`
+----
+[role="edit_command_text"]
+Replace [hotspot=22]`[truststore-password]` with the password that you used when creating the truststore in the previous sections.
 
 The [hotspot=sslConfig]`authServiceSslRef` configuration element, which references [hotspot=keystore]`defaultKeyStore` as the keystore
 and [hotspot=truststore]`socialLoginKeyStore` as the truststore, will be provided to social media login configurations.
 
 === Adding GitHub login configuration
 
-The [hotspot=githubLogin]`<githubLogin />` configuration element will configure GitHub login.
+[role="code_command hotspot=sections", subs="quotes"] 
+----
+#Update the `server.xml` file.#
+`src/liberty/config/server.xml`
+----
+[role="edit_command_text"]
 Replace the values of the [hotspot=43]`clientId` and [hotspot=44]`clientSecret` with the credentials you created for your GitHub application
-in the prerequisites section. The [hotspot=45]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
+in the prerequisites section.
+
+The [hotspot=githubLogin]`<githubLogin />` configuration element will configure GitHub login.
+The [hotspot=45]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
 
 === Adding Amazon login configuration
 
-The [hotspot=amazonLogin]`amazonLogin` configuration uses a custom [hotspot=amazonLogin]`<oauth2Login />` configuration element.
+[role="code_command hotspot=sections", subs="quotes"] 
+----
+#Update the `server.xml` file.#
+`src/liberty/config/server.xml`
+----
+[role="edit_command_text"]
 Replace the values of [hotspot=52]`clientId` and [hotspot=53]`clientSecret` with the credentials you created for your Amazon application
-in the prerequisites section. The [hotspot=55]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
+in the prerequisites section.
+
+The [hotspot=amazonLogin]`amazonLogin` configuration uses a custom [hotspot=amazonLogin]`<oauth2Login />` configuration element.
+The [hotspot=55]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
 
 Further documentation on the [hotspot=amazonLogin]`attributes` can be found on the https://openliberty.io/docs/ref/config/oauth2Login.html[Open Liberty config reference on oauth2Login^].
 The values for these [hotspot=amazonLogin]`attributes` can be found in the https://developer.amazon.com/docs/login-with-amazon/minitoc-lwa-overview.html[Login With Amazon API documentation^].
@@ -521,9 +547,17 @@ Make sure that the [hotspot=50]`id` of your [hotspot=amazonLogin]`<oauth2Login /
 
 === Adding Google login configuration
 
-The [hotspot=googleOIDCLogin]`googleOIDCLogin` configuration uses a custom [hotspot=googleOIDCLogin]`<oidcLogin />` configuration element.
+[role="code_command hotspot=sections", subs="quotes"] 
+----
+#Update the `server.xml` file.#
+`src/liberty/config/server.xml`
+----
+[role="edit_command_text"]
 Repalce the values of [hotspot=70]`clientId` and [hotspot=71]`clientSecret` with the credentials you created for your Google application
-in the prerequisites section. The [hotspot=72]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
+in the prerequisites section.
+
+The [hotspot=googleOIDCLogin]`googleOIDCLogin` configuration uses a custom [hotspot=googleOIDCLogin]`<oidcLogin />` configuration element.
+The [hotspot=72]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
 
 Further documentation on the [hotspot=googleOIDCLogin]`attributes` can be found on the https://openliberty.io/docs/ref/config/oidcLogin.html[Open Liberty config reference on oidcLogin^].
 The values of these [hotspot=googleOIDCLogin]`attributes` can be found in the https://developers.google.com/identity/protocols/OpenIDConnect[Google API documentation^].
@@ -545,10 +579,9 @@ for authentication. When you select a login choice, you will be redirected to th
 Try logging in using your social media accounts. After authenticating, you will be redirected back to https://localhost:9080/api/hello and the response will look like this:
 
 [source,role="no_copy"]
-----
+---
 Hello, <<your username>>
-WSPrincipal:<<your username>>
-----
+---
 
 == Testing the service
 

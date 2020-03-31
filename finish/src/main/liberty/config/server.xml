@@ -19,14 +19,14 @@
     <!-- tag::keystore[] -->
     <keyStore id="defaultKeyStore"
               location="${server.output.dir}/resources/security/key.p12"
-              password="changeit"
+              password="[keystore-password]"
               type="PKCS12" />
     <!-- end::keystore[] -->
 
     <!-- tag::truststore[] -->
     <keyStore id="socialLoginKeyStore"
               location="${server.output.dir}/resources/security/slts.p12"
-              password="changeit"
+              password="[truststore-password]"
               type="PKCS12" />
     <!-- end::truststore[] -->
 
