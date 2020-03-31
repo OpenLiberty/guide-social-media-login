@@ -100,7 +100,7 @@ keytool -genkey \
     -alias selfsigned ^
     -keystore key.p12 ^
     -storetype PKCS12 ^
-    -storepass [truststore-password] ^
+    -storepass [keystore-password] ^
     -validity 360 ^
     -keysize 2048
 ```
@@ -158,7 +158,7 @@ keytool \
     -alias github \
     -keystore slts.p12 \
     -storetype PKCS12 \
-    -storepass changeit \
+    -storepass [truststore-password] \
     -noprompt
 keytool \
     -import -trustcacerts \
@@ -166,7 +166,7 @@ keytool \
     -alias github_api \
     -keystore slts.p12 \
     -storetype PKCS12 \
-    -storepass changeit \
+    -storepass [truststore-password] \
     -noprompt
 ```
 --
@@ -180,7 +180,7 @@ keytool \
     -alias github ^
     -keystore slts.p12 ^
     -storetype PKCS12 ^
-    -storepass changeit ^
+    -storepass [truststore-password] ^
     -noprompt
 %JAVA_HOME%\bin\keytool ^
     -import -trustcacerts ^
@@ -188,7 +188,7 @@ keytool \
     -alias github_api ^
     -keystore slts.p12 ^
     -storetype PKCS12 ^
-    -storepass changeit ^
+    -storepass [truststore-password] ^
     -noprompt
 ```
 --
@@ -243,7 +243,7 @@ keytool \
 ```
 --
 
-Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`, which will be your application's truststore. Replace `[truststore-password]` with a password for your truststore.
+Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`, which will be your application's truststore. Replace `[truststore-password]` with the password you used in the previous section for your truststore.
 You will need this password in later sections in the guide.
 
 include::{common-includes}/os-tabs.adoc[]
@@ -257,7 +257,7 @@ keytool \
     -alias amazon \
     -keystore slts.p12 \
     -storetype PKCS12 \
-    -storepass changeit \
+    -storepass [truststore-password] \
     -noprompt
 keytool \
     -import -trustcacerts \
@@ -265,7 +265,7 @@ keytool \
     -alias amazon_api \
     -keystore slts.p12 \
     -storetype PKCS12 \
-    -storepass changeit \
+    -storepass [truststore-password] \
     -noprompt
 ```
 --
@@ -279,7 +279,7 @@ keytool \
     -alias amazon ^
     -keystore slts.p12 ^
     -storetype PKCS12 ^
-    -storepass changeit ^
+    -storepass [truststore-password] ^
     -nporompt
 %JAVA_HOME%\bin\keytool ^
     -import -trustcacerts ^
@@ -287,7 +287,7 @@ keytool \
     -alias amazon_api ^
     -keystore slts.p12 ^
     -storetype PKCS12 ^
-    -storepass changeit ^
+    -storepass [truststore-password] ^
     -noprompt
 ```
 --
@@ -342,7 +342,7 @@ keytool \
 ```
 --
 
-Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`, which will be your application's truststore. Replace `[truststore-password]` with a password for your truststore.
+Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`, which will be your application's truststore. Replace `[truststore-password]` with the password you used in the previous section for your truststore.
 You will need this password in later sections in the guide.
 
 include::{common-includes}/os-tabs.adoc[]
@@ -356,7 +356,7 @@ keytool \
     -alias google \
     -keystore slts.p12 \
     -storetype PKCS12 \
-    -storepass changeit \
+    -storepass [truststore-password] \
     -noprompt
 keytool \
     -import -trustcacerts \
@@ -364,7 +364,7 @@ keytool \
     -alias googleapis \
     -keystore slts.p12 \
     -storetype PKCS12 \
-    -storepass changeit \
+    -storepass [truststore-password] \
     -noprompt
 ```
 
@@ -379,7 +379,7 @@ keytool \
     -alias google ^
     -keystore slts.p12 ^
     -storetype PKCS12 ^
-    -storepass changeit ^
+    -storepass [truststore-password] ^
     -noprompt
  %JAVA_HOME%\bin\keytool ^
     -import -trustcacerts ^
@@ -387,7 +387,7 @@ keytool \
     -alias googleapis ^
     -keystore slts.p12 ^
     -storetype PKCS12 ^
-    -storepass changeit ^
+    -storepass [truststore-password] ^
     -noprompt
 ```
 --
