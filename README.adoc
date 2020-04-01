@@ -71,7 +71,7 @@ First, navigate to the `start/src/main/liberty/config/resources/security` direct
 
 === Generating a self signed certificate
 Your application requires a TLS server certificate and corresponding private key to securely communicate using HTTPS. In this section, you will
-generate a self signed certificate and add it to your `key.p12`, which you will be your application's keystore.
+generate a self signed certificate and add it to your `key.p12`, which will be your application's keystore.
 
 To create a self-signed certificate and add it to `key.p12` using the Java `keytool`,
 run the following command. Replace `[keystore-password]` with a password for your keystore.
@@ -413,7 +413,7 @@ In order to obtain OAuth 2.0 credentials for Google,
 . Select "OAuth client ID" from the different options.
 . Set the application type to "Web application".
 . Enter the name of your OAuth 2.0 Client ID. This is different from your app name and will not be shown to end users. 
-. Add `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin` to "Authorized redirect URIs", hit "Enter" and then click "Create".
+. Add `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin` to "Authorized redirect URIs", hit "Enter" to save the URI and then click "Create".
 
 == Securing HelloService
 
@@ -501,7 +501,7 @@ will be used to provide SSL certificates when initiating HTTPS connections for s
 `src/liberty/config/server.xml`
 ----
 [role="edit_command_text"]
-Replace [hotspot=29]`[keystore-password]` with the password that you used when creating the keystore in the previous sections.
+Replace [hotspot=22]`[keystore-password]` with the password that you used when creating the keystore in the previous sections.
 
 The [hotspot=truststore]`socialLoginKeyStore` configuration element, whose location is `${server.output.dir}/resources/security/slts.p12`,
 will be used to store trusted certificates when initiating HTTPS connections to social media APIs for authorization and authentication.
@@ -512,7 +512,7 @@ will be used to store trusted certificates when initiating HTTPS connections to 
 `src/liberty/config/server.xml`
 ----
 [role="edit_command_text"]
-Replace [hotspot=22]`[truststore-password]` with the password that you used when creating the truststore in the previous sections.
+Replace [hotspot=29]`[truststore-password]` with the password that you used when creating the truststore in the previous sections.
 
 The [hotspot=sslConfig]`authServiceSslRef` configuration element, which references [hotspot=keystore]`defaultKeyStore` as the keystore
 and [hotspot=truststore]`socialLoginKeyStore` as the truststore, will be provided to social media login configurations.
