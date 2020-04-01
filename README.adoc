@@ -206,7 +206,7 @@ In order to obtain OAuth 2.0 credentials for GitHub,
 
 === Setting up for Amazon
 
-For your application to communicate securely with GitHub using HTTPS, the TLS server public key certificates for the following domains need to be added to your application's truststore:
+For your application to communicate securely with Amazon using HTTPS, the TLS server public key certificates for the following domains need to be added to your application's truststore:
 
 - `www.amazon.com` (saved as `amazon.pem`)
 - `api.amazon.com` (saved as `amazon_api.pem`)
@@ -294,7 +294,7 @@ keytool \
 
 The last prerequisite step for Amazon is obtaining client ID and client secret for access to the Login with Amazon API.
 
-In order to obtain OAuth 2.0 credentials for GitHub,
+In order to obtain OAuth 2.0 credentials for Amazon,
 
 . Navigate to https://login.amazon.com/[Login with Amazon^].
 . Hover over "Sign-in" and click on "Developer Portal".
@@ -413,7 +413,7 @@ In order to obtain OAuth 2.0 credentials for Google,
 . Select "OAuth client ID" from the different options.
 . Set the application type to "Web application".
 . Enter the name of your OAuth 2.0 Client ID. This is different from your app name and will not be shown to end users. 
-. Add `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin` to "Authorized redirect URIs", then click "Create".
+. Add `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin` to "Authorized redirect URIs", hit "Enter" and then click "Create".
 
 == Securing HelloService
 
