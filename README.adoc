@@ -300,9 +300,14 @@ In order to obtain OAuth 2.0 credentials for GitHub,
 . Hover over "Sign-in" and click on "Developer Portal".
 . Login into your Amazon account.
 . Click on "Create a New Security Profile".
-. Enter a name and description.
-. Set "Consent Privacy Notice URL" to `\https://localhost.com/privacy`.
-. Click on "Save".
+.. Enter a name and description.
+.. Set "Consent Privacy Notice URL" to `\https://localhost.com/privacy`.
+.. Click on "Save", which will return you to the "Login with Amazon Console".
+. Hover over the "settings" icon under "Manage" and click on "Web Settings".
+. Click on "Edit".
+.. Set `\https://localhost:9443/` as the "Allowed Origins".
+.. Set `\https://localhost:9443/ibm/api/social-login/redirect/amazonLogin` as the "Allowed Return URLs".
+.. Click "Save".
 
 === Setting up for Google
 For your application to communicate securely with Google using HTTPS, the TLS server public key certificates for the following domains need to be added to your application's truststore:
