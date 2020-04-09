@@ -23,18 +23,11 @@
               type="PKCS12" />
     <!-- end::keystore[] -->
 
-    <!-- tag::truststore[] -->
-    <keyStore id="socialLoginKeyStore"
-              location="${server.output.dir}/resources/security/slts.p12"
-              password="[truststore-password]"
-              type="PKCS12" />
-    <!-- end::truststore[] -->
-
     <!-- SSL configuration for auth services -->
     <!-- tag::sslConfig[] -->
     <ssl id="authServiceSslRef"
-         keyStoreRef="defaultKeyStore"
-         trustStoreRef="socialLoginKeyStore" />
+	     keyStoreRef="defaultKeyStore"
+         trustDefaultCerts="true" />
     <!-- end::sslConfig[] -->
 
     <!-- Social Login Configuration -->
