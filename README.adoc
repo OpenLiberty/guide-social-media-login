@@ -85,7 +85,7 @@ keytool -genkey \
     -keyalg RSA \
     -alias selfsigned \
     -keystore key.p12 \
-    -storetype PKCS12
+    -storetype PKCS12 \
     -storepass [keystore-password] \
     -validity 360 \
     -keysize 2048
