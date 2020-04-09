@@ -60,12 +60,11 @@ By the end of this guide, you will be able to secure the HelloService service us
 [role='command']
 include::{common-includes}/gitclone.adoc[]
 
-== Setting up the certificates and truststore
+== Setting up the certificates
 
-The application you will build in this guide requires certificates for Amazon, Google and GitHub to be added to the truststore.
-You also need to create a server certificate that your application will provide for HTTPS connections, and corresponding private key to decrypt the incoming secure data.
+The application you will build in this guide requires a server certificate that your application will provide for HTTPS connections, and corresponding private key to decrypt the incoming secure data.
 This certificate and private key will need to be added to the keystore for social media login.
-Lastly, you need to create an application on the three social media developer platforms to obtain a client ID and client secret to use their APIs.
+You also need to create an application on the three social media developer platforms to obtain a client ID and client secret to use their APIs.
 
 First, navigate to the `start/src/main/liberty/config/resources/security` directory.
 
@@ -85,7 +84,7 @@ keytool -genkey \
     -keyalg RSA \
     -alias selfsigned \
     -keystore key.p12 \
-    -storetype PKCS12
+    -storetype PKCS12 \
     -storepass [keystore-password] \
     -validity 360 \
     -keysize 2048
@@ -107,95 +106,8 @@ keytool -genkey \
 --
 
 === Setting up for GitHub
-For your application to communicate securely with GitHub using HTTPS, the TLS server public key certificates for the following domains need to be added to your application's truststore:
 
-- `www.github.com` (will be saved as `github.pem`)
-- `api.github.com` (will be saved as `github_api.pem`)
-
-To download the certificates, run the following commands:
-
-include::{common-includes}/os-tabs.adoc[]
-[.tab_content.linux_section.mac_section]
---
-[role='command']
-```
-keytool \
-    -printcert -rfc \
-    -sslserver www.github.com:443 \
-    > github.pem
-keytool \
-    -printcert -rfc \
-    -sslserver api.github.com:443 \
-    > github_api.pem
-```
---
-[.tab_content.windows_section]
---
-[role='command']
-```
-%JAVA_HOME%\bin\keytool ^
-    -printcert -rfc ^
-    -sslserver www.github.com:443 ^
-    > github.pem
-%JAVA_HOME%\bin\keytool ^
-    -printcert -rfc ^
-    -sslserver api.github.com:443 ^
-    > github_api.pem
-```
---
-
-Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`, which will be your application's truststore. Replace `[truststore-password]` with a password for your truststore.
-You will need this password in later sections in the guide.
-
-include::{common-includes}/os-tabs.adoc[]
-[.tab_content.linux_section.mac_section]
---
-[role='command']
-```
-keytool \
-    -import -trustcacerts \
-    -file github.pem \
-    -alias github \
-    -keystore slts.p12 \
-    -storetype PKCS12 \
-    -storepass [truststore-password] \
-    -noprompt
-keytool \
-    -import -trustcacerts \
-    -file github_api.pem \
-    -alias github_api \
-    -keystore slts.p12 \
-    -storetype PKCS12 \
-    -storepass [truststore-password] \
-    -noprompt
-```
---
-[.tab_content.windows_section]
---
-[role='command']
-```
-%JAVA_HOME%\bin\keytool ^
-    -import -trustcacerts ^
-    -file github.pem ^
-    -alias github ^
-    -keystore slts.p12 ^
-    -storetype PKCS12 ^
-    -storepass [truststore-password] ^
-    -noprompt
-%JAVA_HOME%\bin\keytool ^
-    -import -trustcacerts ^
-    -file github_api.pem ^
-    -alias github_api ^
-    -keystore slts.p12 ^
-    -storetype PKCS12 ^
-    -storepass [truststore-password] ^
-    -noprompt
-```
---
-
-The last prerequisite step for GitHub is obtaining client ID and client secret for access to the GitHub developer API.
-
-In order to obtain OAuth 2.0 credentials for GitHub,
+In order to obtain OAuth 2.0 client ID and client secret credentials for accessing the GitHub developer API,
 
 . Log into https://github.com/[GitHub^].
 . Navigate to https://github.com/settings/developers[OAuth Apps^] and click on "Register a new application".
@@ -206,95 +118,7 @@ In order to obtain OAuth 2.0 credentials for GitHub,
 
 === Setting up for Amazon
 
-For your application to communicate securely with Amazon using HTTPS, the TLS server public key certificates for the following domains need to be added to your application's truststore:
-
-- `www.amazon.com` (saved as `amazon.pem`)
-- `api.amazon.com` (saved as `amazon_api.pem`)
-
-To download the certificates, run the following commands:
-
-include::{common-includes}/os-tabs.adoc[]
-[.tab_content.linux_section.mac_section]
---
-[role='command']
-```
-keytool \
-    -printcert -rfc \
-    -sslserver www.amazon.com:443 \
-    > amazon.pem
-keytool \
-    -printcert -rfc \
-    -sslserver api.amazon.com:443 \
-    > amazon_api.pem
-```
---
-[.tab_content.windows_section]
---
-[role='command']
-```
-%JAVA_HOME%\bin\keytool ^
-    -printcert -rfc ^
-    -sslserver www.amazon.com:443 ^
-    > amazon.pem
-%JAVA_HOME%\bin\keytool ^
-    -printcert -rfc ^
-    -sslserver api.amazon.com:443 ^
-    > amazon_api.pem
-```
---
-
-Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`, which will be your application's truststore. Replace `[truststore-password]` with the password you used in the previous section for your truststore.
-You will need this password in later sections in the guide.
-
-include::{common-includes}/os-tabs.adoc[]
-[.tab_content.linux_section.mac_section]
---
-[role='command']
-```
-keytool \
-    -import -trustcacerts \
-    -file amazon.pem \
-    -alias amazon \
-    -keystore slts.p12 \
-    -storetype PKCS12 \
-    -storepass [truststore-password] \
-    -noprompt
-keytool \
-    -import -trustcacerts \
-    -file amazon_api.pem \
-    -alias amazon_api \
-    -keystore slts.p12 \
-    -storetype PKCS12 \
-    -storepass [truststore-password] \
-    -noprompt
-```
---
-[.tab_content.windows_section]
---
-[role='command']
-```
-%JAVA_HOME%\bin\keytool ^
-    -import -trustcacerts ^
-    -file amazon.pem ^
-    -alias amazon ^
-    -keystore slts.p12 ^
-    -storetype PKCS12 ^
-    -storepass [truststore-password] ^
-    -nporompt
-%JAVA_HOME%\bin\keytool ^
-    -import -trustcacerts ^
-    -file amazon_api.pem ^
-    -alias amazon_api ^
-    -keystore slts.p12 ^
-    -storetype PKCS12 ^
-    -storepass [truststore-password] ^
-    -noprompt
-```
---
-
-The last prerequisite step for Amazon is obtaining client ID and client secret for access to the Login with Amazon API.
-
-In order to obtain OAuth 2.0 credentials for Amazon,
+In order to obtain OAuth 2.0 client ID and client secret for accessing the Login with Amazon API,
 
 . Navigate to https://login.amazon.com/[Login with Amazon^].
 . Hover over "Sign-in" and click on "Developer Portal".
@@ -310,96 +134,8 @@ In order to obtain OAuth 2.0 credentials for Amazon,
 .. Click "Save".
 
 === Setting up for Google
-For your application to communicate securely with Google using HTTPS, the TLS server public key certificates for the following domains need to be added to your application's truststore:
 
-- `accounts.google.com` (will be saved as `google.pem`)
-- `www.googleapis.com` (will be saved as `googleapis.pem`)
-
-To download the certificates, run the following commands:
-
-include::{common-includes}/os-tabs.adoc[]
-[.tab_content.linux_section.mac_section]
---
-[role='command']
-```
-keytool \
-    -printcert -rfc \
-    -sslserver accounts.google.com:443 \
-    > google.pem
-keytool \
-    -printcert -rfc \
-    -sslserver www.googleapis.com:443 \
-    > googleapis.pem
-```
---
-[.tab_content.windows_section]
---
-[role='command']
-```
-%JAVA_HOME%\bin\keytool ^
-    -printcert -rfc ^
-    -sslserver accounts.google.com:443 ^
-    > google.pem
-%JAVA_HOME%\bin\keytool ^
-    -printcert -rfc ^
-    -sslserver www.googleapis.com:443 ^
-    > googleapis.pem
-```
---
-
-Next, run the following command to add the downloaded certificates into a keystore named `slts.p12`, which will be your application's truststore. Replace `[truststore-password]` with the password you used in the previous section for your truststore.
-You will need this password in later sections in the guide.
-
-include::{common-includes}/os-tabs.adoc[]
-[.tab_content.linux_section.mac_section]
---
-[role='command']
-```
-keytool \
-    -import -trustcacerts \
-    -file google.pem \
-    -alias google \
-    -keystore slts.p12 \
-    -storetype PKCS12 \
-    -storepass [truststore-password] \
-    -noprompt
-keytool \
-    -import -trustcacerts \
-    -file googleapis.pem \
-    -alias googleapis \
-    -keystore slts.p12 \
-    -storetype PKCS12 \
-    -storepass [truststore-password] \
-    -noprompt
-```
-
---
-[.tab_content.windows_section]
---
-[role='command']
-```
-%JAVA_HOME%\bin\keytool ^
-    -import -trustcacerts ^
-    -file google.pem ^
-    -alias google ^
-    -keystore slts.p12 ^
-    -storetype PKCS12 ^
-    -storepass [truststore-password] ^
-    -noprompt
- %JAVA_HOME%\bin\keytool ^
-    -import -trustcacerts ^
-    -file googleapis.pem ^
-    -alias googleapis ^
-    -keystore slts.p12 ^
-    -storetype PKCS12 ^
-    -storepass [truststore-password] ^
-    -noprompt
-```
---
-
-The last prerequisite step for Google is obtaining client ID and client secret for access to the Google developer API.
-
-In order to obtain OAuth 2.0 credentials for Google,
+In order to obtain OAuth 2.0 credentials obtaining client ID and client secret for accessing the Google developer API,
 
 . Visit the https://console.developers.google.com/[Google API Console^].
 . Sign in using your Google account.
@@ -475,24 +211,24 @@ Adding this allows users that are authenticated using social media login to acce
 
 === Adding required features
 
-To enable https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] and other required features, add new [hotspot=newFeatures]`<feature />` elements to the [hotspot=featureManager]`<featureManager />` in
-`server.xml`
+To enable https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] and other required features,
+new [hotspot=newFeatures]`<feature />` elements are added to the [hotspot=featureManager]`<featureManager />` in
+`server.xml`.
 
 There are some prerequisite configurations that social media login configuration elements need:
 
 1. The [hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` configuration element
 corresponds to the keystore created in the prerequisites section
-2. The [hotspot=truststore]`<keyStore id="socialLoginKeyStore" .../>` configuration element corresponds to the truststore created in the prerequisites section
-3. An [hotspot=sslConfig]`<ssl />` configuration element for configuring the SSL configuration that is used to connect to the social media
+2. An [hotspot=sslConfig]`<ssl id="authServiceSslRef .../>` configuration element for configuring the SSL configuration that is used to connect to the social media
 
 === Adding keystore and truststore
 
-In the first section, you created two keystores, `slts.p12` and `key.p12`.
-Now you will configure your application to use these keystores.
+In the first section, you created a keystore, `key.p12`.
+Now you will configure your application to use this keystore.
 Files in the `src/main/liberty` folder are copied into the location specified by `${server.output.dir}`,
-so the location of these keystores is `${server.output.dir}/resources/security`.
+so the location of this keystore is `${server.output.dir}/resources/security`.
 
-The [hotspot=keystore]`defaultKeyStore` configuration element, whose location is `${server.output.dir}/resources/security/key.p12`,
+The [hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` configuration element, whose location is `${server.output.dir}/resources/security/key.p12`,
 will be used to provide SSL certificates when initiating HTTPS connections for social media login.
 
 [role="code_command hotspot=sections", subs="quotes"] 
@@ -503,19 +239,18 @@ will be used to provide SSL certificates when initiating HTTPS connections for s
 [role="edit_command_text"]
 Replace [hotspot=22]`[keystore-password]` with the password that you used when creating the keystore in the previous sections.
 
-The [hotspot=truststore]`socialLoginKeyStore` configuration element, whose location is `${server.output.dir}/resources/security/slts.p12`,
-will be used to store trusted certificates when initiating HTTPS connections to social media APIs for authorization and authentication.
+The [hotspot=sslConfig]`<ssl id="authServiceSslRef" .../>` configuration element, which references [hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` as the keystore, will be provided to social media login configurations.
 
-[role="code_command hotspot=sections", subs="quotes"] 
-----
-#Update the `server.xml` file.#
-`src/liberty/config/server.xml`
-----
-[role="edit_command_text"]
-Replace [hotspot=29]`[truststore-password]` with the password that you used when creating the truststore in the previous sections.
+For your application to send data securely to the social media platforms, it must trust the public SSL certificates
+provided by them.
+This requires the SSL certificates for Amazon, Google and GitHub to be added to a truststore.
 
-The [hotspot=sslConfig]`authServiceSslRef` configuration element, which references [hotspot=keystore]`defaultKeyStore` as the keystore
-and [hotspot=truststore]`socialLoginKeyStore` as the truststore, will be provided to social media login configurations.
+Since the platforms in this guide use a well-known CA (Certificate Authority), they can be
+found in the JDK default `cacerts` file.
+
+The [hotspot=30]`trustDefaultCerts` attribute of the [hotspot=sslConfig]`<ssl id="authServiceSslRef" .../>` configuration element,
+when set to true, allows the server to establish trust using the JDK default truststore, instead of requiring
+you to create a truststore with the required certificates.
 
 === Adding GitHub login configuration
 
