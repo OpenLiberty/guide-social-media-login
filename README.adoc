@@ -32,16 +32,6 @@ Learn how to authenticate users with the Open Liberty Social Media Login feature
 You will learn how to authenticate users to an existing service using social media login
 https://oauth.net/2[OAuth2^] and https://openid.net/connect[OpenID Connect^].
 
-=== Social Login and its purpose
-Social Media Login provides a form of single sign-on (SSO) that enables users to sign in to a secured website by using
-their existing social media account.
-Social Media Login simplifies the authentication process for end users and allows you to provide a secure authentication
-method for your users without having to explicitly implement it.
-
-Open Liberty provides a https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login Feature^]
-that provides configuration elements can enable Social Login for any social media platform that implements
-the https://oauth.net/2[OAuth 2.0^] or https://openid.net/connect[OpenID Connect 1.0^] standard for authorization.
-
 === OAuth 2.0 and OpenID Connect 1.0
 ==== Authorization
 Authorization is the process of granting access rights/privileges to a user's resources.
@@ -59,6 +49,16 @@ https://openid.net/connect/[OpenID Cnonect 1.0^] is an authentication layer on t
 https://oauth.net/2[OAuth 2.0^] protocol.
 https://openid.net/connect/[OpenID Cnonect 1.0^] allows clients for all types:
 web applications, desktop applications, mobile phones and smart devices.
+
+=== Social Login and its purpose
+Social Media Login provides a form of single sign-on (SSO) that enables users to sign in to a secured website by using
+their existing social media account.
+Social Media Login simplifies the authentication process for end users and allows you to provide a secure authentication
+method for your users without having to explicitly implement it.
+
+Open Liberty provides a https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login Feature^]
+that provides configuration elements can enable Social Login for any social media platform that implements
+the https://oauth.net/2[OAuth 2.0^] or https://openid.net/connect[OpenID Connect 1.0^] standard for authorization.`
 
 By the end of this guide, you will be able to authenticate users to your web service using Facebook and Twitter.
 
@@ -112,6 +112,12 @@ keytool -genkey \
     -keysize 2048
 ```
 --
+
+=== Setting up for Facebook
+
+In order to obtain OAuth 2.0 client ID and client secret credentials for accessing the Facebook Login service,
+
+1.
 
 === Setting up for GitHub
 
