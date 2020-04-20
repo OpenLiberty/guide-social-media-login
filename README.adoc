@@ -12,47 +12,55 @@
 :page-releasedate: 2017-09-19
 :page-essential: true
 :page-essential-order: 1
-:page-description: Learn how to secure a RESTful web service with the Open Liberty Social Media Login feature.
+:page-description: Learn how to authenticate users with the Open Liberty Social Media Login feature.
 :guide-author: Open Liberty
 :page-tags: ['Java EE', 'Jakarta EE', 'Security']
 :page-related-guides: ['microprofile-jwt', 'security-intro', 'rest-client-java', 'rest-client-angularjs']
 :page-permalink: /guides/{projectid}
-:page-seo-title: Securing a RESTful web service with Social Media Login
-:page-seo-description: A tutorial on how to secure a RESTful web service in Open Liberty using the Social Media Login feature
+:page-seo-title: Authenticating users with Social Login
+:page-seo-description: A tutorial on how to authenticate users in Open Liberty using the Social Media Login feature
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
-= Securing a RESTful web service with Social Media Login
+= Authenticating users with Social Login
 
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website^].
 
-Learn how to secure a RESTful web service with the Open Liberty Social Media Login feature.
+Learn how to authenticate users with the Open Liberty Social Media Login feature.
 
 == What you'll learn
 
-You will learn how to secure a simple RESTful web service using the https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^]. You will secure an existing service,
-`HelloService`, using social media https://oauth.net/2[OAuth2^] and https://openid.net/connect[OpenID Connect^].
+You will learn how to authenticate users to an existing service using social media login
+https://oauth.net/2[OAuth2^] and https://openid.net/connect[OpenID Connect^].
 
-`HelloService` is a provided microservice that responds to a `GET` request with the following Plain Text response:
-
-[source,role="no_copy"]
-----
-Hello, friend!
-----
-
-Instead of securing the `HelloService` service by implementing your own authentication service,
-you can allow users to authenticate the service using social media accounts.
-This will allow you to provide a secure authentication method for your users without having to explicitly implement it.
+=== Social Login and its purpose
+Social Media Login provides a form of single sign-on (SSO) that enables users to sign in to a secured website by using
+their existing social media account.
+Social Media Login simplifies the authentication process for end users and allows you to provide a secure authentication
+method for your users without having to explicitly implement it.
 
 Open Liberty provides a https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login Feature^]
-that provides configuration elements that allow you to configure an OAuth2 or OpenID Connect provider.
-The feature also provides preconfigured elements for common social media platforms like Facebook, Google, GitHub, LinkedIn and Twitter,
-which only require that you provide the credentials obtained by registering for an application on that platform.
+that provides configuration elements can enable Social Login for any social media platform that implements
+the https://oauth.net/2[OAuth 2.0^] or https://openid.net/connect[OpenID Connect 1.0^] standard for authorization.
 
-By the end of this guide, you will be able to secure the HelloService service using:
+=== OAuth 2.0 and OpenID Connect 1.0
+==== Authorization
+Authorization is the process of granting access rights/privileges to a user's resources.
+https://oauth.net/2[OAuth 2.0^] is the industry-standard protocol for authorization.
+https://oauth.net/2[OAuth 2.0^] provides specific authorization flows for
+web applications, desktop applications, mobile phones, and smart devices.
 
-1. A pre-configured social media login (GitHub)
-2. A custom OAuth2 login provider configuration (Amazon)
-3. A custom OIDC login provider configuration (Google)
+The scope of https://oauth.net/2[OAuth 2.0^] authorization limits an application's access to a user's account.
+An application can request one or more scopes for authorization.
+https://oauth.net/2[OAuth 2.0^] can be used to authenticate users when the requested scope of authorization is basic public profile information.
+
+==== Authentication
+Authentication is the process of verifying a user's identity.
+https://openid.net/connect/[OpenID Cnonect 1.0^] is an authentication layer on top of the
+https://oauth.net/2[OAuth 2.0^] protocol.
+https://openid.net/connect/[OpenID Cnonect 1.0^] allows clients for all types:
+web applications, desktop applications, mobile phones and smart devices.
+
+By the end of this guide, you will be able to authenticate users to your web service using Facebook and Twitter.
 
 // =================================================================================================
 // Getting Started
@@ -152,6 +160,13 @@ In order to obtain OAuth 2.0 credentials obtaining client ID and client secret f
 . Add `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin` to "Authorized redirect URIs", hit "Enter" to save the URI and then click "Create".
 
 == Securing HelloService
+
+`HelloService` is the provided microservice that responds to a `GET` request with the following Plain Text response:
+
+[source,role="no_copy"]
+----
+Hello, friend!
+----
 
 First, navigate to the `start` directory.
 
