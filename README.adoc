@@ -113,12 +113,6 @@ keytool -genkey \
 ```
 --
 
-=== Setting up for Facebook
-
-In order to obtain OAuth 2.0 client ID and client secret credentials for accessing the Facebook Login service,
-
-1.
-
 === Setting up for GitHub
 
 In order to obtain OAuth 2.0 client ID and client secret credentials for accessing the GitHub developer API,
@@ -130,40 +124,28 @@ In order to obtain OAuth 2.0 client ID and client secret credentials for accessi
 . Set "Authorization callback URL" to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
 . Click on "Register application".
 
-=== Setting up for Amazon
+=== Setting up for LinkedIn
 
-In order to obtain OAuth 2.0 client ID and client secret for accessing the Login with Amazon API,
+In order to obtain OAuth 2.0 client ID and client secret credentials for accessing the LinkedIn developer API,
 
-. Navigate to https://login.amazon.com/[Login with Amazon^].
-. Hover over "Sign-in" and click on "Developer Portal".
-. Login into your Amazon account.
-. Click on "Create a New Security Profile".
-.. Enter a name and description.
-.. Set "Consent Privacy Notice URL" to `\https://localhost.com/privacy`.
-.. Click on "Save", which will return you to the "Login with Amazon Console".
-. Hover over the "settings" icon under "Manage" and click on "Web Settings".
-. Click on "Edit".
-.. Set `\https://localhost:9443/` as the "Allowed Origins".
-.. Set `\https://localhost:9443/ibm/api/social-login/redirect/amazonLogin` as the "Allowed Return URLs".
-.. Click "Save".
-
-=== Setting up for Google
-
-In order to obtain OAuth 2.0 credentials obtaining client ID and client secret for accessing the Google developer API,
-
-. Visit the https://console.developers.google.com/[Google API Console^].
-. Sign in using your Google account.
-. If you haven't created a project on Google API Console before,
-.. Create a new project.
-.. Navigate to the "OAuth consent screen" tab.
-.. Click "External", then click "Create".
-.. Fill in "Application name", then click "Save".
-. Navigate to the "Credentials" tab.
-. Click on the "CREATE CREDENTIALS" button.
-. Select "OAuth client ID" from the different options.
-. Set the application type to "Web application".
-. Enter the name of your OAuth 2.0 Client ID. This is different from your app name and will not be shown to end users. 
-. Add `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin` to "Authorized redirect URIs", hit "Enter" to save the URI and then click "Create".
+. Log into https://www.linkedin.com/developers/[LinkedIn Developers^].
+. Click on "Create app".
+. Fill in the information in the "Create an app" form.
+.. You are required to associate a company to your application. The company page's admin must verify the application.
+If you don't have a company page, you can create one by clicking on "Create a new company page".
+... To create a new application, you need a square image (100px x 100px)
+... To create a new company page, you need a square image (300px x 300px)
+.. Once you've created a LinkedIn company page, add it to your application.
+.. Upload a logo for your application
+.. Complete the "Legal terms" section at the bottom of the form.
+.. Click on the "Create App" button.
+. When your application has successfully been created, you will be redirected to your new application's page.
+. Navigate to the "Auth" tab.
+. Under the "OAuth 2.0 settings" section,
+.. Click the pencil (edit) icon.
+.. Click on "Add redirect URL".
+.. Enter "https://localhost:9443/".
+.. Click on the "Update" button.
 
 == Securing HelloService
 
@@ -281,49 +263,25 @@ you to create a truststore with the required certificates.
 `src/liberty/config/server.xml`
 ----
 [role="edit_command_text"]
-Replace the values of the [hotspot=43]`clientId` and [hotspot=44]`clientSecret` with the credentials you created for your GitHub application
+Replace the values of the [hotspot=36]`clientId` and [hotspot=37]`clientSecret` with the credentials you created for your GitHub application
 in the prerequisites section.
 
 The [hotspot=githubLogin]`<githubLogin />` configuration element will configure GitHub login.
+The [hotspot=38]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
+
+=== Adding LinkedIn login configuration
+
+[role="code_command hotspot=sections", subs="quotes"]
+----
+#Update the `server.xml` file.#
+`src/liberty/config/server.xml`
+----
+[role="edit_command_text"]
+Replace the values of the [hotspot=43]`clientId` and [hotspot=44]`clientSecret` with the credentials you created for your GitHub application
+in the prerequisites section.
+
+The [hotspot=linkedinLogin]`<linkedinLogin />` configuration element will configure GitHub login.
 The [hotspot=45]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
-
-=== Adding Amazon login configuration
-
-[role="code_command hotspot=sections", subs="quotes"] 
-----
-#Update the `server.xml` file.#
-`src/liberty/config/server.xml`
-----
-[role="edit_command_text"]
-Replace the values of [hotspot=52]`clientId` and [hotspot=53]`clientSecret` with the credentials you created for your Amazon application
-in the prerequisites section.
-
-The [hotspot=amazonLogin]`amazonLogin` configuration uses a custom [hotspot=amazonLogin]`<oauth2Login />` configuration element.
-The [hotspot=55]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
-
-Further documentation on the [hotspot=amazonLogin]`attributes` can be found on the https://openliberty.io/docs/ref/config/oauth2Login.html[Open Liberty config reference on oauth2Login^].
-The values for these [hotspot=amazonLogin]`attributes` can be found in the https://developer.amazon.com/docs/login-with-amazon/minitoc-lwa-overview.html[Login With Amazon API documentation^].
-
-Make sure that the [hotspot=50]`id` of your [hotspot=amazonLogin]`<oauth2Login />` configuration matches the redirect URL (if you set the [hotspot=50]`id` to `amazonLogin`, the redirect URL must end with `.../amazonLogin`).
-
-=== Adding Google login configuration
-
-[role="code_command hotspot=sections", subs="quotes"] 
-----
-#Update the `server.xml` file.#
-`src/liberty/config/server.xml`
-----
-[role="edit_command_text"]
-Repalce the values of [hotspot=70]`clientId` and [hotspot=71]`clientSecret` with the credentials you created for your Google application
-in the prerequisites section.
-
-The [hotspot=googleOIDCLogin]`googleOIDCLogin` configuration uses a custom [hotspot=googleOIDCLogin]`<oidcLogin />` configuration element.
-The [hotspot=72]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
-
-Further documentation on the [hotspot=googleOIDCLogin]`attributes` can be found on the https://openliberty.io/docs/ref/config/oidcLogin.html[Open Liberty config reference on oidcLogin^].
-The values of these [hotspot=googleOIDCLogin]`attributes` can be found in the https://developers.google.com/identity/protocols/OpenIDConnect[Google API documentation^].
-
-Make sure that the [hotspot=68]`id` of your [hotspot=googleOIDCLogin]`<oidcLogin />` configuration matches the redirect URL (if you set the [hotspot=68]`id` to `googleOIDCLogin`, the redirect URL must end with `.../googleOIDCLogin`).
 
 == Running the application
 
@@ -331,13 +289,15 @@ The Open Liberty server was started in development mode at the beginning of the 
 changes were automatically picked up.
 
 Check out the service that you created at the
-http://localhost:9080/api/hello[^] URL.
+http://localhost:9080/api/hello[^] URL. If you want to try logging in using both LinkedIn and GitHub, use your browser
+in private mode to avoid caching the authentication.
 
 When you access https://localhost:9080/api/hello[^],
 you should be redirected to a Social Media Login Form. This form allows you to choose which login provider you want to use
 for authentication. When you select a login choice, you will be redirected to the login page of that service.
 
-Try logging in using your social media accounts. After authenticating, you will be redirected back to https://localhost:9080/api/hello and the response will look like this:
+Try logging in using your social media account.
+After authenticating, you will be redirected back to https://localhost:9080/api/hello and the response will look like this:
 
 [source,role="no_copy"]
 ---

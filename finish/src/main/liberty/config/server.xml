@@ -38,39 +38,12 @@
                  sslRef="authServiceSslRef"/>
     <!-- end::githubLogin[] -->
 
-    <!-- Amazon Login -->
-    <!-- tag::amazonLogin[] -->
-    <oauth2Login id="amazonLogin"
-                 displayName="Amazon"
-                 clientId="CLIENT ID"
-                 clientSecret="CLIENT SECRET"
-                 responseType="code"
-                 sslRef="authServiceSslRef"
-                 tokenEndpointAuthMethod="client_secret_post"
-                 authorizationEndpoint="https://www.amazon.com/ap/oa"
-                 tokenEndpoint="https://api.amazon.com/auth/o2/token"
-                 userApi="https://api.amazon.com/user/profile"
-                 scope="profile"
-                 userNameAttribute="name"
-                 userUniqueIdAttribute="user_id"
-                 website="www.amazon.com" />
-    <!-- end::amazonLogin[] -->
-
-    <!-- Google OIDC Login using discovery URL -->
-    <!-- tag::googleOIDCLogin[] -->
-    <oidcLogin id="googleOIDCLogin"
-               displayName="Google"
-               clientId="CLIENT ID"
-               clientSecret="CLIENT SECRET"
-               sslRef="authServiceSslRef"
-               authorizationEndpoint="https://accounts.google.com/o/oauth2/v2/auth"
-               tokenEndpoint="https://www.googleapis.com/oauth2/v4/token"
-               jwksUri="https://www.googleapis.com/oauth2/v3/certs"
-               scope="openid profile email"
-               userNameAttribute="email"
-               realmNameAttribute="iss"
-               issuer="https://accounts.google.com"/>
-    <!-- end::googleOIDCLogin[] -->
+    <!-- LinkedIn Login -->
+    <!-- tag::linkedinLogin[] -->
+    <linkedinLogin clientId="CLIENT ID"
+                   clientSecret="CLIENT SECRET"
+                   sslRef="authServiceSslRef" />
+    <!-- end::linkedinLogin[] -->
 
     <!-- tag::webApplication[] -->
     <webApplication location="guide-social-login.war"
