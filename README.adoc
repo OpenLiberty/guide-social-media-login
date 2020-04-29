@@ -29,38 +29,20 @@ Learn how to authenticate users with the Open Liberty Social Media Login feature
 
 == What you'll learn
 
-You will learn how to authenticate users to an existing service using social media login
-https://oauth.net/2[OAuth2^] and https://openid.net/connect[OpenID Connect^].
+You will learn how to authenticate users to an existing service using Social Media Login.
 
-=== OAuth 2.0 and OpenID Connect 1.0
-==== Authorization
-Authorization is the process of granting access rights/privileges to a user's resources.
-https://oauth.net/2[OAuth 2.0^] is the industry-standard protocol for authorization.
-https://oauth.net/2[OAuth 2.0^] provides specific authorization flows for
-web applications, desktop applications, mobile phones, and smart devices.
-
-The scope of https://oauth.net/2[OAuth 2.0^] authorization limits an application's access to a user's account.
-An application can request one or more scopes for authorization.
-https://oauth.net/2[OAuth 2.0^] can be used to authenticate users when the requested scope of authorization is basic public profile information.
-
-==== Authentication
-Authentication is the process of verifying a user's identity.
-https://openid.net/connect/[OpenID Cnonect 1.0^] is an authentication layer on top of the
-https://oauth.net/2[OAuth 2.0^] protocol.
-https://openid.net/connect/[OpenID Cnonect 1.0^] allows clients for all types:
-web applications, desktop applications, mobile phones and smart devices.
-
-=== Social Login and its purpose
 Social Media Login provides a form of single sign-on (SSO) that enables users to sign in to a secured website by using
 their existing social media account.
-Social Media Login simplifies the authentication process for end users and allows you to provide a secure authentication
+It simplifies the authentication process for end users and allows you to provide a secure authentication
 method for your users without having to explicitly implement it.
 
-Open Liberty provides a https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login Feature^]
-that provides configuration elements can enable Social Login for any social media platform that implements
+The https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login Feature^] in Open Liberty
+enables you to configure application authentication using one or more social media platforms,
+including GitHub, LinkedIn, Facebook, Twitter and Google.
+You can also create custom configuration for any other social media platform that implements
 the https://oauth.net/2[OAuth 2.0^] or https://openid.net/connect[OpenID Connect 1.0^] standard for authorization.`
 
-By the end of this guide, you will be able to authenticate users to your web service using Facebook and Twitter.
+By the end of this guide, you will be able to authenticate users to your web service using GitHub and LinkedIn.
 
 // =================================================================================================
 // Getting Started
@@ -115,7 +97,7 @@ keytool -genkey \
 
 === Setting up for GitHub
 
-In order to obtain OAuth 2.0 client ID and client secret credentials for accessing the GitHub developer API,
+To obtain OAuth 2.0 client ID and client secret credentials for accessing the GitHub developer API,
 
 . Log into https://github.com/[GitHub^].
 . Navigate to https://github.com/settings/developers[OAuth Apps^] and click on "Register a new application".
@@ -126,35 +108,30 @@ In order to obtain OAuth 2.0 client ID and client secret credentials for accessi
 
 === Setting up for LinkedIn
 
-In order to obtain OAuth 2.0 client ID and client secret credentials for accessing the LinkedIn developer API,
+To obtain OAuth 2.0 client ID and client secret credentials for accessing the LinkedIn developer API, you must
+create a LinkedIn app. A requirement for creating a LinkedIn app is to associate a company to your application.
+The company page's admin must verify the application.
+You also need a square image (min. 100px x 100px) for the logo.
+
+If you don't have a company page,
+you can create one https://www.linkedin.com/company/setup/new/[here^].
+To create a new company page, you need a square image (min. 300px x 300px) for the logo.
+
+To create a new LinkedIn application,
 
 . Log into https://www.linkedin.com/developers/[LinkedIn Developers^].
 . Click on "Create app".
-. Fill in the information in the "Create an app" form.
-.. You are required to associate a company to your application. The company page's admin must verify the application.
-If you don't have a company page, you can create one by clicking on "Create a new company page".
-... To create a new application, you need a square image (100px x 100px)
-... To create a new company page, you need a square image (300px x 300px)
-.. Once you've created a LinkedIn company page, add it to your application.
-.. Upload a logo for your application
-.. Complete the "Legal terms" section at the bottom of the form.
-.. Click on the "Create App" button.
-. When your application has successfully been created, you will be redirected to your new application's page.
-. Navigate to the "Auth" tab.
-. Under the "OAuth 2.0 settings" section,
-.. Click the pencil (edit) icon.
-.. Click on "Add redirect URL".
-.. Enter "https://localhost:9443/".
-.. Click on the "Update" button.
+. Complete the "Create an app" form.
+
+When your application has successfully been created, you will be redirected to your new application's page.
+Navigate to the "Auth" tab. Under the "OAuth 2.0 settings" section,
+
+. Click the pencil (edit) icon.
+. Click on "Add redirect URL".
+. Enter "https://localhost:9443/".
+. Click on the "Update" button.
 
 == Securing HelloService
-
-`HelloService` is the provided microservice that responds to a `GET` request with the following Plain Text response:
-
-[source,role="no_copy"]
-----
-Hello, friend!
-----
 
 First, navigate to the `start` directory.
 
@@ -162,6 +139,12 @@ First, navigate to the `start` directory.
 include::{common-includes}/devmode-start.adoc[]
 
 The [hotspot=helloService]`HelloService` class is the JAX-RS service that you will be securing.
+`HelloService` responds to a `GET` request with the following Plain Text response:
+
+[source,role="no_copy"]
+----
+Hello, friend!
+----
 
 [role="code_command hotspot file=0", subs="quotes"] 
 ----
@@ -181,7 +164,7 @@ in the `users` role.
 The `return "Hello, friend!";` is replaced to output user information.
 The [hotspot=securityContext]`SecurityContext` context, which is injected using the
 [hotspot=securityContext]`@Context` annotation, allows you to get information about the logged-in user
-using [hotspot=userPrincipal]`securitContext.getUserPrincipal()`.
+using [hotspot=userPrincipal]`securityContext.getUserPrincipal()`.
 
 HelloService.java 
 [source, Java, linenums, role='code_column hide_tags=copyright'] 
@@ -300,9 +283,9 @@ Try logging in using your social media account.
 After authenticating, you will be redirected back to https://localhost:9080/api/hello and the response will look like this:
 
 [source,role="no_copy"]
----
+----
 Hello, <<your username>>
----
+----
 
 == Testing the service
 
