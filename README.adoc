@@ -42,7 +42,7 @@ including GitHub, LinkedIn, Facebook, Twitter and Google.
 You can also create custom configuration for any other social media platform that implements
 the https://oauth.net/2[OAuth 2.0^] or https://openid.net/connect[OpenID Connect 1.0^] standard for authorization.`
 
-By the end of this guide, you will be able to authenticate users to your web service using GitHub and LinkedIn.
+By the end of this guide, you will be able to authenticate users to your web service using GitHub.
 
 // =================================================================================================
 // Getting Started
@@ -50,52 +50,7 @@ By the end of this guide, you will be able to authenticate users to your web ser
 [role='command']
 include::{common-includes}/gitclone.adoc[]
 
-== Setting up the certificates
-
-The application you will build in this guide requires a server certificate that your application will provide for HTTPS connections, and corresponding private key to decrypt the incoming secure data.
-This certificate and private key will need to be added to the keystore for social media login.
-You also need to create an application on the three social media developer platforms to obtain a client ID and client secret to use their APIs.
-
-First, navigate to the `start/src/main/liberty/config/resources/security` directory.
-
-=== Generating a self signed certificate
-Your application requires a TLS server certificate and corresponding private key to securely communicate using HTTPS. In this section, you will
-generate a self signed certificate and add it to your `key.p12`, which will be your application's keystore.
-
-To create a self-signed certificate and add it to `key.p12` using the Java `keytool`,
-run the following command. Replace `[keystore-password]` with a password for your keystore.
-You will need this password in later sections in the guide.
-include::{common-includes}/os-tabs.adoc[]
-[.tab_content.linux_section.mac_section]
---
-[role='command']
-```
-keytool -genkey \
-    -keyalg RSA \
-    -alias selfsigned \
-    -keystore key.p12 \
-    -storetype PKCS12 \
-    -storepass [keystore-password] \
-    -validity 360 \
-    -keysize 2048
-```
---
-[.tab_content.windows_section]
---
-[role='command']
-```
-%JAVA_HOME%\bin\keytool -genkey ^
-    -keyalg RSA ^
-    -alias selfsigned ^
-    -keystore key.p12 ^
-    -storetype PKCS12 ^
-    -storepass [keystore-password] ^
-    -validity 360 ^
-    -keysize 2048
-```
---
-
-=== Setting up for GitHub
+== Creating a GitHub OAuth2 Application
 
 To obtain OAuth 2.0 client ID and client secret credentials for accessing the GitHub developer API,
 
@@ -105,31 +60,6 @@ To obtain OAuth 2.0 client ID and client secret credentials for accessing the Gi
 . Set "Homepage URL" to `\https://localhost:9443/`.
 . Set "Authorization callback URL" to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
 . Click on "Register application".
-
-=== Setting up for LinkedIn
-
-To obtain OAuth 2.0 client ID and client secret credentials for accessing the LinkedIn developer API, you must
-create a LinkedIn app. A requirement for creating a LinkedIn app is to associate a company to your application.
-The company page's admin must verify the application.
-You also need a square image (min. 100px x 100px) for the logo.
-
-If you don't have a company page,
-you can create one https://www.linkedin.com/company/setup/new/[here^].
-To create a new company page, you need a square image (min. 300px x 300px) for the logo.
-
-To create a new LinkedIn application,
-
-. Log into https://www.linkedin.com/developers/[LinkedIn Developers^].
-. Click on "Create app".
-. Complete the "Create an app" form.
-
-When your application has successfully been created, you will be redirected to your new application's page.
-Navigate to the "Auth" tab. Under the "OAuth 2.0 settings" section,
-
-. Click the pencil (edit) icon.
-. Click on "Add redirect URL".
-. Enter "https://localhost:9443/".
-. Click on the "Update" button.
 
 == Securing HelloService
 
@@ -209,12 +139,7 @@ corresponds to the keystore created in the prerequisites section
 
 === Adding keystore and truststore
 
-In the first section, you created a keystore, `key.p12`.
-Now you will configure your application to use this keystore.
-Files in the `src/main/liberty` folder are copied into the location specified by `${server.output.dir}`,
-so the location of this keystore is `${server.output.dir}/resources/security`.
-
-The [hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` configuration element, whose location is `${server.output.dir}/resources/security/key.p12`,
+The [hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` configuration element
 will be used to provide SSL certificates when initiating HTTPS connections for social media login.
 
 [role="code_command hotspot=sections", subs="quotes"] 
@@ -252,32 +177,13 @@ in the prerequisites section.
 The [hotspot=githubLogin]`<githubLogin />` configuration element will configure GitHub login.
 The [hotspot=38]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
 
-=== Adding LinkedIn login configuration
-
-[role="code_command hotspot=sections", subs="quotes"]
-----
-#Update the `server.xml` file.#
-`src/liberty/config/server.xml`
-----
-[role="edit_command_text"]
-Replace the values of the [hotspot=43]`clientId` and [hotspot=44]`clientSecret` with the credentials you created for your GitHub application
-in the prerequisites section.
-
-The [hotspot=linkedinLogin]`<linkedinLogin />` configuration element will configure GitHub login.
-The [hotspot=45]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
-
 == Running the application
 
 The Open Liberty server was started in development mode at the beginning of the guide and all the 
 changes were automatically picked up.
 
 Check out the service that you created at the
-http://localhost:9080/api/hello[^] URL. If you want to try logging in using both LinkedIn and GitHub, use your browser
-in private mode to avoid caching the authentication.
-
-When you access https://localhost:9080/api/hello[^],
-you should be redirected to a Social Media Login Form. This form allows you to choose which login provider you want to use
-for authentication. When you select a login choice, you will be redirected to the login page of that service.
+http://localhost:9080/api/hello[^] URL.
 
 Try logging in using your social media account.
 After authenticating, you will be redirected back to https://localhost:9080/api/hello and the response will look like this:

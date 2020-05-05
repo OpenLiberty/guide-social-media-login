@@ -1,16 +1,20 @@
 <server description="Social Login Guide Server">
     <!-- tag::featureManager[] -->
     <featureManager>
-        <feature>jaxrs-2.1</feature>
+        <feature>jsp-2.3</feature>
         <!-- tag::newFeatures[] -->
         <feature>appSecurity-3.0</feature>
         <feature>transportSecurity-1.0</feature>
         <feature>socialLogin-1.0</feature>
-        <feature>ssl-1.0</feature>
-        <feature>jwt-1.0</feature>
+        <feature>cdi-2.0</feature>
+        <feature>jaxrsClient-2.1</feature>
+        <feature>mpConfig-1.4</feature>
         <!-- end::newFeatures[] -->
     </featureManager>
     <!-- end::featureManager[] -->
+
+    <variable name="github.client.id" value="3e65aff2ddd6425d6f4f" />
+    <variable name="github.client.secret" value="2a82e498143453a2763ecb97665371e51c34befd" />
 
     <httpEndpoint httpPort="${default.http.port}" httpsPort="${default.https.port}"
                   id="defaultHttpEndpoint" host="localhost" />
@@ -18,14 +22,12 @@
     <!-- Set up default key store, trust stores for auth APIs -->
     <!-- tag::keystore[] -->
     <keyStore id="defaultKeyStore"
-              location="${server.output.dir}/resources/security/key.p12"
-              password="[keystore-password]"
-              type="PKCS12" />
+              password="changeit" />
     <!-- end::keystore[] -->
 
     <!-- SSL configuration for auth services -->
     <!-- tag::sslConfig[] -->
-    <ssl id="authServiceSslRef"
+    <ssl id="defaultSSLConfig"
 	     keyStoreRef="defaultKeyStore"
          trustDefaultCerts="true" />
     <!-- end::sslConfig[] -->
@@ -33,17 +35,9 @@
     <!-- Social Login Configuration -->
     <!-- Github Login -->
     <!-- tag::githubLogin[] -->
-    <githubLogin clientId="CLIENT ID"
-                 clientSecret="CLIENT SECRET"
-                 sslRef="authServiceSslRef"/>
+    <githubLogin clientId="${github.client.id}"
+                 clientSecret="${github.client.secret}" />
     <!-- end::githubLogin[] -->
-
-    <!-- LinkedIn Login -->
-    <!-- tag::linkedinLogin[] -->
-    <linkedinLogin clientId="CLIENT ID"
-                   clientSecret="CLIENT SECRET"
-                   sslRef="authServiceSslRef" />
-    <!-- end::linkedinLogin[] -->
 
     <!-- tag::webApplication[] -->
     <webApplication location="guide-social-login.war"
@@ -60,5 +54,4 @@
     </webApplication>
     <!-- end::webApplication[] -->
 
-    <applicationMonitor updateTrigger="mbean"/>
 </server>
