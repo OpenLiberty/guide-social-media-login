@@ -171,13 +171,13 @@ include::finish/src/main/webapp/securedHello.jsp[]
 
 == Configuring security and social media login
 
-[role="code_command hotspot file=0", subs="quotes"] 
+[role="code_command hotspot file=0", subs="quotes"]
 ----
 #Replace the server configuration file.#
 `src/main/liberty/config/server.xml`
 ----
 
-server.xml 
+server.xml
 [source, xml, linenums, role='code_column']
 ----
 include::finish/src/main/liberty/config/server.xml[]
@@ -209,7 +209,7 @@ corresponds to the keystore created in the prerequisites section
 The [hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` configuration element
 will be used to provide SSL certificates when initiating HTTPS connections for social media login.
 
-[role="code_command hotspot=sections", subs="quotes"] 
+[role="code_command hotspot=sections", subs="quotes"]
 ----
 #Update the `server.xml` file.#
 `src/liberty/config/server.xml`
@@ -235,13 +235,13 @@ instead of requiring you to create a truststore with the required certificates.
 
 === Adding GitHub login configuration
 
-[role="code_command hotspot=sections", subs="quotes"] 
+[role="code_command hotspot=sections", subs="quotes"]
 ----
 #Update the `server.xml` file.#
 `src/liberty/config/server.xml`
 ----
 [role="edit_command_text"]
-Replace [hotspot=33]`{client-id}` and [hotspot=34]`{client-secreT}` with the credentials you created for
+Replace [hotspot=33]`{client-id}` and [hotspot=34]`{client-secret}` with the credentials you created for
 your GitHub application in the prerequisites section.
 
 The [hotspot=githubLogin]`<githubLogin />` configuration element will configure GitHub login.
@@ -250,7 +250,7 @@ section.
 
 == Running the application
 
-The Open Liberty server was started in development mode at the beginning of the guide and all the 
+The Open Liberty server was started in development mode at the beginning of the guide and all the
 changes were automatically picked up.
 
 Check out the service that you created at the
