@@ -63,8 +63,8 @@ To obtain OAuth 2.0 client ID and client secret credentials for accessing the Gi
 
 == Creating a secured servlet
 
-The `hello.html` page contains a [hotspot=login file=3]`login` button that redirects to the
-[hotspot=request file=3]`/hello` endpoint.
+The `hello.html` page contains a [hotspot=login file=2]`login` button that redirects to the
+[hotspot=request file=2]`/hello` endpoint.
 We will create a servlet to handle `GET` requests to this endpoint that requires that users be authenticated.
 When users access this endpoint by clicking on the `login` button, they will be prompted to authenticate using GitHub.
 
@@ -241,7 +241,7 @@ instead of requiring you to create a truststore with the required certificates.
 `src/liberty/config/server.xml`
 ----
 [role="edit_command_text"]
-Replace [hotspot=33]`{client-id}` and [hotspot=34]`{client-secret}` with the credentials you created for
+Replace [hotspot=33]`[client-id]` and [hotspot=34]`[client-secret]` with the credentials you created for
 your GitHub application in the prerequisites section.
 
 The [hotspot=githubLogin]`<githubLogin />` configuration element will configure GitHub login.

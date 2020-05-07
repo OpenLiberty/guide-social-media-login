@@ -17,7 +17,7 @@
     <!-- Set up default key store, trust stores for auth APIs -->
     <!-- tag::keystore[] -->
     <keyStore id="defaultKeyStore"
-              password="changeit" />
+              password="[keystore-password]" />
     <!-- end::keystore[] -->
 
     <!-- SSL configuration for auth services -->
@@ -30,8 +30,8 @@
     <!-- Social Login Configuration -->
     <!-- Github Login -->
     <!-- tag::githubLogin[] -->
-    <githubLogin clientId="{client-id}"
-                 clientSecret="{client-secret}" />
+    <githubLogin clientId="[client-id]"
+                 clientSecret="[client-secret]" />
     <!-- end::githubLogin[] -->
 
     <!-- tag::webApplication[] -->
