@@ -55,8 +55,10 @@ include::{common-includes}/gitclone.adoc[]
 Obtain an OAuth 2.0 client ID and client secret credentials for accessing the GitHub developer API by registering
 a new https://github.com/settings/developers[application^] in your https://github.com/[GitHub^] account.
 On the Settings > Developer settings > OAuth Apps page of your account, register a new application.
+
 Set the Homepage URL to `\https://localhost:9443` and
 the Authorization callback URL to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
+
 When the registration is complete, the client ID and client secret credentials are displayed.
 You’ll need these two values later in the guide to authenticate your application with GitHub.
 
