@@ -6,15 +6,10 @@
         <feature>appSecurity-3.0</feature>
         <feature>transportSecurity-1.0</feature>
         <feature>socialLogin-1.0</feature>
-        <feature>cdi-2.0</feature>
         <feature>jaxrsClient-2.1</feature>
-        <feature>mpConfig-1.4</feature>
         <!-- end::newFeatures[] -->
     </featureManager>
     <!-- end::featureManager[] -->
-
-    <variable name="github.client.id" value="3e65aff2ddd6425d6f4f" />
-    <variable name="github.client.secret" value="2a82e498143453a2763ecb97665371e51c34befd" />
 
     <httpEndpoint httpPort="${default.http.port}" httpsPort="${default.https.port}"
                   id="defaultHttpEndpoint" host="localhost" />
@@ -35,8 +30,8 @@
     <!-- Social Login Configuration -->
     <!-- Github Login -->
     <!-- tag::githubLogin[] -->
-    <githubLogin clientId="${github.client.id}"
-                 clientSecret="${github.client.secret}" />
+    <githubLogin clientId="{client-id}"
+                 clientSecret="{client-secret}" />
     <!-- end::githubLogin[] -->
 
     <!-- tag::webApplication[] -->

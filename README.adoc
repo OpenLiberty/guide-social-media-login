@@ -61,48 +61,115 @@ To obtain OAuth 2.0 client ID and client secret credentials for accessing the Gi
 . Set "Authorization callback URL" to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
 . Click on "Register application".
 
-== Securing HelloService
+== Creating a secured servlet
+
+The `hello.html` page contains a [hotspot=login file=3]`login` button that redirects to the
+[hotspot=request file=3]`/hello` endpoint.
+We will create a servlet to handle `GET` requests to this endpoint that requires that users be authenticated.
+When users access this endpoint by clicking on the `login` button, they will be prompted to authenticate using GitHub.
 
 First, navigate to the `start` directory.
 
 [role='command']
 include::{common-includes}/devmode-start.adoc[]
 
-The [hotspot=helloService]`HelloService` class is the JAX-RS service that you will be securing.
-`HelloService` responds to a `GET` request with the following Plain Text response:
-
-[source,role="no_copy"]
+[role="code_command hotspot file=0", subs="quotes"]
 ----
-Hello, friend!
+#Create the `HelloServlet` class.#
+`src/main/java/io/openliberty/guides/sociallogin/HelloServlet.java`
 ----
 
-[role="code_command hotspot file=0", subs="quotes"] 
+The [hotspot=WebServletImport hotspot=WebServlet file=0]`@WebServlet` annotation declares that the
+[hotspot=HelloServlet file=0]`HelloServlet` class, which must extend
+[hotspot=HttpServlet hotspot=HttpServletImport file=0]`HttpServlet`, is a servlet.
+
+The [hotspot=ServletSecurity hotspot=ServletSecurityImport file=0]`@ServletSecurity` annotation specifies the security
+constraints.
+The [hotspot=HttpConstraint hotspot=HttpConstraintImport file=0]`@HttpConstraint` annotation passed to the `value` element
+configures the constraint for all HTTP methods in this servlet.
+
+The [hotspot=rolesAllowed file=0]`rolesAllowed` element restricts the access to members of the `users` role.
+
+The [hotspot=doGet file=0]`doGet()` method handles GET requests to this servlet.
+The [hotspot=getUsername file=0]`username` of the user is added to the request as an attribute to be used by the
+[hotspot=username file=1]`securedHello.jsp` page, to which the request is [hotspot=forwardRequest]`forwarded`
+by the servlet.
+
+HelloServlet.java
+[source, Java, linenums, role='code_column hide_tags=copyright']
 ----
-#Replace the `HelloService` class.#
-`src/main/java/io/openliberty/guides/sociallogin/HelloService.java`
-----
-
-The following new imports are required for the [hotspot=helloService]`HelloService` class:
-
-- [hotspot=rolesAllowedImport]`javax.annotation.security.RolesAllowed`
-- [hotspot=securityContextImport]`javax.ws.rs.core.SecurityContext`
-- [hotspot=contextImport]`javax.ws.rs.core.Context`
-
-The [hotspot=rolesAllowed]`@RolesAllowed({"users"})` annotation restricts access to the service to users who are
-in the `users` role.
-
-The `return "Hello, friend!";` is replaced to output user information.
-The [hotspot=securityContext]`SecurityContext` context, which is injected using the
-[hotspot=securityContext]`@Context` annotation, allows you to get information about the logged-in user
-using [hotspot=userPrincipal]`securityContext.getUserPrincipal()`.
-
-HelloService.java 
-[source, Java, linenums, role='code_column hide_tags=copyright'] 
-----
-include::finish/src/main/java/io/openliberty/guides/sociallogin/HelloService.java[]
+include::finish/src/main/java/io/openliberty/guides/sociallogin/HelloServlet.java[]
 ----
 
-== Configuring the security and social media login
+securedHello.jsp
+[source, html, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/src/main/webapp/securedHello.jsp[]
+----
+
+hello.html
+[source ,html, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/src/main/webapp/hello.html[]
+----
+
+== Implementing logout
+
+The [file=1]`securedHello.jsp` page contains a [hotspot=logoutButton file=1]`logout` button that makes a `POST` request
+to the [hotspot=logout file=1]`/logout` endpoint.
+We will create a servlet to handle [hostpot=handlePost file=0]`POST` requests to this endpoint.
+Similar to `HelloServlet`, this servlet also requires that the user be authenticated.
+
+----
+#Create the `LogoutServlet` class.#
+`src/main/java/io/openliberty/guides/sociallogin/HelloServlet.java`
+----
+
+The [hotspot=WebServlet file=0]`@WebServlet` and [hotspot=ServletSecurity file=0]`@ServletSecurity` annotations declare
+that the `LogoutServlet` class is a servlet that handles the `/logout` endpoint whose access is restricted to members of
+the role `users`.
+
+Before the user is logged out of the application, the access token obtained by Social Login from the social media provider
+as part of the authentication can be used to revoke user permissions for the application. When the user logs into the
+application again, they will be prompted to authorize the application.
+
+[role="code_command", subs="quotes"]
+----
+#Update the `LogoutServlet` class.#
+`src/main/java/io/openliberty/guides/sociallogin/HelloServlet.java`
+----
+[role="edit_command_text"]
+Replace [hotspot=clientId file=0]`[github-client-id]` and [hotspot=clientSecret file=0]`[github-client-secret]` with
+the client ID and client secret for your GitHub OAuth2 application.
+
+The access token is retrieved using the [hotspot=accessToken file=0]`UserProfileManager`.
+
+Basic Authorization is used to access the [hotspot=unauthorizeUrl file=0]`url` to delete an application grant.
+The username and password for basic authorization are the GitHub client ID and client secret.
+To construct the authorization header, the client ID and client secret must be [hotspot=encodeAuth file=0]`encoded`.
+
+The `DELETE` request to the [hotspot=unauthorizeUrl file=0]`unauthorizeUrl` is performed using the JAX-RS
+[hotspot=revokePermissions hotspot=target file=0]`ClientBuilder`. The [hotspot=encodeAuth file=0]`encoded` client ID and
+client secret is added to the request as an [hotspot=authHeader file=0]`Authorization: Basic ...` header.
+The [hotspot=accessToken file=0]`access token` is sent as part of the
+[hotspot=requestBody hotspot=accessTokenBody file=0]`request body`.
+
+Lastly, the [hotspot=logout file=0]`HttpServletRequest#logout()` method is used to log the user out of the application, after which the user
+is [hotspot=redirect file=0]`redirected` to `hello.html`.
+
+LogoutServlet.java
+[source, Java, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/src/main/java/io/openliberty/guides/sociallogin/LogoutServlet.java[]
+----
+
+securedHello.jsp
+[source, html, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/src/main/webapp/securedHello.jsp[]
+----
+
+== Configuring security and social media login
 
 [role="code_command hotspot file=0", subs="quotes"] 
 ----
@@ -118,14 +185,14 @@ include::finish/src/main/liberty/config/server.xml[]
 
 The explanations for these changes are in the following sections.
 
-=== Configuring the security roles
+=== Configuring the security role
 
 The [hotspot=applicationBnd]`<application-bnd />` configuration element under the
 [hotspot=webApplication]`<webApplication />` configuration element creates a new security role [hotspot=users]`users`,
 which all authenticated users belong to.
 Adding this allows users that are authenticated using social media login to access your `HelloService` service.
 
-=== Adding required features
+=== Required features
 
 To enable https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] and other required features,
 new [hotspot=newFeatures]`<feature />` elements are added to the [hotspot=featureManager]`<featureManager />` in
@@ -137,7 +204,7 @@ There are some prerequisite configurations that social media login configuration
 corresponds to the keystore created in the prerequisites section
 2. An [hotspot=sslConfig]`<ssl id="authServiceSslRef .../>` configuration element for configuring the SSL configuration that is used to connect to the social media
 
-=== Adding keystore and truststore
+=== Configuring keystore and SSL
 
 The [hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` configuration element
 will be used to provide SSL certificates when initiating HTTPS connections for social media login.
@@ -148,20 +215,23 @@ will be used to provide SSL certificates when initiating HTTPS connections for s
 `src/liberty/config/server.xml`
 ----
 [role="edit_command_text"]
-Replace [hotspot=22]`[keystore-password]` with the password that you used when creating the keystore in the previous sections.
+Replace [hotspot=22]`[keystore-password]` with the password that you used when creating the keystore in the previous
+sections.
 
-The [hotspot=sslConfig]`<ssl id="authServiceSslRef" .../>` configuration element, which references [hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` as the keystore, will be provided to social media login configurations.
+The [hotspot=sslConfig]`<ssl id="authServiceSslRef" .../>` configuration element, which references
+[hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` as the keystore, will be provided to social media login
+configurations.
 
-For your application to send data securely to the social media platforms, it must trust the public SSL certificates
-provided by them.
-This requires the SSL certificates for Amazon, Google and GitHub to be added to a truststore.
+For your application to send data securely to GitHub, it must trust the public SSL certificates
+provided by it.
+This requires the SSL certificates for GitHub to be added to a truststore.
 
-Since the platforms in this guide use a well-known CA (Certificate Authority), they can be
+Since GitHub in this guide use a well-known CA (Certificate Authority), they can be
 found in the JDK default `cacerts` file.
 
-The [hotspot=30]`trustDefaultCerts` attribute of the [hotspot=sslConfig]`<ssl id="authServiceSslRef" .../>` configuration element,
-when set to true, allows the server to establish trust using the JDK default truststore, instead of requiring
-you to create a truststore with the required certificates.
+The [hotspot=30]`trustDefaultCerts` attribute of the [hotspot=sslConfig]`<ssl id="authServiceSslRef" .../>`
+configuration element, when set to true, allows the server to establish trust using the JDK default truststore,
+instead of requiring you to create a truststore with the required certificates.
 
 === Adding GitHub login configuration
 
@@ -171,11 +241,12 @@ you to create a truststore with the required certificates.
 `src/liberty/config/server.xml`
 ----
 [role="edit_command_text"]
-Replace the values of the [hotspot=36]`clientId` and [hotspot=37]`clientSecret` with the credentials you created for your GitHub application
-in the prerequisites section.
+Replace [hotspot=33]`{client-id}` and [hotspot=34]`{client-secreT}` with the credentials you created for
+your GitHub application in the prerequisites section.
 
 The [hotspot=githubLogin]`<githubLogin />` configuration element will configure GitHub login.
-The [hotspot=38]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
+The [hotspot=38]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous
+section.
 
 == Running the application
 
@@ -201,6 +272,15 @@ You can test this service manually by starting a server and pointing a web brows
 == Great work! You're done!
 
 You secured a simple RESTful web service in Open Liberty by using the Social Media Login feature.
+
+== Next Steps
+
+If more than one is added, there’s a selection form presented to the user, where all the possible social media providers
+configured in your application are shown for the user to pick from. As an exercise, configure a second social media
+provider, Facebook, for social media login for your application.
+
+For more information, refer to the
+https://www.openliberty.io/docs/ref/feature/#socialLogin-1.0.html[OpenLibery Social Media Login feature documentation^].
 
 == Related Links
 
