@@ -44,7 +44,8 @@ public class LogoutServlet extends HttpServlet {
         final String clientSecret = "[github-client-secret]";
         // end::clientSecret[]
         // tag::unauthorizeUrl[]
-        final String unauthorizeUrl = "https://api.github.com/applications/{client_id}/grant";
+        final String unauthorizeUrl = "https://api.github.com/" +
+                "applications/{client_id}/grant";
         // end::unauthorizeUrl[]
         // end::GitHubInfo[]
 

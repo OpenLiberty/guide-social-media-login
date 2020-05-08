@@ -121,6 +121,7 @@ to the [hotspot=logout file=1]`/logout` endpoint.
 We will create a servlet to handle [hostpot=handlePost file=0]`POST` requests to this endpoint.
 Similar to `HelloServlet`, this servlet also requires that the user be authenticated.
 
+[role="code_command", subs="quotes"]
 ----
 #Create the `LogoutServlet` class.#
 `src/main/java/io/openliberty/guides/sociallogin/HelloServlet.java`
