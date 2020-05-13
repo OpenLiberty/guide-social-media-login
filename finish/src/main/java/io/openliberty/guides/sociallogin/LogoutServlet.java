@@ -1,6 +1,5 @@
 package io.openliberty.guides.sociallogin;
 
-import com.ibm.websphere.security.social.UserProfile;
 import com.ibm.websphere.security.social.UserProfileManager;
 
 import javax.servlet.ServletException;

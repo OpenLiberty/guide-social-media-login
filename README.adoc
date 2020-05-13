@@ -204,23 +204,14 @@ There are some prerequisite configurations that social media login configuration
 
 1. The [hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` configuration element
 corresponds to the keystore created in the prerequisites section
-2. An [hotspot=sslConfig]`<ssl id="authServiceSslRef .../>` configuration element for configuring the SSL configuration that is used to connect to the social media
+2. An [hotspot=sslConfig]`<ssl id="defaultSSLRef .../>` configuration element for configuring the SSL configuration that is used to connect to the social media
 
 === Configuring keystore and SSL
 
 The [hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` configuration element
 will be used to provide SSL certificates when initiating HTTPS connections for social media login.
 
-[role="code_command hotspot=sections", subs="quotes"]
-----
-#Update the `server.xml` file.#
-`src/liberty/config/server.xml`
-----
-[role="edit_command_text"]
-Replace [hotspot=22]`[keystore-password]` with the password that you used when creating the keystore in the previous
-sections.
-
-The [hotspot=sslConfig]`<ssl id="authServiceSslRef" .../>` configuration element, which references
+The [hotspot=sslConfig]`<ssl id="defaultSSLConfig" .../>` configuration element, which references
 [hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` as the keystore, will be provided to social media login
 configurations.
 
@@ -231,7 +222,7 @@ This requires the SSL certificates for GitHub to be added to a truststore.
 Since GitHub in this guide use a well-known CA (Certificate Authority), they can be
 found in the JDK default `cacerts` file.
 
-The [hotspot=30]`trustDefaultCerts` attribute of the [hotspot=sslConfig]`<ssl id="authServiceSslRef" .../>`
+The [hotspot=30]`trustDefaultCerts` attribute of the [hotspot=sslConfig]`<ssl id="defaultSSLRef" .../>`
 configuration element, when set to true, allows the server to establish trust using the JDK default truststore,
 instead of requiring you to create a truststore with the required certificates.
 
@@ -247,29 +238,23 @@ Replace [hotspot=33]`[client-id]` and [hotspot=34]`[client-secret]` with the cre
 your GitHub application in the prerequisites section.
 
 The [hotspot=githubLogin]`<githubLogin />` configuration element will configure GitHub login.
-The [hotspot=38]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous
-section.
 
-== Running the application
-
-The Open Liberty server was started in development mode at the beginning of the guide and all the
-changes were automatically picked up.
+[role='command']
+include::{common-includes}/devmode-build.adoc[]
 
 Check out the service that you created at the
-http://localhost:9080/api/hello[^] URL.
+http://localhost:9080/api/hello.html[^] URL.
 
 Try logging in using your social media account.
-After authenticating, you will be redirected back to https://localhost:9080/api/hello and the response will look like this:
+After authenticating, you will be redirected to `\https://localhost:9080/api/hello`.
+When you click the `logout` button, you will be unauthenticated and redirected back to
+http://localhost:9080/api/hello.html[^].
 
-[source,role="no_copy"]
-----
-Hello, <<your username>>
-----
+If you try logging in again, you will be asked to reauthorize your application with GitHub before being authenticated and
+redirected to `\https://localhost:9080/api/hello`.
 
-== Testing the service
-
-No automated tests are provided in this guide.
-You can test this service manually by starting a server and pointing a web browser at http://localhost:9080/api/hello[the endpoint for Hello service^].
+[role='command']
+include::{common-includes}/devmode-quit.adoc[]
 
 == Great work! You're done!
 
