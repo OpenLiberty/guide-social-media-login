@@ -157,7 +157,7 @@ application again, they will be prompted to authorize the application.
 
 The [hotspot=clientId file=0]`client ID` and [hotspot=clientSecret file=0]`client secret` for your GitHub OAuth2
 application are injected into [hotspot=LogoutServlet file=0]`LogoutServlet` with the values of
-[hotspot=clientIdProperty file=0]`github.client.id` and [hotspot=clientSecretProperty file=0]`github.client.secret` by
+[hotspot=propClientId file=0]`github.client.id` and [hotspot=propClientSecret file=0]`github.client.secret` by
 Microprofile Config.
 These values are supplied using the environment variables `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`.
 

@@ -33,17 +33,17 @@ public class LogoutServlet extends HttpServlet {
 
     // tag::clientId[]
     @Inject
-    // tag::clientIdProperty[]
+    // tag::propClientId[]
     @ConfigProperty(name = "github.client.id")
-    // end::clientIdProperty[]
+    // end::propClientId[]
     private String clientId;
     // end::clientId[]
 
     // tag::clientSecret[]
     @Inject
-    // tag::clientSecretProperty[]
+    // tag::propClientSecret[]
     @ConfigProperty(name = "github.client.secret")
-    // end::clientSecretProperty[]
+    // end::propClientSecret[]
     private String clientSecret;
     // end::clientSecret[]
 
