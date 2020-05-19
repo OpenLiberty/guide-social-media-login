@@ -31,52 +31,77 @@ import java.util.Map;
 // tag::LogoutServlet[]
 public class LogoutServlet extends HttpServlet {
 
+    // tag::clientId[]
     @Inject
+    // tag::clientIdProperty[]
     @ConfigProperty(name = "github.client.id")
+    // end::clientIdProperty[]
     private String clientId;
+    // end::clientId[]
 
+    // tag::clientSecret[]
     @Inject
+    // tag::clientSecretProperty[]
     @ConfigProperty(name = "github.client.secret")
+    // end::clientSecretProperty[]
     private String clientSecret;
+    // end::clientSecret[]
 
     // tag::handlePost[]
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
+        // tag::unauthorizeUrl[]
         final String unauthorizeUrl = "https://api.github.com/" +
                 "applications/{client_id}/grant";
+        // end::unauthorizeUrl[]
 
         // Get access token
+        // tag::accessToken[]
         String accessToken = UserProfileManager
                 .getUserProfile()
                 .getAccessToken();
+        // end::accessToken[]
 
-
+        // tag::requestBody[]
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("access_token", accessToken);
+        // end::requestBody[]
 
+        // tag::encodeAuth[]
         String auth = clientId + ":" + clientSecret;
         byte[] encodedAuthStream = Base64
                 .getEncoder()
                 .encode(auth.getBytes(StandardCharsets.ISO_8859_1));
         String encodedAuth = new String(encodedAuthStream);
+        // end::encodeAuth[]
 
         // Add headers and body to DELETE request to delete OAuth2 grant
+        // tag::revokePermissions[]
         Response logoutResponse = ClientBuilder
                 .newClient()
                 .target(unauthorizeUrl)
                 .resolveTemplate("client_id", clientId)
                 .request()
+                // tag::authHeader[]
                 .header("Authorization", "Basic " + encodedAuth)
+                // end::authHeader[]
+                // tag::accessTokenBody[]
                 .method("DELETE", Entity.json(requestBody));
+                // end::accessTokenBody[]
 
         if (logoutResponse.getStatus() != 204) {
             throw new ServletException("Could not delete OAuth2 application grant");
         }
+        // end::revokePermissions[]
 
+        // tag::logout[]
         request.logout();
+        // end::logout[]
+        // tag::redirect[]
         response.sendRedirect("hello.html");
+        // end::redirect[]
     }
     // end::handlePost[]
 }

@@ -148,21 +148,18 @@ Similar to `HelloServlet`, this servlet also requires that the user be authentic
 ----
 
 The [hotspot=WebServlet file=0]`@WebServlet` and [hotspot=ServletSecurity file=0]`@ServletSecurity` annotations declare
-that the `LogoutServlet` class is a servlet that handles the `/logout` endpoint whose access is restricted to members of
-the role `users`.
+that the [hotspot=LogoutServlet file=0]`LogoutServlet` class is a servlet that handles the
+[hotspot=WebServlet file=0]`/logout` endpoint whose access is restricted to members of the role `users`.
 
 Before the user is logged out of the application, the access token obtained by Social Login from the social media provider
 as part of the authentication can be used to revoke user permissions for the application. When the user logs into the
 application again, they will be prompted to authorize the application.
 
-[role="code_command", subs="quotes"]
-----
-#Update the `LogoutServlet` class.#
-`src/main/java/io/openliberty/guides/sociallogin/HelloServlet.java`
-----
-[role="edit_command_text"]
-Replace [hotspot=clientId file=0]`[github-client-id]` and [hotspot=clientSecret file=0]`[github-client-secret]` with
-the client ID and client secret for your GitHub OAuth2 application.
+The [hotspot=clientId file=0]`client ID` and [hotspot=clientSecret file=0]`client secret` for your GitHub OAuth2
+application are injected into [hotspot=LogoutServlet file=0]`LogoutServlet` with the values of
+[hotspot=clientIdProperty file=0]`github.client.id` and [hotspot=clientSecretProperty file=0]`github.client.secret` by
+Microprofile Config.
+These values are supplied using the environment variables `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`.
 
 The access token is retrieved using the [hotspot=accessToken file=0]`UserProfileManager`.
 
@@ -171,7 +168,7 @@ The username and password for basic authorization are the GitHub client ID and c
 To construct the authorization header, the client ID and client secret must be [hotspot=encodeAuth file=0]`encoded`.
 
 The `DELETE` request to the [hotspot=unauthorizeUrl file=0]`unauthorizeUrl` is performed using the JAX-RS
-[hotspot=revokePermissions hotspot=target file=0]`ClientBuilder`. The [hotspot=encodeAuth file=0]`encoded` client ID and
+[hotspot=revokePermissions file=0]`ClientBuilder`. The [hotspot=encodeAuth file=0]`encoded` client ID and
 client secret is added to the request as an [hotspot=authHeader file=0]`Authorization: Basic ...` header.
 The [hotspot=accessToken file=0]`access token` is sent as part of the
 [hotspot=requestBody hotspot=accessTokenBody file=0]`request body`.
@@ -254,8 +251,9 @@ instead of requiring you to create a truststore with the required certificates.
 `src/liberty/config/server.xml`
 ----
 [role="edit_command_text"]
-Replace [hotspot=33]`[client-id]` and [hotspot=34]`[client-secret]` with the credentials you created for
-your GitHub application in the prerequisites section.
+The client ID and client secret for your GitHub OAuth2 application are injected into the `<githubLogin />` configuration
+element with the values of `github.client.id` and `github.client.secret` by Microprofile Config.
+These values are supplied using the environment variables `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`.
 
 The [hotspot=githubLogin]`<githubLogin />` configuration element will configure GitHub login.
 
