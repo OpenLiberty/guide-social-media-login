@@ -60,7 +60,27 @@ Set the Homepage URL to `\https://localhost:9443` and
 the Authorization callback URL to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
 
 When the registration is complete, the client ID and client secret credentials are displayed.
-You’ll need these two values later in the guide to authenticate your application with GitHub.
+To provide your application with the credentials, export the following environment variables: `GITHUB_CLIENT_ID` and
+`GITHUB_CLIENT_SECRET`.
+
+Replace the values of `[github-client-id]` and `[github-client-secret]` in the following command.
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.mac_section.linux_section]
+--
+[role='command']
+----
+export GITHUB_CLIENT_ID=[github-client-id]
+export GITHUB_CLIENT_SECRET=[github-client-secret]
+----
+--
+[.tab_content.windows_section]
+--
+[role='command']
+----
+set GITHUB_CLIENT_ID=[github-client-id]
+set GITHUB_CLIENT_SECRET=[github-client-secret]
+----
+--
 
 == Creating a secured servlet
 
@@ -264,10 +284,13 @@ You secured a simple RESTful web service in Open Liberty by using the Social Med
 
 If more than one is added, there’s a selection form presented to the user, where all the possible social media providers
 configured in your application are shown for the user to pick from. As an exercise, configure a second social media
-provider, Facebook, for social media login for your application.
+provider, like Facebook, for social media login for your application.
 
-For more information, refer to the
-https://www.openliberty.io/docs/ref/feature/#socialLogin-1.0.html[OpenLibery Social Media Login feature documentation^].
+You can use the `<facebookLogin />` configuration element to setup login for Facebook. The following links to Facebook
+documentation will provide any additional information about setting up an OAuth2 application.
+- https://developers.facebook.com/docs/apps#register[Registering for a Facebook application^]
+- https://developers.facebook.com/docs/facebook-login/web#redirecturl[Adding Facebook Login to your Facebook Application^]
+- https://developers.facebook.com/docs/facebook-login/permissions/requesting-and-revoking#revokelogin[Revoking Facebook Login^]
 
 == Related Links
 

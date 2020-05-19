@@ -7,6 +7,7 @@
         <feature>transportSecurity-1.0</feature>
         <feature>socialLogin-1.0</feature>
         <feature>mpRestClient-1.4</feature>
+        <feature>mpConfig-1.4</feature>
         <!-- end::newFeatures[] -->
     </featureManager>
     <!-- end::featureManager[] -->
@@ -30,8 +31,8 @@
     <!-- Social Login Configuration -->
     <!-- Github Login -->
     <!-- tag::githubLogin[] -->
-    <githubLogin clientId="[client-id]"
-                 clientSecret="[client-secret]" />
+    <githubLogin clientId="${github.client.id}"
+                 clientSecret="${github.client.secret}" />
     <!-- end::githubLogin[] -->
 
     <!-- tag::webApplication[] -->
