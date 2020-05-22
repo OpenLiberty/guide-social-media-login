@@ -15,7 +15,7 @@
 :page-description: Learn how to authenticate users with the Open Liberty Social Media Login feature.
 :guide-author: Open Liberty
 :page-tags: ['Java EE', 'Jakarta EE', 'Security']
-:page-related-guides: ['microprofile-jwt', 'security-intro', 'rest-client-java', 'rest-client-angularjs']
+:page-related-guides: ['microprofile-jwt']
 :page-permalink: /guides/{projectid}
 :page-seo-title: Authenticating users with Social Login
 :page-seo-description: A tutorial on how to authenticate users in Open Liberty using the Social Media Login feature
@@ -190,6 +190,9 @@ include::finish/src/main/webapp/securedHello.jsp[]
 
 == Configuring security and social media login
 
+To enable social login, you will need to configure a social media login provider, a keystore, SSL and create a security
+role for authenticated users.
+
 [role="code_command hotspot file=0", subs="quotes"]
 ----
 #Replace the server configuration file.#
@@ -204,24 +207,12 @@ include::finish/src/main/liberty/config/server.xml[]
 
 The explanations for these changes are in the following sections.
 
-=== Configuring the security role
+=== Security role configuration
 
 The [hotspot=applicationBnd]`<application-bnd />` configuration element under the
 [hotspot=webApplication]`<webApplication />` configuration element creates a new security role [hotspot=users]`users`,
 which all authenticated users belong to.
 Adding this allows users that are authenticated using social media login to access your `HelloService` service.
-
-=== Required features
-
-To enable https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] and other required features,
-new [hotspot=newFeatures]`<feature />` elements are added to the [hotspot=featureManager]`<featureManager />` in
-`server.xml`.
-
-There are some prerequisite configurations that social media login configuration elements need:
-
-1. The [hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` configuration element
-corresponds to the keystore created in the prerequisites section
-2. An [hotspot=sslConfig]`<ssl id="defaultSSLRef .../>` configuration element for configuring the SSL configuration that is used to connect to the social media
 
 === Configuring keystore and SSL
 
@@ -243,19 +234,14 @@ The [hotspot=30]`trustDefaultCerts` attribute of the [hotspot=sslConfig]`<ssl id
 configuration element, when set to true, allows the server to establish trust using the JDK default truststore,
 instead of requiring you to create a truststore with the required certificates.
 
-=== Adding GitHub login configuration
-
-[role="code_command hotspot=sections", subs="quotes"]
-----
-#Update the `server.xml` file.#
-`src/liberty/config/server.xml`
-----
-[role="edit_command_text"]
-The client ID and client secret for your GitHub OAuth2 application are injected into the `<githubLogin />` configuration
-element with the values of `github.client.id` and `github.client.secret` by Microprofile Config.
-These values are supplied using the environment variables `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`.
+=== GitHub login configuration
 
 The [hotspot=githubLogin]`<githubLogin />` configuration element will configure GitHub login.
+
+The client ID and client secret for your GitHub OAuth2 application are injected into the
+[hotspot=githubLogin]`<githubLogin />` configuration element with the values of `github.client.id` and
+`github.client.secret` by Microprofile Config.
+These values are supplied using the environment variables `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`.
 
 [role='command']
 include::{common-includes}/devmode-build.adoc[]
@@ -280,12 +266,13 @@ You secured a simple RESTful web service in Open Liberty by using the Social Med
 
 == Next Steps
 
-If more than one is added, there’s a selection form presented to the user, where all the possible social media providers
-configured in your application are shown for the user to pick from. As an exercise, configure a second social media
-provider, like Facebook, for social media login for your application.
+As an exercise, configure a second social media provider, Facebook, for social media login for your application.
+If more than one social media login provider is added, there’s a selection form presented to the user,
+where all the possible social media providers configured in your application are shown for the user to pick from.
 
 You can use the `<facebookLogin />` configuration element to setup login for Facebook. The following links to Facebook
 documentation will provide any additional information about setting up an OAuth2 application.
+
 - https://developers.facebook.com/docs/apps#register[Registering for a Facebook application^]
 - https://developers.facebook.com/docs/facebook-login/web#redirecturl[Adding Facebook Login to your Facebook Application^]
 - https://developers.facebook.com/docs/facebook-login/permissions/requesting-and-revoking#revokelogin[Revoking Facebook Login^]
