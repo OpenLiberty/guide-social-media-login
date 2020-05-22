@@ -230,7 +230,7 @@ This requires the SSL certificates for GitHub to be added to a truststore.
 Since GitHub in this guide use a well-known CA (Certificate Authority), they can be
 found in the JDK default `cacerts` file.
 
-The [hotspot=30]`trustDefaultCerts` attribute of the [hotspot=sslConfig]`<ssl id="defaultSSLRef" .../>`
+The [hotspot=27]`trustDefaultCerts` attribute of the [hotspot=sslConfig]`<ssl id="defaultSSLRef" .../>`
 configuration element, when set to true, allows the server to establish trust using the JDK default truststore,
 instead of requiring you to create a truststore with the required certificates.
 
@@ -240,7 +240,7 @@ The [hotspot=githubLogin]`<githubLogin />` configuration element will configure 
 
 The client ID and client secret for your GitHub OAuth2 application are injected into the
 [hotspot=githubLogin]`<githubLogin />` configuration element with the values of `github.client.id` and
-`github.client.secret` by Microprofile Config.
+`github.client.secret`.
 These values are supplied using the environment variables `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`.
 
 [role='command']
@@ -270,8 +270,10 @@ As an exercise, configure a second social media provider, Facebook, for social m
 If more than one social media login provider is added, there’s a selection form presented to the user,
 where all the possible social media providers configured in your application are shown for the user to pick from.
 
-You can use the `<facebookLogin />` configuration element to setup login for Facebook. The following links to Facebook
-documentation will provide any additional information about setting up an OAuth2 application.
+You can create the `<facebookLogin />` configuration element in `server.xml` to setup login for Facebook.
+Similar to `<githubLogin />`, `<facebookLogin />` also only requires a client ID and client secret.
+The following links to Facebook documentation will provide any additional information about setting up an OAuth2
+application.
 
 - https://developers.facebook.com/docs/apps#register[Registering for a Facebook application^]
 - https://developers.facebook.com/docs/facebook-login/web#redirecturl[Adding Facebook Login to your Facebook Application^]
