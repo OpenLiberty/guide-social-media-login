@@ -84,10 +84,10 @@ set GITHUB_CLIENT_SECRET=[github-client-secret]
 
 == Creating a secured servlet
 
-The `hello.html` page contains a [hotspot=login file=2]`login` button that redirects to the
-[hotspot=request file=2]`/hello` endpoint.
+The `hello.html` page contains a [hotspot=loginBtn file=2]`login` button that redirects to the
+[hotspot=login file=2]`/hello` endpoint.
 We will create a servlet to handle `GET` requests to this endpoint that requires that users be authenticated.
-When users access this endpoint by clicking on the `login` button, they will be prompted to authenticate using GitHub.
+When users access this endpoint by clicking on the [hotspot=loginBth file=2]`login` button, they will be prompted to authenticate using GitHub.
 
 First, navigate to the `start` directory.
 
@@ -136,8 +136,8 @@ include::finish/src/main/webapp/hello.html[]
 
 == Implementing logout
 
-The [file=1]`securedHello.jsp` page contains a [hotspot=logoutButton file=1]`logout` button that makes a `POST` request
-to the [hotspot=logout file=1]`/logout` endpoint.
+The [file=1]`securedHello.jsp` page contains a [hotspot=logout file=1]`logout` button that makes a `POST` request
+to the [hotspot=WebServlet file=0]`/logout` endpoint.
 We will create a servlet to handle [hostpot=handlePost file=0]`POST` requests to this endpoint.
 Similar to `HelloServlet`, this servlet also requires that the user be authenticated.
 
@@ -169,12 +169,12 @@ To construct the authorization header, the client ID and client secret must be [
 
 The `DELETE` request to the [hotspot=unauthorizeUrl file=0]`unauthorizeUrl` is performed using the JAX-RS
 [hotspot=revokePermissions file=0]`ClientBuilder`. The [hotspot=encodeAuth file=0]`encoded` client ID and
-client secret is added to the request as an [hotspot=authHeader file=0]`Authorization: Basic ...` header.
+client secret are added to the request as an [hotspot=authHeader file=0]`Authorization: Basic ...` header.
 The [hotspot=accessToken file=0]`access token` is sent as part of the
 [hotspot=requestBody hotspot=accessTokenBody file=0]`request body`.
 
 Lastly, the [hotspot=logout file=0]`HttpServletRequest#logout()` method is used to log the user out of the application, after which the user
-is [hotspot=redirect file=0]`redirected` to `hello.html`.
+is redirected to [hotspot=redirect file=0]`hello.html`.
 
 LogoutServlet.java
 [source, Java, linenums, role='code_column hide_tags=copyright']
@@ -230,7 +230,7 @@ This requires the SSL certificates for GitHub to be added to a truststore.
 Since GitHub in this guide use a well-known CA (Certificate Authority), they can be
 found in the JDK default `cacerts` file.
 
-The [hotspot=27]`trustDefaultCerts` attribute of the [hotspot=sslConfig]`<ssl id="defaultSSLRef" .../>`
+The `trustDefaultCerts` attribute of the [hotspot=sslConfig]`<ssl id="defaultSSLRef" .../>`
 configuration element, when set to true, allows the server to establish trust using the JDK default truststore,
 instead of requiring you to create a truststore with the required certificates.
 
