@@ -17,8 +17,8 @@
 :page-tags: ['Java EE', 'Jakarta EE', 'Security']
 :page-related-guides: ['microprofile-jwt']
 :page-permalink: /guides/{projectid}
-:page-seo-title: Authenticating users with Social Login
-:page-seo-description: A tutorial on how to authenticate users in Open Liberty using the Social Media Login feature
+:page-seo-title: Authenticating users with Social Media Login
+:page-seo-description: A getting started tutorial with examples on how to secure Java applications by authenticating users through social media providers, such as GitHub, using the Open Liberty Social Media Login feature.
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 = Authenticating users with Social Login
 
