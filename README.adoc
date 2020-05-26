@@ -1,4 +1,4 @@
-//  Copyright (c) 2017, 2019 IBM Corporation and others.
+//  Copyright (c) 2020 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -9,7 +9,7 @@
 :projectid: social-login
 :page-layout: guide-multipane
 :page-duration: 30 minutes
-:page-releasedate: 2017-09-19
+:page-releasedate: 2020-06-20
 :page-essential: true
 :page-essential-order: 1
 :page-description: Learn how to authenticate users with the Open Liberty Social Media Login feature.
@@ -84,10 +84,10 @@ set GITHUB_CLIENT_SECRET=[github-client-secret]
 
 == Creating a secured servlet
 
-The `hello.html` page contains a [hotspot=loginBtn file=2]`login` button that redirects to the
+The `hello.html` page contains a [hotspot=btnLogin file=2]`login` button that redirects to the
 [hotspot=login file=2]`/hello` endpoint.
 We will create a servlet to handle `GET` requests to this endpoint that requires that users be authenticated.
-When users access this endpoint by clicking on the [hotspot=loginBth file=2]`login` button, they will be prompted to authenticate using GitHub.
+When users access this endpoint by clicking on the `login` button, they will be prompted to authenticate using GitHub.
 
 First, navigate to the `start` directory.
 
