@@ -1,7 +1,21 @@
+// tag::copyright[]
+/*******************************************************************************
+ * Copyright (c) 2020 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - Initial implementation
+ *******************************************************************************/
+// end::copyright[]
 package io.openliberty.guides.sociallogin;
 
 import com.ibm.websphere.security.social.UserProfileManager;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HttpConstraint;
 import javax.servlet.annotation.ServletSecurity;
@@ -29,24 +43,31 @@ import java.util.Map;
 // tag::LogoutServlet[]
 public class LogoutServlet extends HttpServlet {
 
+    // tag::clientId[]
+    @Inject
+    // tag::propClientId[]
+    @ConfigProperty(name = "github.client.id")
+    // end::propClientId[]
+    private String clientId;
+    // end::clientId[]
+
+    // tag::clientSecret[]
+    @Inject
+    // tag::propClientSecret[]
+    @ConfigProperty(name = "github.client.secret")
+    // end::propClientSecret[]
+    private String clientSecret;
+    // end::clientSecret[]
+
     // tag::handlePost[]
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
-        // GitHub endpoint and required credentials
-        // tag::GitHubInfo[]
-        // tag::clientId[]
-        final String clientId = "[github-client-id]";
-        // end::clientId[]
-        // tag::clientSecret[]
-        final String clientSecret = "[github-client-secret]";
-        // end::clientSecret[]
         // tag::unauthorizeUrl[]
         final String unauthorizeUrl = "https://api.github.com/" +
                 "applications/{client_id}/grant";
         // end::unauthorizeUrl[]
-        // end::GitHubInfo[]
 
         // Get access token
         // tag::accessToken[]
@@ -54,7 +75,6 @@ public class LogoutServlet extends HttpServlet {
                 .getUserProfile()
                 .getAccessToken();
         // end::accessToken[]
-
 
         // tag::requestBody[]
         Map<String, String> requestBody = new HashMap<>();
@@ -73,10 +93,8 @@ public class LogoutServlet extends HttpServlet {
         // tag::revokePermissions[]
         Response logoutResponse = ClientBuilder
                 .newClient()
-                // tag::target[]
                 .target(unauthorizeUrl)
                 .resolveTemplate("client_id", clientId)
-                // end::target[]
                 .request()
                 // tag::authHeader[]
                 .header("Authorization", "Basic " + encodedAuth)
