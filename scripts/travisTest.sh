@@ -27,7 +27,7 @@ mvn -q clean package liberty:create liberty:install-feature liberty:deploy
 mvn liberty:start
 
 # Check that the endpoint returns 200
-STATUS="$(curl --write-out "%{http_code}\n" --silent --output /dev/null "http://localhost:9080/api/hello")"
+STATUS="$(curl --write-out "%{http_code}\n" --silent --output /dev/null "http://localhost:9080/api/hello.html")"
 if [ "${STATUS}" -ne "200" ]
     then
         echo "FAIL: Endpoint returned ${STATUS}, expected 200."
