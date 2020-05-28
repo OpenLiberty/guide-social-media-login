@@ -37,15 +37,13 @@ if [ "${STATUS}" -ne "200" ]
 fi
 
 # Check that the endpoint redirects to the social media selection form
-RESPONSE=$(curl --silent "http://localhost:9080/api/hello")
-echo $RESPONSE
-
-# if [ -z "${RESPONSE}" ]
-#     then
-#         echo "FAIL: Could not find string literal \"Social Media Selection Form\" in response."
-#         exit 1
-#     else
-#         echo "Response body check passed."
-# fi
+RESPONSE=$(curl --silent -k "https://localhost:9443/api/hello" | grep "https://github.com/login/oauth/authorize")
+if [ -z "${RESPONSE}" ]
+    then
+        echo "FAIL: Could not find string literal \"https://github.com/login/oauth/authorize\" in response."
+        exit 1
+    else
+        echo "Response body check passed."
+fi
 
 mvn liberty:stop
