@@ -1,4 +1,4 @@
-//  Copyright (c) 2017, 2019 IBM Corporation and others.
+//  Copyright (c) 2020 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -9,50 +9,40 @@
 :projectid: social-login
 :page-layout: guide-multipane
 :page-duration: 30 minutes
-:page-releasedate: 2017-09-19
+:page-releasedate: 2020-06-20
 :page-essential: true
 :page-essential-order: 1
-:page-description: Learn how to secure a RESTful web service with the Open Liberty Social Media Login feature.
+:page-description: Learn how to authenticate users with the Open Liberty Social Media Login feature.
 :guide-author: Open Liberty
 :page-tags: ['Java EE', 'Jakarta EE', 'Security']
-:page-related-guides: ['microprofile-jwt', 'security-intro', 'rest-client-java', 'rest-client-angularjs']
+:page-related-guides: ['microprofile-jwt']
 :page-permalink: /guides/{projectid}
-:page-seo-title: Securing a RESTful web service with Social Media Login
-:page-seo-description: A tutorial on how to secure a RESTful web service in Open Liberty using the Social Media Login feature
+:page-seo-title: Authenticating users with Social Media Login
+:page-seo-description: A getting started tutorial with examples on how to secure Java applications by authenticating users through social media providers, such as GitHub, using the Open Liberty Social Media Login feature.
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
-= Securing a RESTful web service with Social Media Login
+= Authenticating users with Social Login
 
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website^].
 
-Learn how to secure a RESTful web service with the Open Liberty Social Media Login feature.
+Learn how to authenticate users with the Open Liberty Social Media Login feature.
 
 == What you'll learn
 
-You will learn how to secure a simple RESTful web service using the https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^]. You will secure an existing service,
-`HelloService`, using social media https://oauth.net/2[OAuth2^] and https://openid.net/connect[OpenID Connect^].
+You will learn how to authenticate users to an existing service using Social Media Login.
 
-`HelloService` is a provided microservice that responds to a `GET` request with the following Plain Text response:
+Social Media Login provides a form of single sign-on (SSO) that enables users to sign in to a secured website by using
+their existing social media account.
+It simplifies the authentication process for end users and allows you to provide a secure authentication
+method for your users without having to explicitly implement it.
 
-[source,role="no_copy"]
-----
-Hello, friend!
-----
+The https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login Feature^] in Open Liberty
+enables you to configure application authentication using one or more social media platforms,
+including GitHub, LinkedIn, Facebook, Twitter and Google.
+You can also create custom configuration for any other social media platform that implements
+the https://oauth.net/2[OAuth 2.0^] or https://openid.net/connect[OpenID Connect 1.0^] standard for authorization.`
 
-Instead of securing the `HelloService` service by implementing your own authentication service,
-you can allow users to authenticate the service using social media accounts.
-This will allow you to provide a secure authentication method for your users without having to explicitly implement it.
-
-Open Liberty provides a https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login Feature^]
-that provides configuration elements that allow you to configure an OAuth2 or OpenID Connect provider.
-The feature also provides preconfigured elements for common social media platforms like Facebook, Google, GitHub, LinkedIn and Twitter,
-which only require that you provide the credentials obtained by registering for an application on that platform.
-
-By the end of this guide, you will be able to secure the HelloService service using:
-
-1. A pre-configured social media login (GitHub)
-2. A custom OAuth2 login provider configuration (Amazon)
-3. A custom OIDC login provider configuration (Google)
+By the end of this guide, you will be able to authenticate users to your web service using GitHub.
 
 // =================================================================================================
 // Getting Started
@@ -60,141 +50,156 @@ By the end of this guide, you will be able to secure the HelloService service us
 [role='command']
 include::{common-includes}/gitclone.adoc[]
 
-== Setting up the certificates
+== Creating a GitHub OAuth2 Application
 
-The application you will build in this guide requires a server certificate that your application will provide for HTTPS connections, and corresponding private key to decrypt the incoming secure data.
-This certificate and private key will need to be added to the keystore for social media login.
-You also need to create an application on the three social media developer platforms to obtain a client ID and client secret to use their APIs.
+Obtain an OAuth 2.0 client ID and client secret credentials for accessing the GitHub developer API by registering
+a new https://github.com/settings/developers[application^] in your https://github.com/[GitHub^] account.
+On the Settings > Developer settings > OAuth Apps page of your account, register a new application.
 
-First, navigate to the `start/src/main/liberty/config/resources/security` directory.
+Set the Homepage URL to `\https://localhost:9443` and
+the Authorization callback URL to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
 
-=== Generating a self signed certificate
-Your application requires a TLS server certificate and corresponding private key to securely communicate using HTTPS. In this section, you will
-generate a self signed certificate and add it to your `key.p12`, which will be your application's keystore.
+When the registration is complete, the client ID and client secret credentials are displayed.
+To provide your application with the credentials, export the following environment variables: `GITHUB_CLIENT_ID` and
+`GITHUB_CLIENT_SECRET`.
 
-To create a self-signed certificate and add it to `key.p12` using the Java `keytool`,
-run the following command. Replace `[keystore-password]` with a password for your keystore.
-You will need this password in later sections in the guide.
+Replace the values of `[github-client-id]` and `[github-client-secret]` in the following command.
 include::{common-includes}/os-tabs.adoc[]
-[.tab_content.linux_section.mac_section]
+[.tab_content.mac_section.linux_section]
 --
 [role='command']
-```
-keytool -genkey \
-    -keyalg RSA \
-    -alias selfsigned \
-    -keystore key.p12 \
-    -storetype PKCS12 \
-    -storepass [keystore-password] \
-    -validity 360 \
-    -keysize 2048
-```
+----
+export GITHUB_CLIENT_ID=[github-client-id]
+export GITHUB_CLIENT_SECRET=[github-client-secret]
+----
 --
 [.tab_content.windows_section]
 --
 [role='command']
-```
-%JAVA_HOME%\bin\keytool -genkey ^
-    -keyalg RSA ^
-    -alias selfsigned ^
-    -keystore key.p12 ^
-    -storetype PKCS12 ^
-    -storepass [keystore-password] ^
-    -validity 360 ^
-    -keysize 2048
-```
+----
+set GITHUB_CLIENT_ID=[github-client-id]
+set GITHUB_CLIENT_SECRET=[github-client-secret]
+----
 --
 
-=== Setting up for GitHub
+== Creating a secured servlet
 
-In order to obtain OAuth 2.0 client ID and client secret credentials for accessing the GitHub developer API,
-
-. Log into https://github.com/[GitHub^].
-. Navigate to https://github.com/settings/developers[OAuth Apps^] and click on "Register a new application".
-. Enter an application name.
-. Set "Homepage URL" to `\https://localhost:9443/`.
-. Set "Authorization callback URL" to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
-. Click on "Register application".
-
-=== Setting up for Amazon
-
-In order to obtain OAuth 2.0 client ID and client secret for accessing the Login with Amazon API,
-
-. Navigate to https://login.amazon.com/[Login with Amazon^].
-. Hover over "Sign-in" and click on "Developer Portal".
-. Login into your Amazon account.
-. Click on "Create a New Security Profile".
-.. Enter a name and description.
-.. Set "Consent Privacy Notice URL" to `\https://localhost.com/privacy`.
-.. Click on "Save", which will return you to the "Login with Amazon Console".
-. Hover over the "settings" icon under "Manage" and click on "Web Settings".
-. Click on "Edit".
-.. Set `\https://localhost:9443/` as the "Allowed Origins".
-.. Set `\https://localhost:9443/ibm/api/social-login/redirect/amazonLogin` as the "Allowed Return URLs".
-.. Click "Save".
-
-=== Setting up for Google
-
-In order to obtain OAuth 2.0 credentials obtaining client ID and client secret for accessing the Google developer API,
-
-. Visit the https://console.developers.google.com/[Google API Console^].
-. Sign in using your Google account.
-. If you haven't created a project on Google API Console before,
-.. Create a new project.
-.. Navigate to the "OAuth consent screen" tab.
-.. Click "External", then click "Create".
-.. Fill in "Application name", then click "Save".
-. Navigate to the "Credentials" tab.
-. Click on the "CREATE CREDENTIALS" button.
-. Select "OAuth client ID" from the different options.
-. Set the application type to "Web application".
-. Enter the name of your OAuth 2.0 Client ID. This is different from your app name and will not be shown to end users. 
-. Add `\https://localhost:9443/ibm/api/social-login/redirect/googleOIDCLogin` to "Authorized redirect URIs", hit "Enter" to save the URI and then click "Create".
-
-== Securing HelloService
+The `hello.html` page contains a [hotspot=btnLogin file=2]`login` button that redirects to the
+[hotspot=login file=2]`/hello` endpoint.
+We will create a servlet to handle `GET` requests to this endpoint that requires that users be authenticated.
+When users access this endpoint by clicking on the `login` button, they will be prompted to authenticate using GitHub.
 
 First, navigate to the `start` directory.
 
 [role='command']
 include::{common-includes}/devmode-start.adoc[]
 
-The [hotspot=helloService]`HelloService` class is the JAX-RS service that you will be securing.
-
-[role="code_command hotspot file=0", subs="quotes"] 
+[role="code_command hotspot file=0", subs="quotes"]
 ----
-#Replace the `HelloService` class.#
-`src/main/java/io/openliberty/guides/sociallogin/HelloService.java`
+#Create the `HelloServlet` class.#
+`src/main/java/io/openliberty/guides/sociallogin/HelloServlet.java`
 ----
 
-The following new imports are required for the [hotspot=helloService]`HelloService` class:
+The [hotspot=WebServletImport hotspot=WebServlet file=0]`@WebServlet` annotation declares that the
+[hotspot=HelloServlet file=0]`HelloServlet` class, which must extend
+[hotspot=HttpServlet hotspot=HttpServletImport file=0]`HttpServlet`, is a servlet.
 
-- [hotspot=rolesAllowedImport]`javax.annotation.security.RolesAllowed`
-- [hotspot=securityContextImport]`javax.ws.rs.core.SecurityContext`
-- [hotspot=contextImport]`javax.ws.rs.core.Context`
+The [hotspot=ServletSecurity hotspot=ServletSecurityImport file=0]`@ServletSecurity` annotation specifies the security
+constraints.
+The [hotspot=HttpConstraint hotspot=HttpConstraintImport file=0]`@HttpConstraint` annotation passed to the `value` element
+configures the constraint for all HTTP methods in this servlet.
 
-The [hotspot=rolesAllowed]`@RolesAllowed({"users"})` annotation restricts access to the service to users who are
-in the `users` role.
+The [hotspot=rolesAllowed file=0]`rolesAllowed` element restricts the access to members of the `users` role.
 
-The `return "Hello, friend!";` is replaced to output user information.
-The [hotspot=securityContext]`SecurityContext` context, which is injected using the
-[hotspot=securityContext]`@Context` annotation, allows you to get information about the logged-in user
-using [hotspot=userPrincipal]`securitContext.getUserPrincipal()`.
+The [hotspot=doGet file=0]`doGet()` method handles GET requests to this servlet.
+The [hotspot=getUsername file=0]`username` of the user is added to the request as an attribute to be used by the
+[hotspot=username file=1]`securedHello.jsp` page, to which the request is [hotspot=forwardRequest]`forwarded`
+by the servlet.
 
-HelloService.java 
-[source, Java, linenums, role='code_column hide_tags=copyright'] 
+HelloServlet.java
+[source, Java, linenums, role='code_column hide_tags=copyright']
 ----
-include::finish/src/main/java/io/openliberty/guides/sociallogin/HelloService.java[]
+include::finish/src/main/java/io/openliberty/guides/sociallogin/HelloServlet.java[]
 ----
 
-== Configuring the security and social media login
+securedHello.jsp
+[source, html, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/src/main/webapp/securedHello.jsp[]
+----
 
-[role="code_command hotspot file=0", subs="quotes"] 
+hello.html
+[source ,html, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/src/main/webapp/hello.html[]
+----
+
+== Implementing logout
+
+The [file=1]`securedHello.jsp` page contains a [hotspot=logout file=1]`logout` button that makes a `POST` request
+to the [hotspot=WebServlet file=0]`/logout` endpoint.
+We will create a servlet to handle [hostpot=handlePost file=0]`POST` requests to this endpoint.
+Similar to `HelloServlet`, this servlet also requires that the user be authenticated.
+
+[role="code_command", subs="quotes"]
+----
+#Create the `LogoutServlet` class.#
+`src/main/java/io/openliberty/guides/sociallogin/HelloServlet.java`
+----
+
+The [hotspot=WebServlet file=0]`@WebServlet` and [hotspot=ServletSecurity file=0]`@ServletSecurity` annotations declare
+that the [hotspot=LogoutServlet file=0]`LogoutServlet` class is a servlet that handles the
+[hotspot=WebServlet file=0]`/logout` endpoint whose access is restricted to members of the role `users`.
+
+Before the user is logged out of the application, the access token obtained by Social Login from the social media provider
+as part of the authentication can be used to revoke user permissions for the application. When the user logs into the
+application again, they will be prompted to authorize the application.
+
+The [hotspot=clientId file=0]`client ID` and [hotspot=clientSecret file=0]`client secret` for your GitHub OAuth2
+application are injected into [hotspot=LogoutServlet file=0]`LogoutServlet` with the values of
+[hotspot=propClientId file=0]`github.client.id` and [hotspot=propClientSecret file=0]`github.client.secret` by
+Microprofile Config.
+These values are supplied using the environment variables `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`.
+
+The access token is retrieved using the [hotspot=accessToken file=0]`UserProfileManager`.
+
+Basic Authorization is used to access the [hotspot=unauthorizeUrl file=0]`url` to delete an application grant.
+The username and password for basic authorization are the GitHub client ID and client secret.
+To construct the authorization header, the client ID and client secret must be [hotspot=encodeAuth file=0]`encoded`.
+
+The `DELETE` request to the [hotspot=unauthorizeUrl file=0]`unauthorizeUrl` is performed using the JAX-RS
+[hotspot=revokePermissions file=0]`ClientBuilder`. The [hotspot=encodeAuth file=0]`encoded` client ID and
+client secret are added to the request as an [hotspot=authHeader file=0]`Authorization: Basic ...` header.
+The [hotspot=accessToken file=0]`access token` is sent as part of the
+[hotspot=requestBody hotspot=accessTokenBody file=0]`request body`.
+
+Lastly, the [hotspot=logout file=0]`HttpServletRequest#logout()` method is used to log the user out of the application, after which the user
+is redirected to [hotspot=redirect file=0]`hello.html`.
+
+LogoutServlet.java
+[source, Java, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/src/main/java/io/openliberty/guides/sociallogin/LogoutServlet.java[]
+----
+
+securedHello.jsp
+[source, html, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/src/main/webapp/securedHello.jsp[]
+----
+
+== Configuring security and social media login
+
+To enable social login, you will need to configure a social media login provider, a keystore, SSL and create a security
+role for authenticated users.
+
+[role="code_command hotspot file=0", subs="quotes"]
 ----
 #Replace the server configuration file.#
 `src/main/liberty/config/server.xml`
 ----
 
-server.xml 
+server.xml
 [source, xml, linenums, role='code_column']
 ----
 include::finish/src/main/liberty/config/server.xml[]
@@ -202,135 +207,77 @@ include::finish/src/main/liberty/config/server.xml[]
 
 The explanations for these changes are in the following sections.
 
-=== Configuring the security roles
+=== Security role configuration
 
 The [hotspot=applicationBnd]`<application-bnd />` configuration element under the
 [hotspot=webApplication]`<webApplication />` configuration element creates a new security role [hotspot=users]`users`,
 which all authenticated users belong to.
 Adding this allows users that are authenticated using social media login to access your `HelloService` service.
 
-=== Adding required features
+=== Configuring keystore and SSL
 
-To enable https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] and other required features,
-new [hotspot=newFeatures]`<feature />` elements are added to the [hotspot=featureManager]`<featureManager />` in
-`server.xml`.
-
-There are some prerequisite configurations that social media login configuration elements need:
-
-1. The [hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` configuration element
-corresponds to the keystore created in the prerequisites section
-2. An [hotspot=sslConfig]`<ssl id="authServiceSslRef .../>` configuration element for configuring the SSL configuration that is used to connect to the social media
-
-=== Adding keystore and truststore
-
-In the first section, you created a keystore, `key.p12`.
-Now you will configure your application to use this keystore.
-Files in the `src/main/liberty` folder are copied into the location specified by `${server.output.dir}`,
-so the location of this keystore is `${server.output.dir}/resources/security`.
-
-The [hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` configuration element, whose location is `${server.output.dir}/resources/security/key.p12`,
+The [hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` configuration element
 will be used to provide SSL certificates when initiating HTTPS connections for social media login.
 
-[role="code_command hotspot=sections", subs="quotes"] 
-----
-#Update the `server.xml` file.#
-`src/liberty/config/server.xml`
-----
-[role="edit_command_text"]
-Replace [hotspot=22]`[keystore-password]` with the password that you used when creating the keystore in the previous sections.
+The [hotspot=sslConfig]`<ssl id="defaultSSLConfig" .../>` configuration element, which references
+[hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` as the keystore, will be provided to social media login
+configurations.
 
-The [hotspot=sslConfig]`<ssl id="authServiceSslRef" .../>` configuration element, which references [hotspot=keystore]`<keyStore id="defaultKeyStore" .../>` as the keystore, will be provided to social media login configurations.
+For your application to send data securely to GitHub, it must trust the public SSL certificates
+provided by it.
+This requires the SSL certificates for GitHub to be added to a truststore.
 
-For your application to send data securely to the social media platforms, it must trust the public SSL certificates
-provided by them.
-This requires the SSL certificates for Amazon, Google and GitHub to be added to a truststore.
-
-Since the platforms in this guide use a well-known CA (Certificate Authority), they can be
+Since GitHub in this guide use a well-known CA (Certificate Authority), they can be
 found in the JDK default `cacerts` file.
 
-The [hotspot=30]`trustDefaultCerts` attribute of the [hotspot=sslConfig]`<ssl id="authServiceSslRef" .../>` configuration element,
-when set to true, allows the server to establish trust using the JDK default truststore, instead of requiring
-you to create a truststore with the required certificates.
+The `trustDefaultCerts` attribute of the [hotspot=sslConfig]`<ssl id="defaultSSLRef" .../>`
+configuration element, when set to true, allows the server to establish trust using the JDK default truststore,
+instead of requiring you to create a truststore with the required certificates.
 
-=== Adding GitHub login configuration
-
-[role="code_command hotspot=sections", subs="quotes"] 
-----
-#Update the `server.xml` file.#
-`src/liberty/config/server.xml`
-----
-[role="edit_command_text"]
-Replace the values of the [hotspot=43]`clientId` and [hotspot=44]`clientSecret` with the credentials you created for your GitHub application
-in the prerequisites section.
+=== GitHub login configuration
 
 The [hotspot=githubLogin]`<githubLogin />` configuration element will configure GitHub login.
-The [hotspot=45]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
 
-=== Adding Amazon login configuration
+The client ID and client secret for your GitHub OAuth2 application are injected into the
+[hotspot=githubLogin]`<githubLogin />` configuration element with the values of `github.client.id` and
+`github.client.secret`.
+These values are supplied using the environment variables `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`.
 
-[role="code_command hotspot=sections", subs="quotes"] 
-----
-#Update the `server.xml` file.#
-`src/liberty/config/server.xml`
-----
-[role="edit_command_text"]
-Replace the values of [hotspot=52]`clientId` and [hotspot=53]`clientSecret` with the credentials you created for your Amazon application
-in the prerequisites section.
-
-The [hotspot=amazonLogin]`amazonLogin` configuration uses a custom [hotspot=amazonLogin]`<oauth2Login />` configuration element.
-The [hotspot=55]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
-
-Further documentation on the [hotspot=amazonLogin]`attributes` can be found on the https://openliberty.io/docs/ref/config/oauth2Login.html[Open Liberty config reference on oauth2Login^].
-The values for these [hotspot=amazonLogin]`attributes` can be found in the https://developer.amazon.com/docs/login-with-amazon/minitoc-lwa-overview.html[Login With Amazon API documentation^].
-
-Make sure that the [hotspot=50]`id` of your [hotspot=amazonLogin]`<oauth2Login />` configuration matches the redirect URL (if you set the [hotspot=50]`id` to `amazonLogin`, the redirect URL must end with `.../amazonLogin`).
-
-=== Adding Google login configuration
-
-[role="code_command hotspot=sections", subs="quotes"] 
-----
-#Update the `server.xml` file.#
-`src/liberty/config/server.xml`
-----
-[role="edit_command_text"]
-Repalce the values of [hotspot=70]`clientId` and [hotspot=71]`clientSecret` with the credentials you created for your Google application
-in the prerequisites section.
-
-The [hotspot=googleOIDCLogin]`googleOIDCLogin` configuration uses a custom [hotspot=googleOIDCLogin]`<oidcLogin />` configuration element.
-The [hotspot=72]`sslRef` attribute is set to the [hotspot=sslConfig]`authServiceSslRef` configuration from the previous section.
-
-Further documentation on the [hotspot=googleOIDCLogin]`attributes` can be found on the https://openliberty.io/docs/ref/config/oidcLogin.html[Open Liberty config reference on oidcLogin^].
-The values of these [hotspot=googleOIDCLogin]`attributes` can be found in the https://developers.google.com/identity/protocols/OpenIDConnect[Google API documentation^].
-
-Make sure that the [hotspot=68]`id` of your [hotspot=googleOIDCLogin]`<oidcLogin />` configuration matches the redirect URL (if you set the [hotspot=68]`id` to `googleOIDCLogin`, the redirect URL must end with `.../googleOIDCLogin`).
-
-== Running the application
-
-The Open Liberty server was started in development mode at the beginning of the guide and all the 
-changes were automatically picked up.
+[role='command']
+include::{common-includes}/devmode-build.adoc[]
 
 Check out the service that you created at the
-http://localhost:9080/api/hello[^] URL.
+http://localhost:9080/api/hello.html[^] URL.
 
-When you access https://localhost:9080/api/hello[^],
-you should be redirected to a Social Media Login Form. This form allows you to choose which login provider you want to use
-for authentication. When you select a login choice, you will be redirected to the login page of that service.
+Try logging in using your social media account.
+After authenticating, you will be redirected to `\https://localhost:9080/api/hello`.
+When you click the `logout` button, you will be unauthenticated and redirected back to
+http://localhost:9080/api/hello.html[^].
 
-Try logging in using your social media accounts. After authenticating, you will be redirected back to https://localhost:9080/api/hello and the response will look like this:
+If you try logging in again, you will be asked to reauthorize your application with GitHub before being authenticated and
+redirected to `\https://localhost:9080/api/hello`.
 
-[source,role="no_copy"]
----
-Hello, <<your username>>
----
-
-== Testing the service
-
-No automated tests are provided in this guide.
-You can test this service manually by starting a server and pointing a web browser at http://localhost:9080/api/hello[the endpoint for Hello service^].
+[role='command']
+include::{common-includes}/devmode-quit.adoc[]
 
 == Great work! You're done!
 
 You secured a simple RESTful web service in Open Liberty by using the Social Media Login feature.
+
+== Next Steps
+
+As an exercise, configure a second social media provider, Facebook, for social media login for your application.
+If more than one social media login provider is added, there’s a selection form presented to the user,
+where all the possible social media providers configured in your application are shown for the user to pick from.
+
+You can create the `<facebookLogin />` configuration element in `server.xml` to setup login for Facebook.
+Similar to `<githubLogin />`, `<facebookLogin />` also only requires a client ID and client secret.
+The following links to Facebook documentation will provide any additional information about setting up an OAuth2
+application.
+
+- https://developers.facebook.com/docs/apps#register[Registering for a Facebook application^]
+- https://developers.facebook.com/docs/facebook-login/web#redirecturl[Adding Facebook Login to your Facebook Application^]
+- https://developers.facebook.com/docs/facebook-login/permissions/requesting-and-revoking#revokelogin[Revoking Facebook Login^]
 
 == Related Links
 

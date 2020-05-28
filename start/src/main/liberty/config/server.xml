@@ -1,6 +1,6 @@
 <server description="Social Login Guide Server">
     <featureManager>
-        <feature>jaxrs-2.1</feature>
+        <feature>jsp-2.3</feature>
     </featureManager>
     <httpEndpoint httpPort="${default.http.port}" httpsPort="${default.https.port}"
                   id="defaultHttpEndpoint" host="*" />
