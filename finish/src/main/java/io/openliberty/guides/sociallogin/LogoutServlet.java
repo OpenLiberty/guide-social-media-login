@@ -15,6 +15,7 @@ package io.openliberty.guides.sociallogin;
 import com.ibm.websphere.security.social.UserProfileManager;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HttpConstraint;
@@ -33,6 +34,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+@ApplicationScoped
 // tag::WebServlet[]
 @WebServlet(name = "LogoutServlet", urlPatterns = "/logout")
 // end::WebServlet[]
