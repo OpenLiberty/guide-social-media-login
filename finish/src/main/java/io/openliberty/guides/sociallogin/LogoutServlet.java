@@ -12,10 +12,10 @@
 // end::copyright[]
 package io.openliberty.guides.sociallogin;
 
-import com.ibm.websphere.security.social.UserProfileManager;
+import io.openliberty.guides.sociallogin.logout.LogoutHandler;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HttpConstraint;
@@ -24,99 +24,31 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-@ApplicationScoped
-// tag::WebServlet[]
 @WebServlet(name = "LogoutServlet", urlPatterns = "/logout")
-// end::WebServlet[]
-// tag::ServletSecurity[]
 @ServletSecurity(value = @HttpConstraint(rolesAllowed = {"users"},
         transportGuarantee = ServletSecurity.TransportGuarantee.CONFIDENTIAL))
-// end::ServletSecurity[]
-// tag::LogoutServlet[]
 public class LogoutServlet extends HttpServlet {
 
-    // tag::clientId[]
     @Inject
-    // tag::propClientId[]
-    @ConfigProperty(name = "github.client.id")
-    // end::propClientId[]
-    private String clientId;
-    // end::clientId[]
+    private LogoutHandler logoutHandler;
 
-    // tag::clientSecret[]
-    @Inject
-    // tag::propClientSecret[]
-    @ConfigProperty(name = "github.client.secret")
-    // end::propClientSecret[]
-    private String clientSecret;
-    // end::clientSecret[]
-
-    // tag::handlePost[]
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
-        // tag::unauthorizeUrl[]
-        final String unauthorizeUrl = "https://api.github.com/" +
-                "applications/{client_id}/grant";
-        // end::unauthorizeUrl[]
-
-        // Get access token
-        // tag::accessToken[]
-        String accessToken = UserProfileManager
-                .getUserProfile()
-                .getAccessToken();
-        // end::accessToken[]
-
-        // tag::requestBody[]
-        Map<String, String> requestBody = new HashMap<>();
-        requestBody.put("access_token", accessToken);
-        // end::requestBody[]
-
-        // tag::encodeAuth[]
-        String auth = clientId + ":" + clientSecret;
-        byte[] encodedAuthStream = Base64
-                .getEncoder()
-                .encode(auth.getBytes(StandardCharsets.ISO_8859_1));
-        String encodedAuth = new String(encodedAuthStream);
-        // end::encodeAuth[]
-
-        // Add headers and body to DELETE request to delete OAuth2 grant
-        // tag::revokePermissions[]
-        Response logoutResponse = ClientBuilder
-                .newClient()
-                .target(unauthorizeUrl)
-                .resolveTemplate("client_id", clientId)
-                .request()
-                // tag::authHeader[]
-                .header("Authorization", "Basic " + encodedAuth)
-                // end::authHeader[]
-                // tag::accessTokenBody[]
-                .method("DELETE", Entity.json(requestBody));
-                // end::accessTokenBody[]
-
-        if (logoutResponse.getStatus() != 204) {
+        Response logoutResponse = logoutHandler.getLogout().logout();
+        if (!logoutResponse.getStatusInfo().getFamily().equals(Response.Status.Family.SUCCESSFUL)) {
+            Logger.getLogger("LogoutServlet").log(Level.SEVERE, logoutResponse.readEntity(Map.class).toString());
             throw new ServletException("Could not delete OAuth2 application grant");
         }
-        // end::revokePermissions[]
 
-        // tag::logout[]
         request.logout();
-        // end::logout[]
-        // tag::redirect[]
         response.sendRedirect("hello.html");
-        // end::redirect[]
     }
-    // end::handlePost[]
 }
-// end::LogoutServlet[]

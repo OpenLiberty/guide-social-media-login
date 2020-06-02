@@ -8,7 +8,8 @@
         <feature>socialLogin-1.0</feature>
         <feature>mpConfig-1.4</feature>
         <feature>jaxrsClient-2.1</feature>
-        <!-- end::newFeatures[] -->
+        <feature>jwt-1.0</feature>
+    <!-- end::newFeatures[] -->
     </featureManager>
     <!-- end::featureManager[] -->
 
@@ -34,6 +35,9 @@
     <githubLogin clientId="${github.client.id}"
                  clientSecret="${github.client.secret}" />
     <!-- end::githubLogin[] -->
+
+    <facebookLogin clientId="${facebook.client.id}"
+              clientSecret="${facebook.client.secret}" />
 
     <!-- tag::webApplication[] -->
     <webApplication location="guide-social-login.war"
