@@ -12,7 +12,9 @@
 <!-- end::username[] -->
 <!-- tag::logout[] -->
 <form method="post" action="logout">
+    <!-- tag::btnLogout[] -->
     <button type="submit">Logout</button>
+    <!-- end::btnLogout -->
 </form>
 <!-- end::logout[] -->
 </body>

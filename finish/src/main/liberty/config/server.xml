@@ -4,12 +4,12 @@
         <feature>jsp-2.3</feature>
         <feature>appSecurity-3.0</feature>
         <feature>transportSecurity-1.0</feature>
-        <!-- tag::newFeatures[] -->
-        <feature>socialLogin-1.0</feature>
         <feature>mpConfig-1.4</feature>
         <feature>jaxrsClient-2.1</feature>
         <feature>jwt-1.0</feature>
-    <!-- end::newFeatures[] -->
+        <!-- tag::socialLogin[] -->
+        <feature>socialLogin-1.0</feature>
+        <!-- end::socialLogin[] -->
     </featureManager>
     <!-- end::featureManager[] -->
 

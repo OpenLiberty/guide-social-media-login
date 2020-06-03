@@ -11,23 +11,30 @@ public class LogoutHandler {
     @Inject
     private FacebookLogout facebookLogout;
 
+    // tag::inject[]
     @Inject
     private GitHubLogout gitHubLogout;
+    // end::inject[]
 
     // The values returned by UserProfileManager for social media name is id of configuration element
+    // tag::githubLoginName[]
     private static final String GITHUB_LOGIN = "githubLogin";
-    private static final String FACEBOOK_LOGIN = "facebookLogin";
+    // end::githubLoginName[]
 
     public ILogout getLogout() {
+        // tag::socialMediaName[]
         String socialMediaName = UserProfileManager.getUserProfile().getSocialMediaName();
+        // end::socialMediaName[]
+        // tag::switch[]
         switch (socialMediaName) {
+            // tag::handleGithubLogout[]
             case GITHUB_LOGIN:
                 return gitHubLogout;
-            case FACEBOOK_LOGIN:
-                return facebookLogout;
+            // end::handleGithubLogout[]
             default:
                 throw new IllegalArgumentException("Cannot find the right logout service " +
                         "for social media name " + socialMediaName);
+        // end::switch[]
         }
     }
 }

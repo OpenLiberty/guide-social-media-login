@@ -33,8 +33,10 @@ public class HelloServlet extends HttpServlet {
         String username = request.getUserPrincipal().getName();
         request.setAttribute("username", username);
 
+        // tag::serve[]
         request
                 .getRequestDispatcher("securedHello.jsp")
                 .forward(request,response);
+        // end::serve[]
     }
 }

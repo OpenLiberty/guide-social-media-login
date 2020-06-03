@@ -25,29 +25,40 @@ public class GitHubLogout implements ILogout {
     @ConfigProperty(name="github.client.secret")
     private String clientSecret;
 
-    public Response logout() throws ServletException {
+    public Response logout() {
+
+        // tag::unauthorizeUrl[]
         final String unauthorizeUrl = "https://api.github.com/" +
                 "applications/{client_id}/grant";
+        // end::unauthorizeUrl[]
 
+        // tag::accessToken[]
         String accessToken = UserProfileManager
                 .getUserProfile()
                 .getAccessToken();
+        // end::accessToken[]
 
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("access_token", accessToken);
 
+        // tag::encodeAuth[]
         String auth = clientId + ":" + clientSecret;
         byte[] encodedAuthStream = Base64
                 .getEncoder()
                 .encode(auth.getBytes(StandardCharsets.ISO_8859_1));
         String encodedAuth = new String(encodedAuthStream);
+        // end::encodeAuth[]
 
+        // tag::delete[]
         return ClientBuilder
                 .newClient()
                 .target(unauthorizeUrl)
                 .resolveTemplate("client_id", clientId)
                 .request()
+                // tag::authHeader[]
                 .header("Authorization", "Basic " + encodedAuth)
+                // end::authHeader[]
                 .method("DELETE", Entity.json(requestBody));
+        // end::delete[]
     }
 }

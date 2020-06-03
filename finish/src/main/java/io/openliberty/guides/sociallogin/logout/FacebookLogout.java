@@ -10,7 +10,7 @@ import javax.ws.rs.core.Response;
 @RequestScoped
 public class FacebookLogout implements ILogout {
 
-    public Response logout() throws ServletException {
+    public Response logout() {
 
         final String unauthorizeUrl = "https://graph.facebook.com/v2.8" +
                 "/{user_id}/permissions";

@@ -35,20 +35,37 @@ import java.util.logging.Logger;
         transportGuarantee = ServletSecurity.TransportGuarantee.CONFIDENTIAL))
 public class LogoutServlet extends HttpServlet {
 
+    // tag::inject[]
     @Inject
     private LogoutHandler logoutHandler;
+    //end::inject[]
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
-        Response logoutResponse = logoutHandler.getLogout().logout();
-        if (!logoutResponse.getStatusInfo().getFamily().equals(Response.Status.Family.SUCCESSFUL)) {
-            Logger.getLogger("LogoutServlet").log(Level.SEVERE, logoutResponse.readEntity(Map.class).toString());
+        // tag::revoke[]
+        Response logoutResponse = logoutHandler
+                .getLogout()
+                .logout();
+        // end::revoke[]
+        // tag::errorHandle[]
+        Response.Status.Family responseCodeFamily = logoutResponse
+                .getStatusInfo()
+                .getFamily();
+        if (!responseCodeFamily.equals(Response.Status.Family.SUCCESSFUL)) {
+            Logger.getLogger("LogoutServlet").log(Level.SEVERE,
+                    logoutResponse.readEntity(Map.class).toString());
             throw new ServletException("Could not delete OAuth2 application grant");
         }
+        // end::errorHandle[]
 
+        // tag::logout[]
         request.logout();
+        // end::logout[]
+
+        // tag::redirect[]
         response.sendRedirect("hello.html");
+        // end::redirect[]
     }
 }
