@@ -147,8 +147,8 @@ include::finish/src/main/java/io/openliberty/guides/sociallogin/LogoutServlet.ja
 [role='command']
 include::{common-includes}/devmode-build.adoc[]
 
-Check out the service that you created at the
-http://localhost:9080/api/hello.html[^] URL.
+Check out the service that you created at
+http://localhost:9080/api/hello.html[^].
 
 Try logging in using your social media account.
 After authenticating, you will be redirected to `\https://localhost:9080/api/hello`.
@@ -249,8 +249,8 @@ include::finish/src/main/java/io/openliberty/guides/sociallogin/logout/ILogout.j
 [role='command']
 include::{common-includes}/devmode-build.adoc[]
 
-Check out the service that you created at the
-http://localhost:9080/api/hello.html[^] URL.
+Check out the service that you created at
+http://localhost:9080/api/hello.html[^].
 
 Try logging in using your social media account.
 After authenticating, you will be redirected to `\https://localhost:9080/api/hello`.
