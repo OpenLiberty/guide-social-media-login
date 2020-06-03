@@ -38,7 +38,7 @@ The https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media L
 enables you to configure application authentication using one or more social media platforms,
 including GitHub, LinkedIn, Facebook, Twitter and Google.
 You can also create custom configuration for any other social media platform that implements
-the https://oauth.net/2[OAuth 2.0^] or https://openid.net/connect[OpenID Connect 1.0^] standard for authorization.`
+the https://oauth.net/2[OAuth 2.0^] or https://openid.net/connect[OpenID Connect 1.0^] standard for authorization.
 
 By the end of this guide, you will be able to authenticate users to your web service using GitHub.
 

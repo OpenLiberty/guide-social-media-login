@@ -36,9 +36,6 @@
                  clientSecret="${github.client.secret}" />
     <!-- end::githubLogin[] -->
 
-    <facebookLogin clientId="${facebook.client.id}"
-              clientSecret="${facebook.client.secret}" />
-
     <!-- tag::webApplication[] -->
     <webApplication location="guide-social-login.war"
                     contextRoot="${app.context.root}">
