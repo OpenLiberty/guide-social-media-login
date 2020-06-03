@@ -12,6 +12,9 @@
 // end::copyright[]
 package io.openliberty.guides.sociallogin;
 
+import io.openliberty.guides.sociallogin.logout.LogoutHandler;
+
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HttpConstraint;
 import javax.servlet.annotation.ServletSecurity;
@@ -19,7 +22,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @WebServlet(name = "LogoutServlet", urlPatterns = "/logout")
 @ServletSecurity(value = @HttpConstraint(rolesAllowed = {"users"},

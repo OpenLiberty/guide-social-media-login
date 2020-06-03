@@ -3,12 +3,11 @@ package io.openliberty.guides.sociallogin.logout;
 import com.ibm.websphere.security.social.UserProfileManager;
 
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 
 @RequestScoped
 public class LogoutHandler {
 
-    @Produces
     public ILogout getLogout() {
         String socialMediaName = UserProfileManager.getUserProfile().getSocialMediaName();
         switch (socialMediaName) {

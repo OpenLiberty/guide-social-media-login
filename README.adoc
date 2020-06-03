@@ -192,7 +192,8 @@ The GitHub [hotspot=accessToken file=0]`access token` retrieved from the user's 
 ----
 [role="edit_command_text"]
 Inject [hotspot=inject file=1]`GitHubLogout`.
-Add a switch case for [hotspot=handleGithubLogout file=1]`githubLogin` which returns an instance of `GitHubLogout`.
+Add a switch case for [hotspot=handleGithubLogout hotspot=githubLoginName file=1]`githubLogin` which returns an
+instance of `GitHubLogout`.
 
 `LogoutHandler` will [hotspot=switch file=1]`return` the implementation of `ILogout` based on the name of the social
 media provider used by a user which is retrieved using the [hotspot=socialMediaName file=1]`UserProfileManager`.
@@ -264,7 +265,7 @@ include::{common-includes}/devmode-quit.adoc[]
 
 == Great work! You're done!
 
-You secured a simple RESTful web service in Open Liberty by using the Social Media Login feature.
+You secured a web application in Open Liberty by using the Social Media Login feature.
 
 == Next Steps
 

@@ -8,15 +8,11 @@ import javax.inject.Inject;
 @RequestScoped
 public class LogoutHandler {
 
-    @Inject
-    private FacebookLogout facebookLogout;
-
     // tag::inject[]
     @Inject
     private GitHubLogout gitHubLogout;
     // end::inject[]
 
-    // The values returned by UserProfileManager for social media name is id of configuration element
     // tag::githubLoginName[]
     private static final String GITHUB_LOGIN = "githubLogin";
     // end::githubLoginName[]
@@ -32,8 +28,8 @@ public class LogoutHandler {
                 return gitHubLogout;
             // end::handleGithubLogout[]
             default:
-                throw new IllegalArgumentException("Cannot find the right logout service " +
-                        "for social media name " + socialMediaName);
+                throw new IllegalArgumentException("Cannot find the right logout " +
+                        "service for social media name " + socialMediaName);
         // end::switch[]
         }
     }

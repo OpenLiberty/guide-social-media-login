@@ -14,8 +14,6 @@ package io.openliberty.guides.sociallogin;
 
 import io.openliberty.guides.sociallogin.logout.LogoutHandler;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HttpConstraint;
