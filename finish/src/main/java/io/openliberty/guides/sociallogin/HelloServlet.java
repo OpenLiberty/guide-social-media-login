@@ -25,6 +25,8 @@ import java.io.IOException;
 @ServletSecurity(value = @HttpConstraint(rolesAllowed = {"users"},
         transportGuarantee = ServletSecurity.TransportGuarantee.CONFIDENTIAL))
 public class HelloServlet extends HttpServlet {
+	
+	private static final long serialVersionUID = 1L;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
