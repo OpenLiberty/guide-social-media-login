@@ -28,7 +28,7 @@ public class LogoutHandler {
                 return gitHubLogout;
             // end::handleGithubLogout[]
             default:
-                throw new IllegalArgumentException("Cannot find the right logout " +
+                throw new UnsupportedOperationException("Cannot find the right logout " +
                         "service for social media name " + socialMediaName);
         // end::switch[]
         }

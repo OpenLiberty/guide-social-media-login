@@ -13,7 +13,7 @@
     <httpEndpoint httpPort="${default.http.port}"
                   httpsPort="${default.https.port}"
                   id="defaultHttpEndpoint"
-                  host="localhost" />
+                  host="*" />
 
     <keyStore id="defaultKeyStore"
               password="changeit" />

@@ -1,7 +1,7 @@
 package io.openliberty.guides.sociallogin.logout;
 
-import javax.servlet.ServletException;
+import javax.ws.rs.core.Response;
 
 public interface ILogout {
-    void logout() throws ServletException;
+    Response logout();
 }

@@ -12,6 +12,7 @@
 // end::copyright[]
 package io.openliberty.guides.sociallogin;
 
+import io.openliberty.guides.sociallogin.logout.ILogout;
 import io.openliberty.guides.sociallogin.logout.LogoutHandler;
 
 import javax.inject.Inject;
@@ -33,10 +34,27 @@ import java.util.logging.Logger;
         transportGuarantee = ServletSecurity.TransportGuarantee.CONFIDENTIAL))
 public class LogoutServlet extends HttpServlet {
 
+    @Inject
+    private LogoutHandler logoutHandler;
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+
+        ILogout logout = logoutHandler.getLogout();
+        Response logoutResponse = logout.logout();
+
+        Response.Status.Family responseCodeFamily = logoutResponse
+                .getStatusInfo()
+                .getFamily();
+        if (!responseCodeFamily.equals(Response.Status.Family.SUCCESSFUL)) {
+            Logger.getLogger("LogoutServlet").log(Level.SEVERE,
+                    logoutResponse.readEntity(Map.class).toString());
+            throw new ServletException("Could not delete OAuth2 application grant");
+        }
+
         request.logout();
+
         response.sendRedirect("hello.html");
     }
 }

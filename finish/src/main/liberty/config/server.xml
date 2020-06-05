@@ -18,7 +18,7 @@
     <httpEndpoint httpPort="${default.http.port}"
                   httpsPort="${default.https.port}"
                   id="defaultHttpEndpoint"
-                  host="localhost" />
+                  host="*" />
 
     <!-- Set up default key store, trust stores for auth APIs -->
     <!-- tag::keystore[] -->

@@ -12,6 +12,7 @@
 // end::copyright[]
 package io.openliberty.guides.sociallogin;
 
+import io.openliberty.guides.sociallogin.logout.ILogout;
 import io.openliberty.guides.sociallogin.logout.LogoutHandler;
 
 import javax.inject.Inject;
@@ -42,11 +43,13 @@ public class LogoutServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
+        // tag::getLogout[]
+        ILogout logout = logoutHandler.getLogout();
+        // end::getLogout[]
         // tag::revoke[]
-        Response logoutResponse = logoutHandler
-                .getLogout()
-                .logout();
+        Response logoutResponse = logout.logout();
         // end::revoke[]
+
         // tag::errorHandle[]
         Response.Status.Family responseCodeFamily = logoutResponse
                 .getStatusInfo()
