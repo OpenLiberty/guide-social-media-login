@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 <head>
-    <title>Title</title>
+    <title>Social Media Login Guide</title>
 </head>
 <body>
 <h1>Social Media Login Guide</h1>

@@ -33,8 +33,8 @@ import java.util.logging.Logger;
 @ServletSecurity(value = @HttpConstraint(rolesAllowed = {"users"},
         transportGuarantee = ServletSecurity.TransportGuarantee.CONFIDENTIAL))
 public class LogoutServlet extends HttpServlet {
-    
-    private static final long serialVersionUID = 2L;
+
+    private static final long serialVersionUID = 1L;
 
     @Inject
     private LogoutHandler logoutHandler;
