@@ -37,7 +37,7 @@ method for your users without having to explicitly implement it.
 The https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login Feature^] in Open Liberty
 enables you to configure application authentication using one or more social media platforms,
 including GitHub, LinkedIn, Facebook, Twitter and Google.
-You can also create custom configuration for any other social media platform that implements
+You can also create a custom configuration for any other social media platform that implements
 the https://oauth.net/2[OAuth 2.0^] or https://openid.net/connect[OpenID Connect 1.0^] standard for authorization.
 
 By the end of this guide, you will be able to authenticate users to your web service using GitHub.
@@ -55,7 +55,7 @@ a new https://github.com/settings/developers[application^] in your https://githu
 On the Settings > Developer settings > OAuth Apps page of your account, register a new application.
 
 Set the Homepage URL to `\https://localhost:9443` and
-the Authorization callback URL to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
+the authorization callback URL to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
 
 When the registration is complete, the client ID and client secret credentials are displayed.
 To provide your application with the credentials, export the following environment variables: `GITHUB_CLIENT_ID` and
@@ -256,7 +256,7 @@ include::{common-includes}/devmode-quit.adoc[]
 
 You secured a web application in Open Liberty by using the Social Media Login feature.
 
-== Next Steps
+== Next steps
 
 As an exercise, configure a second social media provider, Facebook, for social media login for your application.
 If more than one social media login provider is added, there’s a selection form presented to the user,
