@@ -202,7 +202,7 @@ the user for the application. The JAX-RS [hotspot=delete file=0]`HttpClient` is 
 
 The [hotspot=encodeAuth file=0]`encoded` client ID and client secret, obtained from the `github.client.id` and
 `github.client.secret` config properties are added to the request as an
-[hotspot=authHeader file=0]`Authorization: Basic ...` header.
+[hotspot=authHeader file=0]`Authorization` header.
 
 The GitHub [hotspot=accessToken file=0]`access token` retrieved from the user's `UserProfile` using the
 [hotspot=accessToken file=0]`UserProfileManager`, is sent as part of the
