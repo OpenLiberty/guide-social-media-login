@@ -259,8 +259,8 @@ You secured a web application in Open Liberty by using the Social Media Login fe
 
 == Next steps
 
-As an exercise, configure a second social media provider, Facebook, for social media login for your application.
-If more than one social media login provider is added, there’s a selection form presented to the user,
+As an exercise, configure Facebook as a second social media provider for social media login for your application.
+If more than one social media login provider is added, a selection form is presented to the user,
 where all the possible social media providers configured in your application are shown for the user to pick from.
 
 Create the `<facebookLogin />` configuration element in `server.xml` to setup login for Facebook.
