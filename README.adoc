@@ -164,7 +164,7 @@ http://localhost:9080/api/hello.html[^].
 == Implementing logout
 
 The [hotspot file=2]`LogoutServlet` provided in the `start` directory uses the
-[hotspot=logout file=2]`HttpServletRequest#logout()`
+[hotspot=logout file=2]`logout()` method in `HttpServletRequest`.
 method to log the user out of the application, after which the user is redirected to
 [hotspot=redirect file=2]`hello.html`.
 
@@ -172,15 +172,15 @@ You are also provided with a [hotspot file=1]`LogoutHandler` class and [hotspot 
 custom logout logic to revoke the application's permissions from a user's account when they choose to log out of the
 application.
 
-Before using [hotspot=logout file=2]`HttpServletRequest#logout()` to log the user out of the application,
-[hotspot=getLogout hotspot=inject file=2]`LogoutHandler#getLogout()` gets an implementation of `ILogout`
-for GitHub and revokes OAuth2 permissions granted to the application by the user using
-[hotspot=revoke file=2]`ILogout#logout()`.
+Before using `HttpServletRequest` [hotspot=logout file=2]`logout()` method to log the user out of the application,
+the `LogoutHandler` [hotspot=getLogout hotspot=inject file=2]`getLogout()` method gets an implementation of `ILogout`
+for GitHub and revokes OAuth2 permissions granted to the application by the user using the `ILogout`
+[hotspot=revoke file=2]`logout()` method.
 
-The response returned by [hotspot=revoke file=2]`ILogout#logout()` is verified by checking if it has a
+The response returned by the `ILogout` [hotspot=revoke file=2]`logout()` method is verified by checking if it has a
 [hotspot=errorHandle file=2]`2xx` series status code.
 
-[hotspot=getLogout file=2]`LogoutHandler#getLogout()` will [hotspot=switch file=1]`return` the
+The `LogoutHandler` [hotspot=getLogout file=2]`getLogout()` method will [hotspot=switch file=1]`return` the
 [hotspot=inject file=1]`implementation` of `ILogout` based on the name of the social media provider used
 by a user which is retrieved using the [hotspot=socialMediaName file=1]`UserProfileManager`.
 The social media name returned by [hotspot=socialMediaName file=1]`UserProfileManager` is the `id` of the login
