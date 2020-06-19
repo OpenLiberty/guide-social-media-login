@@ -206,7 +206,7 @@ The [hotspot=encodeAuth file=0]`encoded` client ID and client secret, obtained f
 
 The GitHub [hotspot=accessToken file=0]`access token` retrieved from the user's `UserProfile` using the
 [hotspot=accessToken file=0]`UserProfileManager`, is sent as part of the
-[hotspot=requestBody hotspot=accessTokenBody file=0]`request body`.
+[hotspot=requestBody hotspot=createAccessTokenBody hotspot=addBody file=0]`request body`.
 
 
 GitHubLogout.java

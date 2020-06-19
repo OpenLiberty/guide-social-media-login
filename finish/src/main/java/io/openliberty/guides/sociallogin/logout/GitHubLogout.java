@@ -49,8 +49,10 @@ public class GitHubLogout implements ILogout {
                 .getAccessToken();
         // end::accessToken[]
 
+        // tag::createAccessTokenBody[]
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("access_token", accessToken);
+        // end::createAccessTokenBody[]
 
         // tag::encodeAuth[]
         String auth = clientId + ":" + clientSecret;
@@ -69,7 +71,9 @@ public class GitHubLogout implements ILogout {
                 // tag::authHeader[]
                 .header("Authorization", "Basic " + encodedAuth)
                 // end::authHeader[]
+                // tag::addBody[]
                 .method("DELETE", Entity.json(requestBody));
+                // end::addBody[]
         // end::delete[]
     }
 }
