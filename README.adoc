@@ -234,10 +234,10 @@ include::finish/src/main/java/io/openliberty/guides/sociallogin/logout/ILogout.j
 ----
 
 // =================================================================================================
-// Building the application
+// Running the application
 // ================================================================================================
-[role='command']
-include::{common-includes}/devmode-build.adoc[]
+The Open Liberty server was started in development mode at the beginning of the guide and all the changes were
+automatically picked up.
 
 Check out the service that you created at
 http://localhost:9080/api/hello.html[^].
