@@ -165,8 +165,8 @@ http://localhost:9080/api/hello.html[^].
 == Implementing logout
 
 The [hotspot file=2]`LogoutServlet` provided in the `start` directory uses the
-[hotspot=logout file=2]`logout()` method in `HttpServletRequest`.
-method to log the user out of the application after which the user is redirected to
+[hotspot=logout file=2]`logout()` method in the `HttpServletRequest`.
+class to log the user out of the application after which the user is redirected to
 [hotspot=redirect file=2]`hello.html`.
 
 You are also provided with a [hotspot file=1]`LogoutHandler` class and [hotspot file=3]`ILogout` interface to add
