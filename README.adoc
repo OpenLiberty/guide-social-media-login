@@ -182,7 +182,7 @@ The response returned by this [hotspot=revoke file=2]`logout()` method is verifi
 The [hotspot=logout file=2]`request.logout()` method is then called to log the user out of the
 application.
 
-The [hotspot=getLogout file=2]`logoutHandler.getLogout()` method [hotspot=switch file=1]`return`s the
+The [hotspot=getLogout file=2]`logoutHandler.getLogout()` method [hotspot=switch file=1]`returns` the
 [hotspot=inject file=1]`implementation` of `ILogout` based on the name of the social media provider that is used
 by a user. The social media provider's name is retrieved by using the
 [hotspot=socialMediaName file=1]`UserProfileManager`.
