@@ -172,17 +172,17 @@ class to log the user out of the application after which the user is redirected 
 You are also provided with a [hotspot file=1]`LogoutHandler` class and [hotspot file=3]`ILogout` interface to add
 custom logout logic to revoke the application's permissions from a user's account.
 
-The `LogoutHandler` [hotspot=getLogout hotspot=inject file=2]`getLogout()` method gets an implementation
-of `ILogout` for GitHub and uses the `ILogout` [hotspot=revoke file=2]`logout()` method to revoke OAuth2 permissions
-that are granted to the application by the user.
+The [hotspot=getLogout hotspot=inject file=2]`logoutHandler.getLogout()` method gets an implementation
+of `ILogout` for GitHub and uses the [hotspot=revoke file=2]`logout()` method of the `ILogout` interface to revoke
+OAuth2 permissions that are granted to the application by the user.
 
-The response returned by the `ILogout` [hotspot=revoke file=2]`logout()` method is verified by checking whether it has a
+The response returned by this [hotspot=revoke file=2]`logout()` method is verified by checking whether it has a
 [hotspot=errorHandle file=2]`2xx` series status code.
 
-The `HttpServletRequest` [hotspot=logout file=2]`logout()` method is then called to log the user out of the
+The [hotspot=logout file=2]`request.logout()` method is then called to log the user out of the
 application.
 
-The `LogoutHandler` [hotspot=getLogout file=2]`getLogout()` method [hotspot=switch file=1]`return`s the
+The [hotspot=getLogout file=2]`logoutHandler.getLogout()` method [hotspot=switch file=1]`return`s the
 [hotspot=inject file=1]`implementation` of `ILogout` based on the name of the social media provider that is used
 by a user. The social media provider's name is retrieved by using the
 [hotspot=socialMediaName file=1]`UserProfileManager`.
