@@ -1,3 +1,15 @@
+// tag::copyright[]
+/*******************************************************************************
+ * Copyright (c) 2020 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - Initial implementation
+ *******************************************************************************/
+// end::copyright[]
 package io.openliberty.guides.sociallogin.logout;
 
 import com.ibm.websphere.security.social.UserProfileManager;
@@ -37,8 +49,10 @@ public class GitHubLogout implements ILogout {
                 .getAccessToken();
         // end::accessToken[]
 
+        // tag::createAccessTokenBody[]
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("access_token", accessToken);
+        // end::createAccessTokenBody[]
 
         // tag::encodeAuth[]
         String auth = clientId + ":" + clientSecret;
@@ -57,7 +71,9 @@ public class GitHubLogout implements ILogout {
                 // tag::authHeader[]
                 .header("Authorization", "Basic " + encodedAuth)
                 // end::authHeader[]
+                // tag::addBody[]
                 .method("DELETE", Entity.json(requestBody));
+                // end::addBody[]
         // end::delete[]
     }
 }
