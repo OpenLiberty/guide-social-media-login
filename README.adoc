@@ -159,8 +159,6 @@ http://localhost:9080/api/hello.html[^].
 
 Try logging in with your social media account.
 After authenticating, you will be redirected to `\https://localhost:9080/api/hello`.
-When you click the `logout` button, you will be unauthenticated and redirected back to
-http://localhost:9080/api/hello.html[^].
 
 == Implementing logout
 
