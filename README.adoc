@@ -86,13 +86,8 @@ set GITHUB_CLIENT_SECRET=[github-client-secret]
 In the `start` directory, you are provided with an application that is secured through `BASIC` authentication.
 When you access the [hotspot file=1]`hello.html` page, find the [hotspot=btnLogin file=1]`login` button.
 
-Clicking the [hotspot=btnLogin file=1]`login` button opens a login dialog, and after authentication, redirects you to
-the [hotspot=login file=1]`/hello` endpoint served by [hotspot file=2]`HelloServlet`, which serves the
-[hotspot=serve file=2]`securedHello.jsp` page.
-
-The [hotspot file=3]`securedHello.jsp` page contains a [hotspot=btnLogout file=3]`logout` button that makes a
-`POST` request to the [hotspot=logout file=3]`/logout` endpoint served by [hotspot file=4]`LogoutServlet`.
-
+Clicking the [hotspot=btnLogin file=1]`login` button opens a login dialog that requests a username and password for
+`defaultRealm`.
 Enabling the Social Login feature will replace the login dialogue with social media login.
 
 First, navigate to the `start` directory.
@@ -158,7 +153,25 @@ Check out the service that you created at
 http://localhost:9080/api/hello.html[^].
 
 Try logging in with your social media account.
-After authenticating, you will be redirected to `\https://localhost:9080/api/hello`.
+After authentication, you are redirected to the [hotspot=login file=1]`/hello` endpoint served by
+[hotspot file=2]`HelloServlet`, which serves the
+[hotspot=serve file=2]`securedHello.jsp` page.
+
+The [hotspot file=3]`securedHello.jsp` page contains a [hotspot=btnLogout file=3]`logout` button that makes a
+`POST` request to the [hotspot=logout file=3]`/logout` endpoint served by [hotspot file=4]`LogoutServlet`.
+
+Since the logout feature is not fully implemented, clicking the logout button returns an error:
+
+[role='no_copy']
+----
+ Exception thrown by application class 'io.openliberty.guides.sociallogin.LogoutServlet.doPost:50'
+java.lang.NullPointerException:
+at io.openliberty.guides.sociallogin.LogoutServlet.doPost(LogoutServlet.java:50)
+at javax.servlet.http.HttpServlet.service(HttpServlet.java:706)
+at javax.servlet.http.HttpServlet.service(HttpServlet.java:791)
+at com.ibm.ws.webcontainer.servlet.ServletWrapper.service(ServletWrapper.java:1230)
+at [internal classes]
+----
 
 == Implementing logout
 
