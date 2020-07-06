@@ -2,17 +2,23 @@
     <!-- tag::featureManager[] -->
     <featureManager>
         <feature>jsp-2.3</feature>
-        <!-- tag::newFeatures[] -->
-        <feature>appSecurity-3.0</feature>
+        <feature>appSecurity-2.0</feature>
         <feature>transportSecurity-1.0</feature>
-        <feature>socialLogin-1.0</feature>
         <feature>mpConfig-1.4</feature>
-        <!-- end::newFeatures[] -->
+        <feature>jaxrsClient-2.1</feature>
+        <feature>cdi-2.0</feature>
+        <feature>jsonb-1.0</feature>
+        <feature>jwt-1.0</feature>
+        <!-- tag::socialLogin[] -->
+        <feature>socialLogin-1.0</feature>
+        <!-- end::socialLogin[] -->
     </featureManager>
     <!-- end::featureManager[] -->
 
-    <httpEndpoint httpPort="${default.http.port}" httpsPort="${default.https.port}"
-                  id="defaultHttpEndpoint" host="localhost" />
+    <httpEndpoint httpPort="${default.http.port}"
+                  httpsPort="${default.https.port}"
+                  id="defaultHttpEndpoint"
+                  host="*" />
 
     <!-- Set up default key store, trust stores for auth APIs -->
     <!-- tag::keystore[] -->
@@ -48,5 +54,4 @@
         <!-- end::applicationBnd[] -->
     </webApplication>
     <!-- end::webApplication[] -->
-
 </server>

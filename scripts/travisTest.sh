@@ -9,6 +9,10 @@ set -euxo pipefail
 
 # LMP 3.0+ goals are listed here: https://github.com/OpenLiberty/ci.maven#goals
 
+# Required environment variable
+export GITHUB_CLIENT_ID=placeholder
+export GITHUB_CLIENT_SECRET=placeholder
+
 ## Rebuild the application
 #       package                   - Take the compiled code and package it in its distributable format.
 #       liberty:create            - Create a Liberty server.

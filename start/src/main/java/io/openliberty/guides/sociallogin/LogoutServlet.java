@@ -36,23 +36,16 @@ public class LogoutServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    // tag::inject[]
     @Inject
     private LogoutHandler logoutHandler;
-    //end::inject[]
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
-        // tag::getLogout[]
         ILogout logout = logoutHandler.getLogout();
-        // end::getLogout[]
-        // tag::revoke[]
         Response logoutResponse = logout.logout();
-        // end::revoke[]
 
-        // tag::errorHandle[]
         Response.Status.Family responseCodeFamily = logoutResponse
                 .getStatusInfo()
                 .getFamily();
@@ -61,14 +54,9 @@ public class LogoutServlet extends HttpServlet {
                     logoutResponse.readEntity(Map.class).toString());
             throw new ServletException("Could not delete OAuth2 application grant");
         }
-        // end::errorHandle[]
 
-        // tag::logout[]
         request.logout();
-        // end::logout[]
 
-        // tag::redirect[]
         response.sendRedirect("hello.html");
-        // end::redirect[]
     }
 }
