@@ -14,7 +14,7 @@
 :page-essential-order: 1
 :page-description: Learn how to authenticate users with the Open Liberty Social Media Login feature.
 :guide-author: Open Liberty
-:page-tags: ['Java EE', 'Jakarta EE', 'Security']
+:page-tags: ['Security']
 :page-related-guides: ['microprofile-jwt']
 :page-permalink: /guides/{projectid}
 :page-seo-title: Authenticating users with Social Media Login
@@ -25,8 +25,11 @@
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website^].
 
-A getting started tutorial with examples on how to secure Java applications by authenticating users through social media
-providers, such as GitHub, using the Open Liberty Social Media Login feature.
+//A getting started tutorial with examples on how to secure Java applications by authenticating users through social media
+//providers, such as GitHub, using the Open Liberty Social Media Login feature.
+
+You'll explore how to log users into your application with their social media accounts using the Social Media Login
+feature.
 
 == What you'll learn
 
