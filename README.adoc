@@ -6,7 +6,7 @@
 // Contributors:
 //     IBM Corporation
 //
-:projectid: social-login
+:projectid: social-media-login
 :page-layout: guide-multipane
 :page-duration: 30 minutes
 :page-releasedate: 2020-06-20
@@ -28,8 +28,8 @@ NOTE: This repository contains the guide documentation source. To view the guide
 //A getting started tutorial with examples on how to secure Java applications by authenticating users through social media
 //providers, such as GitHub, using the Open Liberty Social Media Login feature.
 
-You'll explore how to log users into your application with their social media accounts using the Social Media Login
-feature.
+You'll explore how to log users into your application with their social media accounts using the
+Open Liberty Social Media Login feature.
 
 == What you'll learn
 
