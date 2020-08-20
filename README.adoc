@@ -44,7 +44,20 @@ including GitHub, LinkedIn, Facebook, Twitter, and Google.
 You can also create a custom configuration for any other social media platform that implements
 the https://oauth.net/2[OAuth 2.0^] or https://openid.net/connect[OpenID Connect 1.0^] standard for authorization.
 
-By the end of this guide, you will be able to use GitHub to authenticate users to your web service.
+The application provided with this guide is secured through basic authentication.
+The application includes a simple welcome page which includes a message and a **Log in** button.
+The welcome page is defined in the [hotspot]`hello.html` file and the button is
+defined in the [hotspot=btnLogin]`button` element of that page.
+When the application user clicks the **Log in** button, a dialog box opens requesting the user's username and password
+for authenticating to the service.
+In this guide, you will replace the basic authentication dialog with a dialog to log in with a social media provider.
+
+hello.html
+[source ,html, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/src/main/webapp/hello.html[]
+----
+
 
 // =================================================================================================
 // Getting Started
@@ -88,35 +101,29 @@ set GITHUB_CLIENT_SECRET=[github-client-secret]
 ----
 --
 
-== Configuring GitHub social media login
-In the `start` directory, you are provided with an application that is secured through basic authentication.
-When you access the [hotspot file=1]`hello.html` page, find the login button, defined in
-[hotspot=btnLogin file=1]`hello.html`.
-
-Clicking the login button opens a login dialog that requests a username and password for
-authenticating to the service.
-Enabling the Social Login feature will replace the login dialogue with social media login.
+== Building and running the application in dev mode
 
 First, navigate to the `start` directory.
 
 [role='command']
 include::{common-includes}/devmode-start.adoc[]
 
+== Configuring GitHub as a social media login
+
+Enable the Social Media Login feature in the application by updating the `server.xml` configuration file.
+
 [role="code_command", subs="quotes"]
 ----
-#Update this `server.xml` file.#
+#Replace the `server.xml` file.#
 `src/main/liberty/config/server.xml`
 ----
-[role="edit_command_text"]
-Add the [hotspot=socialLogin file=0]`socialLogin-1.0` feature definition to the existing list of features.
-Add the [hotspot=githubLogin file=0]`<githubLogin />` configuration element to the server configuration.
 
-Adding the [hotspot=socialLogin file=0]`socialLogin-1.0` feature definition enables social media login functionality to
-the application, which allows you to use the [hotspot=githubLogin file=0]`<githubLogin />` configuration element to
-configure GitHub login.
+The [hotspot=socialLogin]`socialLogin-1.0` feature definition enables the Social Media Login feature in the
+application so that you can the [hotspot=githubLogin file=0]`githubLogin` configuration element to
+configure GitHub as a social media login.
 
 The client ID and client secret for your GitHub OAuth2 application are injected into the
-[hotspot=githubLogin file=0]`<githubLogin />` configuration element with the values of `github.client.id` and
+[hotspot=githubLogin]`githubLogin` configuration element with the values of `github.client.id` and
 `github.client.secret`.
 These values are supplied by the environment variables `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`.
 
@@ -124,30 +131,6 @@ server.xml
 [source, xml, linenums, role='code_column hide_tags=copyright']
 ----
 include::finish/src/main/liberty/config/server.xml[]
-----
-
-hello.html
-[source ,html, linenums, role='code_column hide_tags=copyright']
-----
-include::finish/src/main/webapp/hello.html[]
-----
-
-HelloServlet.java
-[source ,java, linenums, role='code_column hide_tags=copyright']
-----
-include::finish/src/main/java/io/openliberty/guides/sociallogin/HelloServlet.java[]
-----
-
-securedHello.jsp
-[source ,html, linenums, role='code_column hide_tags=copyright']
-----
-include::finish/src/main/webapp/securedHello.jsp[]
-----
-
-LogoutServlet.java
-[source ,java, linenums, role='code_column hide_tags=copyright']
-----
-include::finish/src/main/java/io/openliberty/guides/sociallogin/LogoutServlet.java[]
 ----
 
 // =================================================================================================
@@ -160,8 +143,8 @@ Check out the service that you created at
 http://localhost:9080/api/hello.html[^].
 
 Try logging in with your social media account.
-After you log in with your GitHub account, you will need to authorize access to your GitHub user data
-by the OAuth application you created in the prerequisites section.
+After you log in with your GitHub account, authorize access to your GitHub user data
+by the OAuth application you created in the **Creating a GitHub OAuth2 Application** section.
 After authentication, you are redirected to the [hotspot=login file=1]`/hello` endpoint served by
 [hotspot file=2]`HelloServlet`, which serves the
 [hotspot=serve file=2]`securedHello.jsp` page.
@@ -185,33 +168,33 @@ at [internal classes]
 == Implementing logout
 
 The [hotspot file=2]`LogoutServlet` provided in the `start` directory uses the
-[hotspot=logout file=2]`logout()` method in the [hotspot file=2]`HttpServletRequest`class to log the user out of the
+[hotspot=logout file=2]`logout()` method in the [hotspot file=2]`HttpServletRequest` class to log the user out of the
 application. After logging the user out, the user is redirected to [hotspot=redirect file=2]`hello.html`.
 
 You are also provided with a [hotspot file=1]`LogoutHandler` class and [hotspot file=3]`ILogout` interface to add
-custom logout logic to revoke the application's permissions from a user's account.
+custom logout logic which revokes the application's permissions from a user's account.
 
 The [hotspot=getLogout hotspot=inject file=2]`logoutHandler.getLogout()` method gets an implementation
-of `ILogout` for GitHub and uses the [hotspot=revoke file=2]`logout()` method of the `ILogout` interface to revoke
-OAuth2 permissions that are granted to the application by the user.
+of the `ILogout` interface for GitHub and uses the [hotspot=revoke file=2]`logout()` method of the `ILogout` interface
+to revoke the OAuth2 permissions that are granted to the application by the user.
 
-The response returned by this [hotspot=revoke file=2]`logout()` method is verified by checking whether it has a
-[hotspot=errorHandle file=2]`2xx` series status code.
+The response returned by this [hotspot=revoke file=2]`logout()` method is verified by the application which checks
+whether it has a [hotspot=errorHandle file=2]`2xx` series status code.
 
 The [hotspot=logout file=2]`request.logout()` method is then called to log the user out of the
 application.
 
 The [hotspot=getLogout file=2]`logoutHandler.getLogout()` method [hotspot=switch file=1]`returns` the
-[hotspot=inject file=1]`implementation` of `ILogout` based on the name of the social media provider that is used
-by a user. The social media provider's name is retrieved by using the
-[hotspot=socialMediaName file=1]`UserProfileManager`.
-The social media provider's name that is returned by [hotspot=socialMediaName file=1]`UserProfileManager` is the `id`
-of the login configuration.
-
-In this case, when the user uses GitHub, the name of the social media provider is
+[hotspot=inject file=1]`implementation` of the `ILogout` interface based on the name of the social media provider that
+is used by a user.
+The social media provider's name is retrieved by using the [hotspot=socialMediaName file=1]`UserProfileManager` class.
+The social media provider's name that is returned by the [hotspot=socialMediaName file=1]`UserProfileManager` class is
+the ID of the social media login configuration.
+In our application, when the application user selects GitHub, the name of the social media provider is
 [hotspot=githubLoginName file=1]`githubLogin`.
 
-Implement [hotspot file=3]`ILogout` for revoking permissions for the application from the user's GitHub account.
+Implement the [hotspot file=3]`ILogout` interface to revoke permissions for the application from the user's GitHub
+account.
 
 [role="code_command", subs="quotes"]
 ----
@@ -219,18 +202,20 @@ Implement [hotspot file=3]`ILogout` for revoking permissions for the application
 `src/main/java/io/openliberty/guides/sociallogin/logout/GitHubLogout.java`
 ----
 
-GitHub's REST API provides a `DELETE` [hotspot=unauthorizeUrl file=0]`endpoint` that is used to revoke permissions
-from the user for the application.
+GitHub's REST API provides a `DELETE` endpoint, stored in the [hotspot=unauthorizeUrl file=0]`unauthorizeUrl` variable,
+that is used to revoke permissions from the user for the application.
 The JAX-RS [hotspot=delete file=0]`HttpClient` is used to send a request to this endpoint.
 
-The [hotspot=encodeAuth file=0]`encoded` client ID and client secret, obtained from the `github.client.id` and
-`github.client.secret` config properties are added to the request as an
-[hotspot=authHeader file=0]`Authorization` header.
+Your GitHub application's client ID and client secret are obtained from the `github.client.id` and `github.client.secret`
+config properties.
+These credentials are encoded and stored in the [hotspot=encodeAuth file=0]`encodedAuth` variable and added to the
+request as an [hotspot=authHeader file=0]`Authorization` header.
 
-The GitHub [hotspot=accessToken file=0]`access token` that is retrieved from the user's `UserProfile` through the
-[hotspot=accessToken file=0]`UserProfileManager` is sent as part of the
-[hotspot=requestBody hotspot=createAccessTokenBody hotspot=addBody file=0]`request body`.
-
+The GitHub access token for a user, which is stored in the [hotspot=accessToken file=0]`accessToken` variable, is
+retrieved from their user profile, modelled by the `UserProfile` class. The `UserProfile` object can be retrieved using
+the `UserProfileManager` class.
+The access token is used in the DELETE request's body, which is stored in the
+[hotspot=createAccessTokenBody hotspot=addBody file=0]`requestBody` variable.
 
 GitHubLogout.java
 [source, Java, linenums, role='code_column hide_tags=copyright']
@@ -259,20 +244,18 @@ include::finish/src/main/java/io/openliberty/guides/sociallogin/logout/ILogout.j
 // =================================================================================================
 // Running the application
 // ================================================================================================
-The Open Liberty server was started in development mode at the beginning of the guide and all the changes were
-automatically picked up.
 
 Check out the service that you created at
 http://localhost:9080/api/hello.html[^].
 
-Try logging in with your social media account.
+Try logging in with your GitHub account.
 After authenticating, you will be redirected to `\https://localhost:9080/api/hello`.
 When you click the `logout` button, you are unauthenticated and redirected back to
 http://localhost:9080/api/hello.html[^].
 
 If you try logging in again, you are asked to reauthorize your application with GitHub, and authenticated and
-redirected to `\https://localhost:9080/api/hello`. As long as you are logged into GitHub, you will not be required
-to log into GitHub by entering your GitHub credentials.
+redirected to `\https://localhost:9080/api/hello`.
+As long as you are logged into GitHub, the application does not prompt you to enter your GitHub credentials.
 
 [role='command']
 include::{common-includes}/devmode-quit.adoc[]
@@ -287,16 +270,7 @@ As an exercise, configure Facebook as a second social media provider for social 
 If more than one social media login provider is added, a selection form is presented to the user. This form contains
 all the possible social media providers that are configured in your application.
 
-Create the `<facebookLogin />` configuration element in `server.xml` to set up login for Facebook.
-Similar to `<githubLogin />`, `<facebookLogin />` also requires only a client ID and client secret.
-
-Then, implement `ILogout` as `FacebookLogout` for revoking permissions for the application from the Facebook user
-account and update `LogoutHandler` to inject `FacebookLogout` and return it when the social media name is
-`facebookLogin`.
-
-The following links to Facebook documentation provides any additional information about setting up an OAuth2
-application and revoking permissions.
-
+See the Facebook documentation additional information about setting up an OAuth2 application and revoking permissions:
 - https://developers.facebook.com/docs/apps#register[Registering for a Facebook application^]
 - https://developers.facebook.com/docs/facebook-login/web#redirecturl[Adding Facebook Login to your Facebook Application^]
 - https://developers.facebook.com/docs/facebook-login/permissions/requesting-and-revoking#revokelogin[Revoking Facebook Login^]

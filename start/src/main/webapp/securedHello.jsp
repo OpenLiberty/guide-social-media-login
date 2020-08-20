@@ -13,7 +13,7 @@
 <!-- tag::logout[] -->
 <form method="post" action="logout">
     <!-- tag::logoutButton[] -->
-    <button type="submit">Logout</button>
+    <button type="submit">Log out</button>
     <!-- end::logoutButton[] -->
 </form>
 <!-- end::logout[] -->
