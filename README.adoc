@@ -271,6 +271,7 @@ If more than one social media login provider is added, a selection form is prese
 all the possible social media providers that are configured in your application.
 
 See the Facebook documentation additional information about setting up an OAuth2 application and revoking permissions:
+
 - https://developers.facebook.com/docs/apps#register[Registering for a Facebook application^]
 - https://developers.facebook.com/docs/facebook-login/web#redirecturl[Adding Facebook Login to your Facebook Application^]
 - https://developers.facebook.com/docs/facebook-login/permissions/requesting-and-revoking#revokelogin[Revoking Facebook Login^]
