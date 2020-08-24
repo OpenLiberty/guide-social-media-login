@@ -118,12 +118,12 @@ Enable the Social Media Login feature in the application by updating the `server
 `src/main/liberty/config/server.xml`
 ----
 
-The [hotspot=socialLogin]`socialLogin-1.0` feature definition enables the Social Media Login feature in the
+The [hotspot=socialLogin file=1]`socialLogin-1.0` feature definition enables the Social Media Login feature in the
 application so that you can the [hotspot=githubLogin file=0]`githubLogin` configuration element to
 configure GitHub as a social media login.
 
 The client ID and client secret for your GitHub OAuth2 application are injected into the
-[hotspot=githubLogin]`githubLogin` configuration element with the values of `github.client.id` and
+[hotspot=githubLogin file=1]`githubLogin` configuration element with the values of `github.client.id` and
 `github.client.secret`.
 These values are supplied by the environment variables `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`.
 
@@ -163,6 +163,30 @@ at javax.servlet.http.HttpServlet.service(HttpServlet.java:706)
 at javax.servlet.http.HttpServlet.service(HttpServlet.java:791)
 at com.ibm.ws.webcontainer.servlet.ServletWrapper.service(ServletWrapper.java:1230)
 at [internal classes]
+----
+
+hello.html
+[source, html, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/src/main/webapp/hello.html[]
+----
+
+HelloServlet.java
+[source, Java, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/src/main/java/io/openliberty/guides/sociallogin/HelloServlet.java[]
+----
+
+securedHello.jsp
+[source, html, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/src/main/webapp/securedHello.jsp[]
+----
+
+LogoutServlet.java
+[source, Java, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/src/main/java/io/openliberty/guides/sociallogin/LogoutServlet.java[]
 ----
 
 == Implementing logout
