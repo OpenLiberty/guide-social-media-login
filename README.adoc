@@ -118,12 +118,12 @@ Enable the Social Media Login feature in the application by updating the `server
 `src/main/liberty/config/server.xml`
 ----
 
-The [hotspot=socialLogin file=1]`socialLogin-1.0` feature definition enables the Social Media Login feature in the
+The [hotspot=socialLogin file=0]`socialLogin-1.0` feature definition enables the Social Media Login feature in the
 application so that you can the [hotspot=githubLogin file=0]`githubLogin` configuration element to
 configure GitHub as a social media login.
 
 The client ID and client secret for your GitHub OAuth2 application are injected into the
-[hotspot=githubLogin file=1]`githubLogin` configuration element with the values of `github.client.id` and
+[hotspot=githubLogin file=0]`githubLogin` configuration element with the values of `github.client.id` and
 `github.client.secret`.
 These values are supplied by the environment variables `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`.
 
@@ -145,12 +145,11 @@ http://localhost:9080/api/hello.html[^].
 Try logging in with your social media account.
 After you log in with your GitHub account, authorize access to your GitHub user data
 by the OAuth application you created in the **Creating a GitHub OAuth2 Application** section.
-After authentication, you are redirected to the [hotspot=login file=1]`/hello` endpoint served by
-[hotspot file=2]`HelloServlet`, which serves the
-[hotspot=serve file=2]`securedHello.jsp` page.
+After authentication, you are redirected to the [hotspot=login file=0]`/hello` endpoint served by
+[hotspot file=1]`HelloServlet`, which serves the [hotspot=serve file=1]`securedHello.jsp` page.
 
-The [hotspot file=3]`securedHello.jsp` page contains a **Log out** button that makes a
-`POST` request to the [hotspot=logout file=3]`/logout` endpoint served by [hotspot file=4]`LogoutServlet`.
+The [hotspot file=2]`securedHello.jsp` page contains a **Log out** button that makes a
+`POST` request to the [hotspot=logout file=2]`/logout` endpoint served by [hotspot file=3]`LogoutServlet`.
 
 Since the logout feature is not fully implemented, clicking the logout button returns an error:
 
