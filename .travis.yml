@@ -28,7 +28,7 @@ notifications:
     - 'Summary: %{result} in %{duration}'
     rooms:
       secure: rH2A4RZ8xzPn2trpY4c6q+b6SOfyidm8JslMQlzWrGBPfn3vtErkGpU1W3MndqUWnVDJNsPA3Me1nahdal2Cd36OEhV/BAU+7OFuOelrCpgjnpsZnnq/UTdYlmO7OkE6vWZuqJ8NhrqeOb40mRHp60/RJ9euqWLGshYwbBbQZGnOu8paddM3rR8kQpP8+3axyYx4vB7PvVRpdYbZfQOw+jlJGP0FyNrxILmRmvNadNfcY4QhnzD7LaL15r8CSUaOX5XJPcnaVmNPM9Ua1NfFf+RpCA2djyFvOMp+ZpZPv50mBOBLYXYKZL0da/HNRkcVb2co5gesQgXycj4Hm9CW/diBAudq6JzSzknnBNWBcU/phycA7S1QRi4UT6WhGR3UPnr83WjADRj0+es5gv5bOpORQFZgE88vV/y2HrwY2I8S/5TWg91NHgAGjzN7KHT4/9Ehbrme+JRQ92PcafC3pzu0fdd0fxlUMutxZ5gOWEuCvPY+Da4Mjez3imBG5fYC/Yl+WSRA7NeMJRoB0RKdE/2oV0sto1byZoa8tGOOWFUUqfCFtTaVqrSto3rjQ3cBRTS03eaLQV0wH5wvZBOcHjH7AgF5Z6zhTXl2QNR8VxIeGvnrCmktl8DeY6DFHbyajvWNzWGdwHZuYyA65OR2py1CCpGHayNDEIbdYg+hB7c=
-    on_success: always
+    on_success: never
     on_failure: always
 branches:
   only:
