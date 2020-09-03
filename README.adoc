@@ -224,7 +224,7 @@ account.
 
 GitHub's REST API provides a `DELETE` endpoint, which is stored in the [hotspot=unauthorizeUrl file=0]`unauthorizeUrl` variable. The 
 `unauthorizeUrl` variable is used to revoke application permissions from the user.
-The JAX-RS [hotspot=delete file=0]`Client` is used to send a request to this endpoint.
+The JAX-RS [hotspot=delete file=0]`Client` is used to send a request to this `DELETE` endpoint.
 
 Your GitHub application client ID and client secret credentials are obtained from the `github.client.id` and `github.client.secret`
 configuration properties.
