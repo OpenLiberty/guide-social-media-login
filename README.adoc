@@ -28,7 +28,7 @@ NOTE: This repository contains the guide documentation source. To view the guide
 //A getting started tutorial with examples on how to secure Java applications by authenticating users through social media
 //providers, such as GitHub, using the Open Liberty Social Media Login feature.
 
-You'll explore how to allow users to log in to your application with their social media accounts using the
+You'll explore how to allow users to log in to your application with their social media accounts by using the
 Open Liberty Social Media Login feature.
 
 == What you'll learn
@@ -69,8 +69,7 @@ include::{common-includes}/gitclone.adoc[]
 
 Obtain an OAuth 2.0 client ID and client secret credentials for accessing the GitHub API by registering
 a new application in your https://github.com/[GitHub^] account.
-Register a new application on the https://github.com/settings/developers[Settings > Developer settings > OAuth Apps^] page of your account,
-register a new application.
+Register a new application on the https://github.com/settings/developers[Settings > Developer settings > OAuth Apps^] page of your account.
 
 Set the Homepage URL to `\https://localhost:9443`, and set
 the authorization callback URL to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
@@ -192,7 +191,7 @@ include::finish/src/main/java/io/openliberty/guides/sociallogin/LogoutServlet.ja
 
 The [hotspot file=2]`LogoutServlet` provided in the `start` directory uses the
 [hotspot=logout file=2]`logout()` method in the [hotspot file=2]`HttpServletRequest` class to log the user out of the
-application. After a user is logged out, the user is redirected to the [hotspot=redirect file=2]`hello.html` URL.
+application. After a user is logged out, the user is redirected to the [hotspot=redirect file=2]`hello.html` page.
 
 You are also provided with a [hotspot file=1]`LogoutHandler` class and [hotspot file=3]`ILogout` interface to add
 custom logout logic that revokes the application permissions from a user's account.
