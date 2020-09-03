@@ -143,7 +143,7 @@ http://localhost:9080/api/hello.html[^] URL.
 
 Try logging in with your social media account.
 After you log in with your GitHub account, authorize access to your GitHub user data
-with the OAuth2 application that you created in the **Creating a GitHub OAuth2 Application** section.
+with the OAuth2 application that you created in the **Creating a GitHub OAuth2 application** section.
 After authentication, you're redirected to the [hotspot=login file=0]`/hello` endpoint that's served by
 [hotspot file=1]`HelloServlet`, which also serves the [hotspot=serve file=1]`securedHello.jsp` page.
 
