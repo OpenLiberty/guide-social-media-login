@@ -33,7 +33,7 @@ Open Liberty Social Media Login feature.
 
 == What you'll learn
 
-Social Media Login provides a form of single sign-on (SSO) that application users can use to sign in to a secured
+Social media login provides a form of single sign-on (SSO) that application users can use to sign in to a secured
 website with their existing social media account.
 Social media login simplifies the authentication process for users and allows you to provide a secure authentication
 method for your users without having to explicitly implement it.
