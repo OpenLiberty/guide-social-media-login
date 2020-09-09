@@ -38,7 +38,7 @@ website with their existing social media account.
 Social media login simplifies the authentication process for users and allows you to provide a secure authentication
 method for your users without having to explicitly implement it.
 
-The https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login Feature^] in Open Liberty
+The https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] in Open Liberty
 provides configuration elements to configure application authentication by using one or more social media platforms,
 including GitHub, LinkedIn, Facebook, Twitter, and Google.
 You can also create a custom configuration for any other social media platform that implements
