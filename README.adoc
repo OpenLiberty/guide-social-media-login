@@ -42,7 +42,7 @@ The https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media L
 provides configuration elements to configure application authentication by using one or more social media platforms,
 including GitHub, LinkedIn, Facebook, Twitter, and Google.
 You can also create a custom configuration for any other social media platform that implements
-the https://oauth.net/2[OAuth 2.0^] standard or https://openid.net/connect[OpenID Connect 1.0^] standard for authorization.
+the https://oauth.net/2[OAuth 2.0^] standard or the https://openid.net/connect[OpenID Connect 1.0^] standard for authorization.
 
 The application that is provided with this guide is secured through basic authentication.
 The application includes a simple welcome page that includes a message and a **Log in** button.
