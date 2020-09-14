@@ -300,7 +300,7 @@ You secured a web application in Open Liberty by using the Social Media Login fe
 
 Learn more about MicroProfile.
 
-https://microprofile.io/[See the MicroProfile specs^]
+https://microprofile.io/[View the MicroProfile specs^]
 
 https://openliberty.io/docs/latest/microprofile.html[View the MicroProfile^]
 
