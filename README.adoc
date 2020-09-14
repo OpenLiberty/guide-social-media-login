@@ -302,6 +302,6 @@ Learn more about MicroProfile.
 
 https://microprofile.io/[See the MicroProfile specs^]
 
-https://openliberty.io/docs/later/microprofile.html[View the MicroProfile^]
+https://openliberty.io/docs/latest/microprofile.html[View the MicroProfile^]
 
 include::{common-includes}/attribution.adoc[subs="attributes"]
