@@ -58,7 +58,7 @@ include::finish/src/main/webapp/hello.html[]
 == Additional prerequisites
 
 Before you begin, a Github account is required for the examples in this guide. 
-https://github.com/join[Register^ for a Github account] if you do not already have one. 
+https://github.com/join[Register for a Github account^] if you do not already have one. 
 
 // =================================================================================================
 // Getting Started
