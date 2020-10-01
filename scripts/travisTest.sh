@@ -53,3 +53,4 @@ fi
 mvn liberty:stop
 
 hostname -I
+ip a | grep inet
