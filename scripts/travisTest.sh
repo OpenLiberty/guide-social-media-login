@@ -51,3 +51,5 @@ if [ -z "${RESPONSE}" ]
 fi
 
 mvn liberty:stop
+
+hostname -I
