@@ -25,9 +25,6 @@
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website^].
 
-//A getting started tutorial with examples on how to secure Java applications by authenticating users through social media
-//providers, such as GitHub, using the Open Liberty Social Media Login feature.
-
 You'll explore how to allow users to log in to your application with their social media accounts by using the
 Open Liberty Social Media Login feature.
 
@@ -58,6 +55,10 @@ hello.html
 include::finish/src/main/webapp/hello.html[]
 ----
 
+== Additional prerequisites
+
+Before you begin, you must have a GitHub account to complete this guide. 
+https://github.com/join[Register for a GitHub account^], if you don't already have one. 
 
 // =================================================================================================
 // Getting Started
