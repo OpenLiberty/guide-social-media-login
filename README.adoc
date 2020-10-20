@@ -106,7 +106,7 @@ set GITHUB_CLIENT_SECRET=[github-client-secret]
 First, navigate to the `start` directory.
 
 [role='command']
-include::{common-includes}/devmode-start.adoc[]
+include::{common-includes}/devmode-start-cd.adoc[]
 
 == Configuring GitHub as a social media login provider
 
