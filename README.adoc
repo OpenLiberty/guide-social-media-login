@@ -191,7 +191,7 @@ include::finish/src/main/java/io/openliberty/guides/sociallogin/LogoutServlet.ja
 == Implementing logout
 
 The [hotspot file=2]`LogoutServlet` provided in the `start` directory uses the
-[hotspot=logout file=2]`logout()` method in the [hotspot file=2]`HttpServletRequest` class to log the user out of the
+[hotspot=logout file=2]`logout()` method in the `HttpServletRequest` class to log the user out of the
 application. After a user is logged out, the user is redirected to the [hotspot=redirect file=2]`hello.html` page.
 
 You are also provided with a [hotspot file=1]`LogoutHandler` class and [hotspot file=3]`ILogout` interface to add
