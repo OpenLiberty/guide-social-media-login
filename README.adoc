@@ -112,7 +112,7 @@ include::{common-includes}/devmode-lmp33-start-cd.adoc[]
 
 Enable the Social Media Login feature in the application by updating the `server.xml` configuration file.
 
-[role="code_command", subs="quotes"]
+[role="code_command hotspot file=0", subs="quotes"]
 ----
 #Replace the `server.xml` file.#
 `src/main/liberty/config/server.xml`
@@ -217,18 +217,18 @@ In this application, when the application user selects GitHub, the name of the s
 Implement the [hotspot file=3]`ILogout` interface to revoke permissions for the application from the user's GitHub
 account.
 
-[role="code_command", subs="quotes"]
+[role="code_command hotspot file=0", subs="quotes"]
 ----
 #Replace this `GitHubLogout` class.#
 `src/main/java/io/openliberty/guides/sociallogin/logout/GitHubLogout.java`
 ----
 
-GitHub's REST API provides a `DELETE` endpoint, which is stored in the [hotspot=unauthorizeUrl file=0]`unauthorizeUrl` variable. The 
-`unauthorizeUrl` variable is used to revoke application permissions from the user.
+GitHub's REST API provides a `DELETE` endpoint, which is stored in the [hotspot=unauthorizeUrl file=0]`unauthorizeUrl` variable.
+The `unauthorizeUrl` variable is used to revoke application permissions from the user.
 The JAX-RS [hotspot=delete file=0]`Client` is used to send a request to this `DELETE` endpoint.
 
-Your GitHub application client ID and client secret credentials are obtained from the `github.client.id` and `github.client.secret`
-configuration properties.
+Your GitHub application client ID and client secret credentials are obtained from the `github.client.id`
+and `github.client.secret` configuration properties.
 These credentials are encoded and stored in the [hotspot=encodeAuth file=0]`encodedAuth` variable and added to the
 request as an [hotspot=authHeader file=0]`Authorization` header.
 
