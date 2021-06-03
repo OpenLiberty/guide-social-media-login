@@ -219,7 +219,7 @@ account.
 
 [role="code_command hotspot file=0", subs="quotes"]
 ----
-#Replace this `GitHubLogout` class.#
+#Replace the `GitHubLogout` class.#
 `src/main/java/io/openliberty/guides/sociallogin/logout/GitHubLogout.java`
 ----
 
@@ -232,9 +232,9 @@ and `github.client.secret` configuration properties.
 These credentials are encoded and stored in the [hotspot=encodeAuth file=0]`encodedAuth` variable and added to the
 request as an [hotspot=authHeader file=0]`Authorization` header.
 
-The GitHub access token for a user, which is stored in the [hotspot=accessToken file=0]`accessToken` variable, is
-retrieved from their user profile that is modelled by the `UserProfile` class. The `UserProfile` object can be retrieved with
-the `UserProfileManager` class.
+The GitHub access token for a user, which is stored in the [hotspot=accessToken file=0]`accessToken` variable,
+is retrieved from their user profile that is modelled by the `UserProfile` class. 
+The `UserProfile` object can be retrieved with the `UserProfileManager` class.
 The access token is used in the `DELETE` request body, which is stored in the
 [hotspot=createAccessTokenBody hotspot=addBody file=0]`requestBody` variable.
 
@@ -274,8 +274,8 @@ After authenticating, you are redirected to the `\https://localhost:9080/api/hel
 When you click the **Log out** button, you are unauthenticated and redirected back to the
 `\http://localhost:9080/api/hello.html` URL.
 
-If you try logging in again, you are asked to reauthorize your application with GitHub. Then, you're authenticated and
-redirected to the `\https://localhost:9080/api/hello` URL.
+If you try logging in again, you are asked to reauthorize your application with GitHub.
+Then, you're authenticated and redirected to the `\https://localhost:9080/api/hello` URL.
 While you stay logged in to GitHub, the application doesn't prompt you to enter your GitHub credentials.
 
 [role='command']
@@ -284,8 +284,8 @@ include::{common-includes}/devmode-quit.adoc[]
 == Next steps
 
 As an exercise, configure Facebook as a second social media provider for social media login for your application.
-If you add more than one social media login provider, a selection form is presented to the user. This form contains
-all of the social media providers that are configured in your application.
+If you add more than one social media login provider, a selection form is presented to the user.
+This form contains all of the social media providers that are configured in your application.
 
 For information about setting up an OAuth2 application and revoking permissions, see the Facebook documentation:
 
