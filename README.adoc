@@ -1,4 +1,4 @@
-//  Copyright (c) 2021 IBM Corporation and others.
+//  Copyright (c) 2020 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -106,7 +106,7 @@ set GITHUB_CLIENT_SECRET=[github-client-secret]
 First, navigate to the `start` directory.
 
 [role='command']
-include::{common-includes}/devmode-lmp33-start-cd.adoc[]
+include::{common-includes}/devmode-start-cd.adoc[]
 
 == Configuring GitHub as a social media login provider
 
@@ -289,9 +289,9 @@ all of the social media providers that are configured in your application.
 
 For information about setting up an OAuth2 application and revoking permissions, see the Facebook documentation:
 
-* https://developers.facebook.com/docs/apps#register[Registering for a Facebook application^]
-* https://developers.facebook.com/docs/facebook-login/web#redirecturl[Adding Facebook Login to your Facebook application^]
-* https://developers.facebook.com/docs/facebook-login/permissions/requesting-and-revoking#revokelogin[Revoking Facebook Login^]
+- https://developers.facebook.com/docs/apps#register[Registering for a Facebook application^]
+- https://developers.facebook.com/docs/facebook-login/web#redirecturl[Adding Facebook Login to your Facebook application^]
+- https://developers.facebook.com/docs/facebook-login/permissions/requesting-and-revoking#revokelogin[Revoking Facebook Login^]
 
 == Great work! You're done!
 
