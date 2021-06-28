@@ -19,7 +19,7 @@
 :page-permalink: /guides/{projectid}
 :page-seo-title: Authenticating users with Social Media Login
 :page-seo-description: A getting started tutorial with examples on how to secure Java applications by authenticating users through social media providers, such as GitHub, LinkedIn, Facebook, Twitter and Google, using the Open Liberty Social Media Login feature for single sign-on (SSO).
-:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
+:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
 = Authenticating users through social media providers
 
 [.hidden]
