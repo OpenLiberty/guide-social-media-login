@@ -38,7 +38,7 @@ public class HelloServlet extends HttpServlet {
         // tag::serve[]
         request
                 .getRequestDispatcher("securedHello.jsp")
-                .forward(request,response);
+                .forward(request, response);
         // end::serve[]
     }
 }

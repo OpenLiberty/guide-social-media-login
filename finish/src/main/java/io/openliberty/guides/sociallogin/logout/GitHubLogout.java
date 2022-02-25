@@ -29,18 +29,18 @@ import java.util.Map;
 public class GitHubLogout implements ILogout {
 
     @Inject
-    @ConfigProperty(name="github.client.id")
+    @ConfigProperty(name = "github.client.id")
     private String clientId;
 
     @Inject
-    @ConfigProperty(name="github.client.secret")
+    @ConfigProperty(name = "github.client.secret")
     private String clientSecret;
 
     public Response logout() {
 
         // tag::unauthorizeUrl[]
-        final String unauthorizeUrl = "https://api.github.com/" +
-                "applications/{client_id}/grant";
+        final String unauthorizeUrl = "https://api.github.com/"
+                + "applications/{client_id}/grant";
         // end::unauthorizeUrl[]
 
         // tag::accessToken[]

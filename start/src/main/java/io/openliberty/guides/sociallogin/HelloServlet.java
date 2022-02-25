@@ -37,6 +37,6 @@ public class HelloServlet extends HttpServlet {
 
         request
                 .getRequestDispatcher("securedHello.jsp")
-                .forward(request,response);
+                .forward(request, response);
     }
 }
