@@ -27,13 +27,14 @@ public class LogoutHandler {
 
     public ILogout getLogout() {
 
-        String socialMediaName = UserProfileManager.getUserProfile().getSocialMediaName();
+        String socialMediaName = UserProfileManager.getUserProfile()
+                                                   .getSocialMediaName();
         switch (socialMediaName) {
             case GITHUB_LOGIN:
                 return gitHubLogout;
             default:
-                throw new UnsupportedOperationException("Cannot find the right logout " +
-                        "service for social media name " + socialMediaName);
+                throw new UnsupportedOperationException("Cannot find the right logout "
+                        + "service for social media name " + socialMediaName);
         }
     }
 }
