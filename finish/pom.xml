@@ -53,16 +53,6 @@
             <version>1.1.36</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-client</artifactId>
-            <version>6.0.0.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-json-binding-provider</artifactId>
-            <version>6.0.0.Final</version>
-        </dependency>
     </dependencies>
 
     <build>
