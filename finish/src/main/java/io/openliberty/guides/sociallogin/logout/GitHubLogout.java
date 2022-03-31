@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2020 IBM Corporation and others.
+ * Copyright (c) 2020, 2022 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,11 +15,11 @@ package io.openliberty.guides.sociallogin.logout;
 import com.ibm.websphere.security.social.UserProfileManager;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Response;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.Response;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
@@ -29,18 +29,18 @@ import java.util.Map;
 public class GitHubLogout implements ILogout {
 
     @Inject
-    @ConfigProperty(name="github.client.id")
+    @ConfigProperty(name = "github.client.id")
     private String clientId;
 
     @Inject
-    @ConfigProperty(name="github.client.secret")
+    @ConfigProperty(name = "github.client.secret")
     private String clientSecret;
 
     public Response logout() {
 
         // tag::unauthorizeUrl[]
-        final String unauthorizeUrl = "https://api.github.com/" +
-                "applications/{client_id}/grant";
+        final String unauthorizeUrl = "https://api.github.com/"
+                + "applications/{client_id}/grant";
         // end::unauthorizeUrl[]
 
         // tag::accessToken[]

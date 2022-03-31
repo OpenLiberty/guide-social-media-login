@@ -1,4 +1,4 @@
-//  Copyright (c) 2021 IBM Corporation and others.
+//  Copyright (c) 2022 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -25,29 +25,15 @@
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website^].
 
-You'll explore how to allow users to log in to your application with their social media accounts by using the
-Open Liberty Social Media Login feature.
+You'll explore how to allow users to log in to your application with their social media accounts by using the Open Liberty Social Media Login feature.
 
 == What you'll learn
 
-Social media login provides a form of single sign-on (SSO) that application users can use to sign in to a secured
-website with their existing social media account.
-Social media login simplifies the authentication process for users and allows you to provide a secure authentication
-method for your users without having to explicitly implement it.
+Social media login provides a form of single sign-on (SSO) that application users can use to sign in to a secured website with their existing social media account. Social media login simplifies the authentication process for users and allows you to provide a secure authentication method for your users without having to explicitly implement it.
 
-The https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] in Open Liberty
-provides configuration elements to configure application authentication by using one or more social media platforms,
-including GitHub, LinkedIn, Facebook, Twitter, and Google.
-You can also create a custom configuration for any other social media platform that implements
-the https://oauth.net/2[OAuth 2.0^] standard or the https://openid.net/connect[OpenID Connect 1.0^] standard for authorization.
+The https://openliberty.io/docs/ref/feature/#socialLogin-1.0.html[Social Media Login feature^] in Open Liberty provides configuration elements to configure application authentication by using one or more social media platforms, including GitHub, LinkedIn, Facebook, Twitter, and Google. You can also create a custom configuration for any other social media platform that implements the https://oauth.net/2[OAuth 2.0^] standard or the https://openid.net/connect[OpenID Connect 1.0^] standard for authorization.
 
-The application that is provided with this guide is secured through basic authentication.
-The application includes a simple welcome page that includes a message and a **Log in** button.
-The welcome page is defined in the [hotspot]`hello.html` file, and the **Log in** button is
-defined in the [hotspot=btnLogin]`button` element of that page.
-When the application user clicks the **Log in** button, a dialog box opens requesting the user's username and password
-for authenticating to the service.
-In this guide, you will replace the basic authentication dialog with a dialog to log in with a social media provider.
+The application that is provided with this guide is secured through basic authentication. The application includes a simple welcome page that includes a message and a **Log in** button. The welcome page is defined in the [hotspot]`hello.html` file, and the **Log in** button is defined in the [hotspot=btnLogin]`button` element of that page. When the application user clicks the **Log in** button, a dialog box opens requesting the user's username and password for authenticating to the service. In this guide, you will replace the basic authentication dialog with a dialog to log in with a social media provider.
 
 hello.html
 [source ,html, linenums, role='code_column hide_tags=copyright']
@@ -57,8 +43,7 @@ include::finish/src/main/webapp/hello.html[]
 
 == Additional prerequisites
 
-Before you begin, you must have a GitHub account to complete this guide. 
-https://github.com/join[Register for a GitHub account^], if you don't already have one. 
+Before you begin, you must have a GitHub account to complete this guide. https://github.com/join[Register for a GitHub account^], if you don't already have one. 
 
 // =================================================================================================
 // Getting Started
@@ -68,19 +53,13 @@ include::{common-includes}/gitclone.adoc[]
 
 == Creating a GitHub OAuth2 application
 
-Obtain an OAuth 2.0 client ID and client secret credentials for accessing the GitHub API by registering
-a new application in your https://github.com/[GitHub^] account.
-Register a new application on the https://github.com/settings/developers[Settings > Developer settings > OAuth Apps^] page of your account.
+Obtain an OAuth 2.0 client ID and client secret credentials for accessing the GitHub API by registering a new application in your https://github.com/[GitHub^] account. Register a new application on the https://github.com/settings/developers[Settings > Developer settings > OAuth Apps^] page of your account.
 
-Set the Homepage URL to `\https://localhost:9443`, and set
-the authorization callback URL to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
+Set the Homepage URL to `\https://localhost:9443`, and set the authorization callback URL to `\https://localhost:9443/ibm/api/social-login/redirect/githubLogin`.
 
-When the registration is complete, the client ID and client secret credentials are displayed.
-To provide your application with the credentials, export the `GITHUB_CLIENT_ID` and
-`GITHUB_CLIENT_SECRET` environment variables.
+When the registration is complete, the client ID and client secret credentials are displayed. To provide your application with the credentials, export the `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` environment variables.
 
-For more information about creating an OAuth application, see the
-https://docs.github.com/en/developers/apps/creating-an-oauth-app[GitHub documentation^].
+For more information about creating an OAuth application, see the https://docs.github.com/en/developers/apps/creating-an-oauth-app[GitHub documentation^].
 
 Replace the values of the `[github-client-id]` and `[github-client-secret]` fields in the following command:
 include::{common-includes}/os-tabs.adoc[]
@@ -118,14 +97,9 @@ Enable the Social Media Login feature in the application by updating the `server
 `src/main/liberty/config/server.xml`
 ----
 
-The [hotspot=socialLogin file=0]`socialLogin-1.0` feature definition enables the Social Media Login feature in the
-application so that you can use the [hotspot=githubLogin file=0]`githubLogin` configuration element to
-configure GitHub as a social media login provider.
+The [hotspot=socialLogin file=0]`socialLogin-1.0` feature definition enables the Social Media Login feature in the application so that you can use the [hotspot=githubLogin file=0]`githubLogin` configuration element to configure GitHub as a social media login provider.
 
-The client ID and client secret credentials for your GitHub OAuth2 application are injected into the
-[hotspot=githubLogin file=0]`githubLogin` configuration element with values of `github.client.id` and
-`github.client.secret`.
-These values are supplied by the `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` environment variables.
+The client ID and client secret credentials for your GitHub OAuth2 application are injected into the [hotspot=githubLogin file=0]`githubLogin` configuration element with values of `github.client.id` and `github.client.secret`. These values are supplied by the `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` environment variables.
 
 server.xml
 [source, xml, linenums, role='code_column hide_tags=copyright']
@@ -139,17 +113,11 @@ include::finish/src/main/liberty/config/server.xml[]
 [role='command']
 include::{common-includes}/devmode-build.adoc[]
 
-Check out the service that you created by going to the 
-http://localhost:9080/api/hello.html[^] URL.
+Check out the service that you created by going to the  http://localhost:9080/api/hello.html[^] URL.
 
-Try logging in with your social media account.
-After you log in with your GitHub account, authorize access to your GitHub user data
-with the OAuth2 application that you created in the **Creating a GitHub OAuth2 application** section.
-After authentication, you're redirected to the [hotspot=login file=0]`/hello` endpoint that's served by
-[hotspot file=1]`HelloServlet`, which also serves the [hotspot=serve file=1]`securedHello.jsp` page.
+Try logging in with your social media account. After you log in with your GitHub account, authorize access to your GitHub user data with the OAuth2 application that you created in the **Creating a GitHub OAuth2 application** section. After authentication, you're redirected to the [hotspot=login file=0]`/hello` endpoint that's served by [hotspot file=1]`HelloServlet`, which also serves the [hotspot=serve file=1]`securedHello.jsp` page.
 
-The [hotspot file=2]`securedHello.jsp` page contains a **Log out** button that makes a
-`POST` request to the [hotspot=logout file=2]`/logout` endpoint, which is served by [hotspot file=3]`LogoutServlet`.
+The [hotspot file=2]`securedHello.jsp` page contains a **Log out** button that makes a `POST` request to the [hotspot=logout file=2]`/logout` endpoint, which is served by [hotspot file=3]`LogoutServlet`.
 
 Because the logout feature isn't fully implemented, an error is returned when you click the **Log out** button:
 
@@ -190,32 +158,19 @@ include::finish/src/main/java/io/openliberty/guides/sociallogin/LogoutServlet.ja
 
 == Implementing logout
 
-The [hotspot file=2]`LogoutServlet` provided in the `start` directory uses the
-[hotspot=logout file=2]`logout()` method in the `HttpServletRequest` class to log the user out of the
-application. After a user is logged out, the user is redirected to the [hotspot=redirect file=2]`hello.html` page.
+The [hotspot file=2]`LogoutServlet` provided in the `start` directory uses the [hotspot=logout file=2]`logout()` method in the `HttpServletRequest` class to log the user out of the application. After a user is logged out, the user is redirected to the [hotspot=redirect file=2]`hello.html` page.
 
-You are also provided with a [hotspot file=1]`LogoutHandler` class and [hotspot file=3]`ILogout` interface to add
-custom logout logic that revokes the application permissions from a user's account.
+You are also provided with a [hotspot file=1]`LogoutHandler` class and [hotspot file=3]`ILogout` interface to add custom logout logic that revokes the application permissions from a user's account.
 
-The [hotspot=getLogout hotspot=inject file=2]`logoutHandler.getLogout()` method gets an implementation
-of the `ILogout` interface for GitHub and uses the [hotspot=revoke file=2]`logout()` method of that interface
-to revoke the OAuth2 permissions that are granted to the application by the user.
+The [hotspot=getLogout hotspot=inject file=2]`logoutHandler.getLogout()` method gets an implementation of the `ILogout` interface for GitHub and uses the [hotspot=revoke file=2]`logout()` method of that interface to revoke the OAuth2 permissions that are granted to the application by the user.
 
-The response that's returned by this [hotspot=revoke file=2]`logout()` method is verified by the application, which checks
-whether it has a [hotspot=errorHandle file=2]`2xx` series status code.
+The response that's returned by this [hotspot=revoke file=2]`logout()` method is verified by the application, which checks whether it has a [hotspot=errorHandle file=2]`2xx` series status code.
 
-The [hotspot=logout file=2]`request.logout()` method is then called to log the user out of the
-application.
+The [hotspot=logout file=2]`request.logout()` method is then called to log the user out of the application.
 
-The [hotspot=getLogout file=2]`logoutHandler.getLogout()` method returns the implementation of the
-[hotspot=inject file=1]`ILogout` interface based on the name of the social media provider that a user chooses.
-The social media provider's name is retrieved by using the [hotspot=socialMediaName file=1]`UserProfileManager` class.
-The `UserProfileManager` class returns the ID of the social media login configuration. 
-In this application, when the application user selects GitHub, the name of the social media provider is
-[hotspot=githubLoginName file=1]`githubLogin`.
+The [hotspot=getLogout file=2]`logoutHandler.getLogout()` method returns the implementation of the [hotspot=inject file=1]`ILogout` interface based on the name of the social media provider that a user chooses. The social media provider's name is retrieved by using the [hotspot=socialMediaName file=1]`UserProfileManager` class. The `UserProfileManager` class returns the ID of the social media login configuration. In this application, when the application user selects GitHub, the name of the social media provider is [hotspot=githubLoginName file=1]`githubLogin`.
 
-Implement the [hotspot file=3]`ILogout` interface to revoke permissions for the application from the user's GitHub
-account.
+Implement the [hotspot file=3]`ILogout` interface to revoke permissions for the application from the user's GitHub account.
 
 [role="code_command", subs="quotes"]
 ----
@@ -223,20 +178,11 @@ account.
 `src/main/java/io/openliberty/guides/sociallogin/logout/GitHubLogout.java`
 ----
 
-GitHub's REST API provides a `DELETE` endpoint, which is stored in the [hotspot=unauthorizeUrl file=0]`unauthorizeUrl` variable. The 
-`unauthorizeUrl` variable is used to revoke application permissions from the user.
-The JAX-RS [hotspot=delete file=0]`Client` is used to send a request to this `DELETE` endpoint.
+GitHub's REST API provides a `DELETE` endpoint, which is stored in the [hotspot=unauthorizeUrl file=0]`unauthorizeUrl` variable. The  `unauthorizeUrl` variable is used to revoke application permissions from the user. The JAX-RS [hotspot=delete file=0]`Client` is used to send a request to this `DELETE` endpoint.
 
-Your GitHub application client ID and client secret credentials are obtained from the `github.client.id` and `github.client.secret`
-configuration properties.
-These credentials are encoded and stored in the [hotspot=encodeAuth file=0]`encodedAuth` variable and added to the
-request as an [hotspot=authHeader file=0]`Authorization` header.
+Your GitHub application client ID and client secret credentials are obtained from the `github.client.id` and `github.client.secret` configuration properties. These credentials are encoded and stored in the [hotspot=encodeAuth file=0]`encodedAuth` variable and added to the request as an [hotspot=authHeader file=0]`Authorization` header.
 
-The GitHub access token for a user, which is stored in the [hotspot=accessToken file=0]`accessToken` variable, is
-retrieved from their user profile that is modelled by the `UserProfile` class. The `UserProfile` object can be retrieved with
-the `UserProfileManager` class.
-The access token is used in the `DELETE` request body, which is stored in the
-[hotspot=createAccessTokenBody hotspot=addBody file=0]`requestBody` variable.
+The GitHub access token for a user, which is stored in the [hotspot=accessToken file=0]`accessToken` variable, is retrieved from their user profile that is modelled by the `UserProfile` class. The `UserProfile` object can be retrieved with the `UserProfileManager` class. The access token is used in the `DELETE` request body, which is stored in the [hotspot=createAccessTokenBody hotspot=addBody file=0]`requestBody` variable.
 
 GitHubLogout.java
 [source, Java, linenums, role='code_column hide_tags=copyright']
@@ -266,26 +212,18 @@ include::finish/src/main/java/io/openliberty/guides/sociallogin/logout/ILogout.j
 // Running the application
 // ================================================================================================
 
-Check out the service that you created by going to the 
-http://localhost:9080/api/hello.html[^] URL.
+Check out the service that you created by going to the http://localhost:9080/api/hello.html[^] URL.
 
-Try logging in with your GitHub account.
-After authenticating, you are redirected to the `\https://localhost:9080/api/hello` URL.
-When you click the **Log out** button, you are unauthenticated and redirected back to the
-`\http://localhost:9080/api/hello.html` URL.
+Try logging in with your GitHub account. After authenticating, you are redirected to the `\https://localhost:9080/api/hello` URL. When you click the **Log out** button, you are unauthenticated and redirected back to the `\http://localhost:9080/api/hello.html` URL.
 
-If you try logging in again, you are asked to reauthorize your application with GitHub. Then, you're authenticated and
-redirected to the `\https://localhost:9080/api/hello` URL.
-While you stay logged in to GitHub, the application doesn't prompt you to enter your GitHub credentials.
+If you try logging in again, you are asked to reauthorize your application with GitHub. Then, you're authenticated and redirected to the `\https://localhost:9080/api/hello` URL. While you stay logged in to GitHub, the application doesn't prompt you to enter your GitHub credentials.
 
 [role='command']
 include::{common-includes}/devmode-quit.adoc[]
 
 == Next steps
 
-As an exercise, configure Facebook as a second social media provider for social media login for your application.
-If you add more than one social media login provider, a selection form is presented to the user. This form contains
-all of the social media providers that are configured in your application.
+As an exercise, configure Facebook as a second social media provider for social media login for your application. If you add more than one social media login provider, a selection form is presented to the user. This form contains all of the social media providers that are configured in your application.
 
 For information about setting up an OAuth2 application and revoking permissions, see the Facebook documentation:
 
