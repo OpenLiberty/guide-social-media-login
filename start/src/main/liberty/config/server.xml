@@ -8,6 +8,7 @@
         <feature>cdi-3.0</feature>
         <feature>jsonb-2.0</feature>
         <feature>jwt-1.0</feature>
+        <feature>socialLogin-1.0</feature>
     </featureManager>
 
     <httpEndpoint httpPort="${default.http.port}"
@@ -15,12 +16,19 @@
                   id="defaultHttpEndpoint"
                   host="*" />
 
+    <!-- Set up default key store, trust stores for auth APIs -->
     <keyStore id="defaultKeyStore"
               password="changeit" />
 
+    <!-- SSL configuration for auth services -->
     <ssl id="defaultSSLConfig"
          keyStoreRef="defaultKeyStore"
          trustDefaultCerts="true" />
+
+    <!-- Social Login Configuration -->
+    <!-- Github Login -->
+    <githubLogin clientId="${github.client.id}"
+                 clientSecret="${github.client.secret}" />
 
     <webApplication location="guide-social-login.war"
                     contextRoot="${app.context.root}">
