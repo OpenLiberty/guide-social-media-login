@@ -12,7 +12,7 @@ export GITHUB_CLIENT_SECRET=placeholder
 #       liberty:create            - Create a Liberty server.
 #       liberty:install-feature   - Install a feature packaged as a Subsystem Archive (esa) to the Liberty runtime.
 #       liberty:deploy            - Copy applications to the Liberty server's dropins or apps directory. 
-mvn -Dhttp.keepAlive=false \
+mvn -ntp -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
     -q clean package liberty:create liberty:install-feature liberty:deploy
@@ -25,7 +25,7 @@ mvn -Dhttp.keepAlive=false \
 #       failsafe:integration-test - Runs the integration tests of an application.
 #       liberty:stop              - Stop a Liberty server.
 #       failsafe:verify           - Verifies that the integration tests of an application passed.
-mvn liberty:start
+mvn -ntp liberty:start
 
 # Check that the endpoint returns 200
 STATUS="$(curl --write-out "%{http_code}\n" --silent --output /dev/null "http://localhost:9080/api/hello.html")"
@@ -47,4 +47,4 @@ if [ -z "${RESPONSE}" ]
         echo "Response body check passed."
 fi
 
-mvn liberty:stop
+mvn -ntp liberty:stop
