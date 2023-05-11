@@ -1,13 +1,13 @@
 <server description="Social Login Guide Server">
     <!-- tag::featureManager[] -->
     <featureManager>
-        <feature>pages-3.0</feature>
-        <feature>appSecurity-4.0</feature>
+        <feature>pages-3.1</feature>
+        <feature>appSecurity-5.0</feature>
         <feature>transportSecurity-1.0</feature>
         <feature>mpConfig-3.0</feature>
-        <feature>restfulWSClient-3.0</feature>
-        <feature>cdi-3.0</feature>
-        <feature>jsonb-2.0</feature>
+        <feature>restfulWSClient-3.1</feature>
+        <feature>cdi-4.0</feature>
+        <feature>jsonb-3.0</feature>
         <feature>jwt-1.0</feature>
         <!-- tag::socialLogin[] -->
         <feature>socialLogin-1.0</feature>
