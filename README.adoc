@@ -89,11 +89,11 @@ include::{common-includes}/devmode-lmp33-start-cd.adoc[]
 
 == Configuring GitHub as a social media login provider
 
-Enable the Social Media Login feature in the application by updating the `server.xml` configuration file.
+Enable the Social Media Login feature in the application by updating the Liberty `server.xml` configuration file.
 
 [role="code_command", subs="quotes"]
 ----
-#Replace the `server.xml` file.#
+#Replace the Liberty `server.xml` configuration file.#
 `src/main/liberty/config/server.xml`
 ----
 
