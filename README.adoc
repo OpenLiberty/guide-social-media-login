@@ -221,7 +221,7 @@ Try logging in with your GitHub account. After authenticating, you are redirecte
 If you try logging in again, you are asked to reauthorize your application with GitHub. Then, you're authenticated and redirected to the `\https://localhost:9080/api/hello` URL. While you stay logged in to GitHub, the application doesn't prompt you to enter your GitHub credentials.
 
 [role='command']
-include::{common-includes}/devmode-quit.adoc[]
+include::{common-includes}/devmode-quit-ctrlc.adoc[]
 
 == Next steps
 
