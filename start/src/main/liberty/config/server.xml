@@ -3,15 +3,15 @@
         <feature>pages-3.1</feature>
         <feature>appSecurity-5.0</feature>
         <feature>transportSecurity-1.0</feature>
-        <feature>mpConfig-3.0</feature>
+        <feature>mpConfig-3.1</feature>
         <feature>restfulWSClient-3.1</feature>
         <feature>cdi-4.0</feature>
         <feature>jsonb-3.0</feature>
         <feature>jwt-1.0</feature>
     </featureManager>
 
-    <httpEndpoint httpPort="${default.http.port}"
-                  httpsPort="${default.https.port}"
+    <httpEndpoint httpPort="${http.port}"
+                  httpsPort="${https.port}"
                   id="defaultHttpEndpoint"
                   host="*" />
 
