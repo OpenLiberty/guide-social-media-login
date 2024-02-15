@@ -16,10 +16,10 @@
         <maven.compiler.target>11</maven.compiler.target>
 
         <!-- tag::defaultHttpPort[] -->
-        <liberty.var.default.http.port>9080</liberty.var.default.http.port>
+        <liberty.var.http.port>9080</liberty.var.http.port>
         <!-- end::defaultHttpPort[] -->
         <!-- tag::defaultHttpsPort[] -->
-        <liberty.var.default.https.port>9443</liberty.var.default.https.port>
+        <liberty.var.https.port>9443</liberty.var.https.port>
         <!-- end::defaultHttpsPort[] -->
         <!-- tag::appContextRoot[] -->
         <liberty.var.app.context.root>api</liberty.var.app.context.root>
@@ -37,20 +37,20 @@
         <dependency>
             <groupId>org.eclipse.microprofile</groupId>
             <artifactId>microprofile</artifactId>
-            <version>6.0</version>
+            <version>6.1</version>
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.ibm.websphere.appserver.api</groupId>
             <artifactId>com.ibm.websphere.appserver.api.social</artifactId>
-            <version>1.0.75</version>
+            <version>1.0.84</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.ibm.websphere.appserver.api</groupId>
             <artifactId>com.ibm.websphere.appserver.api.jwt</artifactId>
-            <version>1.1.75</version>
+            <version>1.1.84</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -62,13 +62,13 @@
             <plugin>
                 <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
-                <version>3.8.2</version>
+                <version>3.10</version>
             </plugin>
             <!-- Plugin to run functional tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.2.5</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -79,7 +79,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.2.5</version>
             </plugin>
         </plugins>
     </build>
