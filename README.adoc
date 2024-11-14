@@ -97,7 +97,7 @@ Enable the Social Media Login feature in the application by updating the Liberty
 `src/main/liberty/config/server.xml`
 ----
 
-The [hotspot=socialLogin file=0]`socialLogin-1.0` feature definition enables the Social Media Login feature in the application so that you can use the [hotspot=githubLogin file=0]`githubLogin` configuration element to configure GitHub as a social media login provider.
+The [hotspot=socialLogin file=0]`socialLogin` feature definition enables the Social Media Login feature in the application so that you can use the [hotspot=githubLogin file=0]`githubLogin` configuration element to configure GitHub as a social media login provider.
 
 The client ID and client secret credentials for your GitHub OAuth2 application are injected into the [hotspot=githubLogin file=0]`githubLogin` configuration element with values of `github.client.id` and `github.client.secret`. These values are supplied by the `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` environment variables.
 
