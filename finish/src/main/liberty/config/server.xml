@@ -12,7 +12,7 @@
         <feature>jsonb</feature>
         <feature>jwt</feature>
         <!-- tag::socialLogin[] -->
-        <feature>socialLogin</feature>
+        <feature>socialLogin-1.0</feature>
         <!-- end::socialLogin[] -->
     </featureManager>
     <!-- end::featureManager[] -->
