@@ -5,15 +5,15 @@
         <platform>microprofile-6.1</platform>
         <feature>pages</feature>
         <feature>appSecurity</feature>
-        <feature>transportSecurity</feature>
         <feature>mpConfig</feature>
         <feature>restfulWSClient</feature>
         <feature>cdi</feature>
         <feature>jsonb</feature>
-        <feature>jwt</feature>
+        <feature>jwt-1.0</feature>
         <!-- tag::socialLogin[] -->
         <feature>socialLogin-1.0</feature>
         <!-- end::socialLogin[] -->
+        <feature>transportSecurity-1.0</feature>
     </featureManager>
     <!-- end::featureManager[] -->
 
