@@ -1,4 +1,4 @@
-//  Copyright (c) 2022, 2023 IBM Corporation and others.
+//  Copyright (c) 2022, 2024 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -14,7 +14,7 @@
 :page-essential-order: 1
 :page-description: Learn how to authenticate users with the Open Liberty Social Media Login feature.
 :guide-author: Open Liberty
-:page-tags: ['Security']
+:page-tags: ['security']
 :page-related-guides: ['microprofile-jwt']
 :page-permalink: /guides/{projectid}
 :page-seo-title: Authenticating users with Social Media Login
