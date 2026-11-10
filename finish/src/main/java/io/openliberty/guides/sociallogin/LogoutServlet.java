@@ -24,6 +24,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.core.Response;
 import java.io.IOException;
+import java.io.Serial;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +34,7 @@ import java.util.logging.Logger;
         transportGuarantee = ServletSecurity.TransportGuarantee.CONFIDENTIAL))
 public class LogoutServlet extends HttpServlet {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     // tag::inject[]
